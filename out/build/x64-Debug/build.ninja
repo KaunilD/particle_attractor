@@ -75,7 +75,7 @@ build src\edit_cache: phony src\CMakeFiles\edit_cache.util
 #############################################
 # Order-only phony target for particle_attractor
 
-build cmake_object_order_depends_target_particle_attractor: phony || src\__\include\algorithms\moc_algorithms.cpp src\__\include\gameobject\moc_gameobject.cpp src\__\include\gameobject\moc_material.cpp src\__\include\gameobject\moc_mesh.cpp src\__\include\moc_camera.cpp src\__\include\moc_libs.cpp src\__\include\moc_mainwindow.cpp src\__\include\moc_objreader.cpp src\__\include\moc_oglwidget.cpp src\__\include\moc_shaderprogram.cpp src\__\include\moc_vertex.cpp src\particle_attractor_autogen src\particle_attractor_autogen\3YJK5W5UP7\qrc_resources.cpp src\ui_mainwindow.h
+build cmake_object_order_depends_target_particle_attractor: phony || src\__\include\gameobject\moc_gameobject.cpp src\__\include\gameobject\moc_material.cpp src\__\include\gameobject\moc_mesh.cpp src\__\include\moc_camera.cpp src\__\include\moc_libs.cpp src\__\include\moc_mainwindow.cpp src\__\include\moc_objreader.cpp src\__\include\moc_oglwidget.cpp src\__\include\moc_shaderprogram.cpp src\__\include\moc_vertex.cpp src\particle_attractor_autogen src\particle_attractor_autogen\3YJK5W5UP7\qrc_resources.cpp src\ui_mainwindow.h
 
 build src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\mocs_compilation.cpp.obj: CXX_COMPILER__particle_attractor src\particle_attractor_autogen\mocs_compilation.cpp || cmake_object_order_depends_target_particle_attractor
   DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
@@ -122,15 +122,6 @@ build src\CMakeFiles\particle_attractor.dir\shaderprogram.cpp.obj: CXX_COMPILER_
   TARGET_COMPILE_PDB = src\CMakeFiles\particle_attractor.dir\
   TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
 
-build src\CMakeFiles\particle_attractor.dir\algorithms.cpp.obj: CXX_COMPILER__particle_attractor ..\..\..\src\algorithms.cpp || cmake_object_order_depends_target_particle_attractor
-  DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
-  INCLUDES = -Isrc -I..\..\..\src -Isrc\particle_attractor_autogen\include -I..\..\..\include -IC:\Qt\5.11.2\msvc2017_64\include -IC:\Qt\5.11.2\msvc2017_64\include\QtCore -IC:\Qt\5.11.2\msvc2017_64\.\mkspecs\win32-msvc -IC:\Qt\5.11.2\msvc2017_64\include\QtGui -IC:\Qt\5.11.2\msvc2017_64\include\QtANGLE -IC:\Qt\5.11.2\msvc2017_64\include\QtWidgets
-  OBJECT_DIR = src\CMakeFiles\particle_attractor.dir
-  OBJECT_FILE_DIR = src\CMakeFiles\particle_attractor.dir
-  TARGET_COMPILE_PDB = src\CMakeFiles\particle_attractor.dir\
-  TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
-
 build src\CMakeFiles\particle_attractor.dir\gameobject.cpp.obj: CXX_COMPILER__particle_attractor ..\..\..\src\gameobject.cpp || cmake_object_order_depends_target_particle_attractor
   DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
@@ -150,6 +141,15 @@ build src\CMakeFiles\particle_attractor.dir\camera.cpp.obj: CXX_COMPILER__partic
   TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
 
 build src\CMakeFiles\particle_attractor.dir\renderer.cpp.obj: CXX_COMPILER__particle_attractor ..\..\..\src\renderer.cpp || cmake_object_order_depends_target_particle_attractor
+  DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -Isrc -I..\..\..\src -Isrc\particle_attractor_autogen\include -I..\..\..\include -IC:\Qt\5.11.2\msvc2017_64\include -IC:\Qt\5.11.2\msvc2017_64\include\QtCore -IC:\Qt\5.11.2\msvc2017_64\.\mkspecs\win32-msvc -IC:\Qt\5.11.2\msvc2017_64\include\QtGui -IC:\Qt\5.11.2\msvc2017_64\include\QtANGLE -IC:\Qt\5.11.2\msvc2017_64\include\QtWidgets
+  OBJECT_DIR = src\CMakeFiles\particle_attractor.dir
+  OBJECT_FILE_DIR = src\CMakeFiles\particle_attractor.dir
+  TARGET_COMPILE_PDB = src\CMakeFiles\particle_attractor.dir\
+  TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
+
+build src\CMakeFiles\particle_attractor.dir\objreader.cpp.obj: CXX_COMPILER__particle_attractor ..\..\..\src\objreader.cpp || cmake_object_order_depends_target_particle_attractor
   DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   INCLUDES = -Isrc -I..\..\..\src -Isrc\particle_attractor_autogen\include -I..\..\..\include -IC:\Qt\5.11.2\msvc2017_64\include -IC:\Qt\5.11.2\msvc2017_64\include\QtCore -IC:\Qt\5.11.2\msvc2017_64\.\mkspecs\win32-msvc -IC:\Qt\5.11.2\msvc2017_64\include\QtGui -IC:\Qt\5.11.2\msvc2017_64\include\QtANGLE -IC:\Qt\5.11.2\msvc2017_64\include\QtWidgets
@@ -191,15 +191,6 @@ build src\CMakeFiles\particle_attractor.dir\__\include\moc_shaderprogram.cpp.obj
   INCLUDES = -Isrc -I..\..\..\src -Isrc\particle_attractor_autogen\include -I..\..\..\include -IC:\Qt\5.11.2\msvc2017_64\include -IC:\Qt\5.11.2\msvc2017_64\include\QtCore -IC:\Qt\5.11.2\msvc2017_64\.\mkspecs\win32-msvc -IC:\Qt\5.11.2\msvc2017_64\include\QtGui -IC:\Qt\5.11.2\msvc2017_64\include\QtANGLE -IC:\Qt\5.11.2\msvc2017_64\include\QtWidgets
   OBJECT_DIR = src\CMakeFiles\particle_attractor.dir
   OBJECT_FILE_DIR = src\CMakeFiles\particle_attractor.dir\__\include
-  TARGET_COMPILE_PDB = src\CMakeFiles\particle_attractor.dir\
-  TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
-
-build src\CMakeFiles\particle_attractor.dir\__\include\algorithms\moc_algorithms.cpp.obj: CXX_COMPILER__particle_attractor src\__\include\algorithms\moc_algorithms.cpp || cmake_object_order_depends_target_particle_attractor
-  DEFINES = -DQDESIGNER_EXPORT_WIDGETS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SHARED -DQT_WIDGETS_LIB
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
-  INCLUDES = -Isrc -I..\..\..\src -Isrc\particle_attractor_autogen\include -I..\..\..\include -IC:\Qt\5.11.2\msvc2017_64\include -IC:\Qt\5.11.2\msvc2017_64\include\QtCore -IC:\Qt\5.11.2\msvc2017_64\.\mkspecs\win32-msvc -IC:\Qt\5.11.2\msvc2017_64\include\QtGui -IC:\Qt\5.11.2\msvc2017_64\include\QtANGLE -IC:\Qt\5.11.2\msvc2017_64\include\QtWidgets
-  OBJECT_DIR = src\CMakeFiles\particle_attractor.dir
-  OBJECT_FILE_DIR = src\CMakeFiles\particle_attractor.dir\__\include\algorithms
   TARGET_COMPILE_PDB = src\CMakeFiles\particle_attractor.dir\
   TARGET_PDB = ..\..\..\lib\particle_attractor.pdb
 
@@ -274,7 +265,7 @@ build src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\3YJK5W5UP
 #############################################
 # Link the executable ..\..\..\lib\particle_attractor.exe
 
-build ..\..\..\lib\particle_attractor.exe: CXX_EXECUTABLE_LINKER__particle_attractor src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\mocs_compilation.cpp.obj src\CMakeFiles\particle_attractor.dir\main.cpp.obj src\CMakeFiles\particle_attractor.dir\mainwindow.cpp.obj src\CMakeFiles\particle_attractor.dir\oglwidget.cpp.obj src\CMakeFiles\particle_attractor.dir\shaderprogram.cpp.obj src\CMakeFiles\particle_attractor.dir\algorithms.cpp.obj src\CMakeFiles\particle_attractor.dir\gameobject.cpp.obj src\CMakeFiles\particle_attractor.dir\camera.cpp.obj src\CMakeFiles\particle_attractor.dir\renderer.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_mainwindow.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_oglwidget.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_vertex.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_shaderprogram.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\algorithms\moc_algorithms.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_gameobject.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_camera.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_libs.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_mesh.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_material.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_objreader.cpp.obj src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\3YJK5W5UP7\qrc_resources.cpp.obj | C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Widgetsd.lib C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Guid.lib C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Cored.lib C$:\Qt\5.11.2\msvc2017_64\lib\qtmaind.lib || src\particle_attractor_autogen
+build ..\..\..\lib\particle_attractor.exe: CXX_EXECUTABLE_LINKER__particle_attractor src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\mocs_compilation.cpp.obj src\CMakeFiles\particle_attractor.dir\main.cpp.obj src\CMakeFiles\particle_attractor.dir\mainwindow.cpp.obj src\CMakeFiles\particle_attractor.dir\oglwidget.cpp.obj src\CMakeFiles\particle_attractor.dir\shaderprogram.cpp.obj src\CMakeFiles\particle_attractor.dir\gameobject.cpp.obj src\CMakeFiles\particle_attractor.dir\camera.cpp.obj src\CMakeFiles\particle_attractor.dir\renderer.cpp.obj src\CMakeFiles\particle_attractor.dir\objreader.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_mainwindow.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_oglwidget.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_vertex.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_shaderprogram.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_gameobject.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_camera.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_libs.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_mesh.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\gameobject\moc_material.cpp.obj src\CMakeFiles\particle_attractor.dir\__\include\moc_objreader.cpp.obj src\CMakeFiles\particle_attractor.dir\particle_attractor_autogen\3YJK5W5UP7\qrc_resources.cpp.obj | C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Widgetsd.lib C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Guid.lib C$:\Qt\5.11.2\msvc2017_64\lib\Qt5Cored.lib C$:\Qt\5.11.2\msvc2017_64\lib\qtmaind.lib || src\particle_attractor_autogen
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:windows
   LINK_LIBRARIES = opengl32.lib C:\Qt\5.11.2\msvc2017_64\lib\Qt5Widgetsd.lib C:\Qt\5.11.2\msvc2017_64\lib\Qt5Guid.lib C:\Qt\5.11.2\msvc2017_64\lib\Qt5Cored.lib C:\Qt\5.11.2\msvc2017_64\lib\qtmaind.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
@@ -338,15 +329,6 @@ build src\__\include\moc_vertex.cpp: CUSTOM_COMMAND ..\..\..\include\vertex.hpp 
 build src\__\include\moc_shaderprogram.cpp: CUSTOM_COMMAND ..\..\..\include\shaderprogram.hpp || src\particle_attractor_autogen
   COMMAND = cmd.exe /C "cd /D C:\Users\dhruv\Development\git\particle_attractor\out\build\x64-Debug\src\__\include && C:\Qt\5.11.2\msvc2017_64\bin\moc.exe @C:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src/__/include/moc_shaderprogram.cpp_parameters"
   DESC = Generating __/include/moc_shaderprogram.cpp
-  restat = 1
-
-
-#############################################
-# Custom command for src\__\include\algorithms\moc_algorithms.cpp
-
-build src\__\include\algorithms\moc_algorithms.cpp: CUSTOM_COMMAND ..\..\..\include\algorithms\algorithms.hpp || src\particle_attractor_autogen
-  COMMAND = cmd.exe /C "cd /D C:\Users\dhruv\Development\git\particle_attractor\out\build\x64-Debug\src\__\include\algorithms && C:\Qt\5.11.2\msvc2017_64\bin\moc.exe @C:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src/__/include/algorithms/moc_algorithms.cpp_parameters"
-  DESC = Generating __/include/algorithms/moc_algorithms.cpp
   restat = 1
 
 

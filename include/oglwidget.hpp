@@ -2,13 +2,10 @@
 #define OGLWIDGET_H
 
 #include "libs.hpp"
-// shaderprogram
-#include "shaderprogram.hpp"
-// algorithms
-#include "gameobject/gameobject.hpp"
-#include "algorithms/algorithms.hpp"
 #include "camera.hpp"
 #include "renderer.hpp"
+#include "shaderprogram.hpp"
+#include "gameobject/gameobject.hpp"
 
 class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -22,7 +19,6 @@ public:
 
 	ShaderProgram *particleObjShader;
 
-	Algorithms *attractor;
 	std::vector<GameObject *> *gameObjects;
 	QMatrix4x4 *projectionMatrix, *viewMatrix;
 	Camera *camera;

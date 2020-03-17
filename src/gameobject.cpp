@@ -42,9 +42,7 @@ QMatrix4x4 & GameObject::getModelMatrix() const {
 	return *modelMatrix;
 }
 
-void GameObject::updateObject(
-	int frames, QKeyEvent * event, Algorithms * attractor
-) {
+void GameObject::updateObject(int frames, QKeyEvent * event) {
 
 }
 

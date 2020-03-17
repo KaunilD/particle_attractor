@@ -9,8 +9,6 @@ OGLWidget::OGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 	this->setFormat(format);
 	this->setFocus();
 
-	attractor = new Algorithms();
-	
 	updateGLTimer.setInterval(1000 / 60.f);
 	connect(&updateGLTimer, SIGNAL(timeout()), this, SLOT(update()));
 
@@ -51,6 +49,7 @@ void OGLWidget::initializeGL() {
 	);
 	
 	renderer = new Renderer();
+	
 	initializeGLfromGrid();
 	elapsedTimer.start();
 	updateGLTimer.start();
@@ -72,10 +71,13 @@ void OGLWidget::initializeGLfromGrid() {
 	gameObjects = new std::vector<GameObject *>();
 
 	Mesh mesh(
-		engine::ObjReader::readObj(QString(":/sphere")));
+		Utils::readObj(QString(":/sphere"))
+	);
+	
 	Material material(
 		QString(":/blattTexture")
 	);
+
 	GameObject *sunObject = new GameObject(
 		true, 
 		100.f, 
@@ -127,7 +129,7 @@ void OGLWidget::signalGameOver() {
 
 void OGLWidget::keyPressEvent(QKeyEvent * event) {
 	for (int i = 0; i < gameObjects->size(); i++) {
-		gameObjects->at(i)->updateObject(frame, event, attractor);
+		gameObjects->at(i)->updateObject(frame, event);
 	}
 }
 

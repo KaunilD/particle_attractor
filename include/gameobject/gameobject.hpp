@@ -3,10 +3,9 @@
 
 #include "libs.hpp"
 #include "vertex.hpp"
+#include "shaderprogram.hpp"
 #include "gameobject/mesh.hpp"
 #include "gameobject/material.hpp"
-#include "shaderprogram.hpp"
-#include "algorithms/algorithms.hpp"
 
 class GameObject: protected QOpenGLFunctions {
 
@@ -35,7 +34,7 @@ class GameObject: protected QOpenGLFunctions {
 
 	QVector3D getPosition() { return position; };
 
-	void updateObject(int frames, QKeyEvent * event, Algorithms * algorithm);
+	void updateObject(int frames, QKeyEvent * event);
 
 	QVector3D velocity = QVector3D(0.0, 0.0, 0.0);
 	QVector3D acceleration = QVector3D(0, 0, 0);

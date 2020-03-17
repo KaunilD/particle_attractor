@@ -39,10 +39,10 @@ set(SRCS
 	"mainwindow.cpp"
 	"oglwidget.cpp"
 	"shaderprogram.cpp"
-	"algorithms.cpp"
 	"gameobject.cpp"
 	"camera.cpp"
 	"renderer.cpp"
+	"objreader.cpp"
 )
 
 set(UI
@@ -54,7 +54,6 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/oglwidget.hpp
 	${PROJECT_SOURCE_DIR}/include/vertex.hpp
 	${PROJECT_SOURCE_DIR}/include/shaderprogram.hpp
-	${PROJECT_SOURCE_DIR}/include/algorithms/algorithms.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/gameobject.hpp
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
 	${PROJECT_SOURCE_DIR}/include/libs.hpp

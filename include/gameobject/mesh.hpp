@@ -3,7 +3,6 @@
 
 #include "libs.hpp"
 #include "objreader.hpp"
-#include "gameobject/gameobject.hpp"
 
 class Mesh {
 public:
@@ -19,7 +18,7 @@ public:
 		v_count(t_mesh.v_count)
 	{};
 
-	Mesh(engine::ObjReader::ObjReaderRet obj) {
+	Mesh(Utils::ObjReaderRet obj) {
 		m_VAO = new QOpenGLBuffer();
 		m_VAO->create();
 		m_VAO->bind();
@@ -45,4 +44,4 @@ public:
 	}
 };
 
-#endif
+#endif MESH_H
