@@ -1,0 +1,12 @@
+-IC:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src
+-IC:/Users/dhruv/Development/git/particle_attractor/src
+-IC:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src
+-DQT_PLUGIN
+-DQT_NO_DEBUG
+-DQT_SHARED
+-DQDESIGNER_EXPORT_WIDGETS
+-DWIN32
+--compiler-flavor=msvc
+-o
+C:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src/__/include/gameobject/moc_material.cpp
+C:/Users/dhruv/Development/git/particle_attractor/include/gameobject/material.hpp

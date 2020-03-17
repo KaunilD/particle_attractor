@@ -38,8 +38,8 @@ public:
 	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
 	void resetProjectionMatrix();
 
-	QMatrix4x4 getProjectionMatrix();
-	QMatrix4x4 getViewMatrix();
+	QMatrix4x4 getProjectionMatrix() const;
+	QMatrix4x4 getViewMatrix() const;
 
 	void update(QWheelEvent *);
 };

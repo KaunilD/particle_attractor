@@ -20,13 +20,13 @@ public:
 	~OGLWidget();
 
 
-	shared_ptr<ShaderProgram> particleObjShader;
+	ShaderProgram *particleObjShader;
 
-	Algorithms * attractor;
-	shared_ptr<vector<GameObject *>> gameObjects;
-	QMatrix4x4 * projectionMatrix, *viewMatrix;
+	Algorithms *attractor;
+	std::vector<GameObject *> *gameObjects;
+	QMatrix4x4 *projectionMatrix, *viewMatrix;
 	Camera *camera;
-	Renderer * renderer;
+	Renderer *renderer;
 	void initializeGL() override;
 	void paintGL() override;
 	void resizeGL(int w, int h) override;

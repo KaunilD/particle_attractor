@@ -65,11 +65,11 @@ void Camera::resetProjectionMatrix() {
 	);
 }
 
-QMatrix4x4 Camera::getProjectionMatrix() {
+QMatrix4x4 Camera::getProjectionMatrix() const {
 	return *projectionMatrix;
 }
 
-QMatrix4x4 Camera::getViewMatrix() {
+QMatrix4x4 Camera::getViewMatrix() const  {
 	return *viewMatrix;
 }
 

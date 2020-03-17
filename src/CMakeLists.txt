@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Make this a GUI application on Windows
@@ -58,6 +58,9 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/gameobject/gameobject.hpp
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
 	${PROJECT_SOURCE_DIR}/include/libs.hpp
+	${PROJECT_SOURCE_DIR}/include/gameobject/mesh.hpp
+	${PROJECT_SOURCE_DIR}/include/gameobject/material.hpp
+	${PROJECT_SOURCE_DIR}/include/objreader.hpp
 )
 
 qt5_wrap_ui(ui_wrap ${UI})

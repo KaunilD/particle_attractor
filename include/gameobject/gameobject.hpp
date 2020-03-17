@@ -3,6 +3,8 @@
 
 #include "libs.hpp"
 #include "vertex.hpp"
+#include "gameobject/mesh.hpp"
+#include "gameobject/material.hpp"
 #include "shaderprogram.hpp"
 #include "algorithms/algorithms.hpp"
 
@@ -10,18 +12,19 @@ class GameObject: protected QOpenGLFunctions {
 
 	public:
 	GameObject();
-	GameObject(
-		bool npc,
-		float mass,
-		QVector3D position,
-		QVector3D color
-	);
-	virtual ~GameObject();
+	GameObject(bool, float, Mesh, Material);
+	~GameObject() = default;
+	QMatrix4x4* modelMatrix;
+	QVector3D position, color, scale;
 
-	QMatrix4x4 & getModelMatrix();
+	Mesh m_mesh;
+	Material m_material;
+
+	QMatrix4x4 & getModelMatrix() const;
 	QMatrix4x4 & getProjectionMatrix();
 
 	void setupModelMatrix(QVector3D translate, QVector3D scale);
+	
 	void setScale(QVector3D scale);
 	void setTranslate(QVector3D translate);
 	void setPosition(QVector3D translate);
@@ -31,10 +34,6 @@ class GameObject: protected QOpenGLFunctions {
 	QVector3D getColor() { return color; };
 
 	QVector3D getPosition() { return position; };
-
-	void setupGLBuffers();
-	void render(ShaderProgram * shaderProgram);
-	void loadObject(QString objFile, QString textureImage);
 
 	void updateObject(int frames, QKeyEvent * event, Algorithms * algorithm);
 
@@ -50,24 +49,5 @@ class GameObject: protected QOpenGLFunctions {
 	float getForceVector(GameObject * p);
 	void applyForceVector(float, QVector3D);
 	bool npc;
-
-	QMatrix4x4 * modelMatrix, *projectionMatrix;
-	QVector3D position, color, scale;
-	QOpenGLTexture * texture = NULL;
-
-	QVector<Vertex> vertices;
-	QVector<GLsizei> indices;
-
-	QVector<QVector3D> rawVertices;
-	QVector<QVector2D> rawTextures;
-	QVector<QVector3D> rawNormals;
-
-	std::vector<int> vertesIndices;
-	std::vector<int> textureIndices;
-	std::vector<int> normalIndices;
-
-	shared_ptr<QOpenGLBuffer> attributeBuffer, indexBuffer;
-
-
 };
 #endif
