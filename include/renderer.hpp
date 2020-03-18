@@ -25,8 +25,8 @@ public:
 		);
 
 		GLuint textureAttribLoc, positionAttribLoc, normalAttribLoc, colorAttribLoc;
-		gameObject.m_mesh.m_VAO->bind();
-		gameObject.m_mesh.m_IBO->bind();
+		gameObject.m_mesh->m_VAO->bind();
+		gameObject.m_mesh->m_IBO->bind();
 
 		// POSITION
 		positionAttribLoc = shaderProgram->program->attributeLocation("vertex_position");
@@ -44,7 +44,7 @@ public:
 		shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
 
 
-		glDrawElements(GL_TRIANGLES, gameObject.m_mesh.i_count, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, gameObject.m_mesh->i_count, GL_UNSIGNED_INT, 0);
 
 		glDisableVertexAttribArray(positionAttribLoc);
 		glDisableVertexAttribArray(normalAttribLoc);

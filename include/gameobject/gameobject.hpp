@@ -11,13 +11,13 @@ class GameObject: protected QOpenGLFunctions {
 
 	public:
 	GameObject();
-	GameObject(bool, float, Mesh, Material);
-	~GameObject() = default;
+	GameObject(bool, float, std::shared_ptr<Mesh>, std::shared_ptr<Material>);
+	~GameObject();
 	QMatrix4x4* modelMatrix;
 	QVector3D position, color, scale;
 
-	Mesh m_mesh;
-	Material m_material;
+	std::shared_ptr<Mesh> m_mesh;
+	std::shared_ptr<Material> m_material;
 
 	QMatrix4x4 & getModelMatrix() const;
 	QMatrix4x4 & getProjectionMatrix();

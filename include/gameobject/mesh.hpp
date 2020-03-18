@@ -6,19 +6,12 @@
 
 class Mesh {
 public:
-	QOpenGLBuffer *m_VAO, *m_IBO;
 	size_t i_count = 0, v_count = 0;
-
-	Mesh() = default;
+	QOpenGLBuffer *m_VAO, *m_IBO;
 	
-	Mesh(const Mesh& t_mesh) :
-		m_VAO(t_mesh.m_VAO),
-		m_IBO(t_mesh.m_IBO),
-		i_count(t_mesh.i_count),
-		v_count(t_mesh.v_count)
-	{};
+	Mesh() = default;
 
-	Mesh(Utils::ObjReaderRet obj) {
+	Mesh(Utils::ObjReaderRet obj): i_count(obj.i.count()), v_count(obj.v.count()) {
 		m_VAO = new QOpenGLBuffer();
 		m_VAO->create();
 		m_VAO->bind();
@@ -26,7 +19,6 @@ public:
 			obj.v.constData(),
 			obj.v.count() * static_cast<int>(sizeof(Vertex))
 		);
-		v_count = obj.v.count();
 
 		m_IBO = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
 		m_IBO->create();
@@ -35,10 +27,10 @@ public:
 			obj.i.constData(),
 			obj.i.count() * static_cast<int>(sizeof(GL_UNSIGNED_INT))
 		);
-		i_count = obj.i.count();
 	};
 
 	~Mesh(){
+		qDebug() << "Mesh::Destroyed";
 		m_IBO->destroy();
 		m_VAO->destroy();
 	}

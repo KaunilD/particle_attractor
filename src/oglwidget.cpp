@@ -51,6 +51,7 @@ void OGLWidget::initializeGL() {
 	renderer = new Renderer();
 	
 	initializeGLfromGrid();
+	
 	elapsedTimer.start();
 	updateGLTimer.start();
 	frameTimeUpdateTimer.start();
@@ -68,24 +69,31 @@ void OGLWidget::frameTimeUpdateTimerTicked() {
 
 
 void OGLWidget::initializeGLfromGrid() {
-	gameObjects = new std::vector<GameObject *>();
+	using std::make_unique;
+	using std::unique_ptr;
 
-	Mesh mesh(
-		Utils::readObj(QString(":/sphere"))
-	);
-	
-	Material material(
-		QString(":/blattTexture")
+
+	gameObjects = make_unique<vector<unique_ptr<GameObject>>>();
+
+	m_sphereMesh = make_shared<Mesh>(Utils::readObj(QString(":/sphere")));
+	m_sphereMaterial = make_shared<Material>(QString(":/blattTexture"));
+
+	unique_ptr<GameObject> sunObject = make_unique<GameObject>(
+		true,
+		100.f,
+		m_sphereMesh,
+		m_sphereMaterial
+	); 
+	unique_ptr<GameObject> particleObject = make_unique<GameObject>(
+		true,
+		100.f,
+		m_sphereMesh,
+		m_sphereMaterial
 	);
 
-	GameObject *sunObject = new GameObject(
-		true, 
-		100.f, 
-		mesh,
-		material
-	);
-	gameObjects->push_back(sunObject);
-	
+	gameObjects->push_back(std::move(sunObject));
+	gameObjects->push_back(std::move(particleObject));
+
 }
 
 

@@ -2,14 +2,26 @@
 
 GameObject::GameObject() {}
 
+
+
 GameObject::GameObject(
-	bool t_npc, float t_mass, Mesh t_mesh, Material t_material): npc(t_npc), mass(t_mass), m_mesh(t_mesh), m_material(t_material){
+	bool t_npc, float t_mass, std::shared_ptr<Mesh> t_mesh, std::shared_ptr<Material> t_material
+):	npc(t_npc), mass(t_mass)
+{	
 	initializeOpenGLFunctions();
 	float scale = qBound(7.f, mass*10, 10.0f);
+
+	m_mesh = t_mesh;
+	m_material = t_material;
+
 	setupModelMatrix(
 		position,
 		QVector3D(scale, scale, scale)
 	);
+}
+
+GameObject::~GameObject() {
+	qDebug()<<"GameObject::Destroyed";
 }
 
 void GameObject::setColor(QVector3D _color) {
