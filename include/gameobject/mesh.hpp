@@ -30,7 +30,7 @@ public:
 	};
 
 	~Mesh(){
-		qDebug() << "Mesh::Destroyed";
+		LOG("Mesh::Destroyed")
 		m_IBO->destroy();
 		m_VAO->destroy();
 	}

@@ -19,7 +19,7 @@ public:
 
 	ShaderProgram *particleObjShader;
 
-	std::unique_ptr<std::vector<std::unique_ptr<GameObject>>> gameObjects;
+	unique_ptr<std::vector<unique_ptr<GameObject>>> gameObjects;
 	
 	QMatrix4x4 *projectionMatrix, *viewMatrix;
 	Camera *camera;
@@ -33,9 +33,9 @@ public:
 	void signalGameOver();
 	void initializeGLfromGrid();
 
-	/* meshes */
-	std::shared_ptr<Mesh> m_sphereMesh;
-	std::shared_ptr<Material> m_sphereMaterial;
+	/* meshes and materials */
+	shared_ptr<Mesh> m_sphereMesh;
+	shared_ptr<Material> m_sphereMaterial;
 private:
 	int frame{0};
 	QTimer updateGLTimer, frameTimeUpdateTimer;

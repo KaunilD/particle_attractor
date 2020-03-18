@@ -19,7 +19,9 @@ public:
 		);
 	}
 
-	~Material() = default;
+	~Material() {
+		LOG("Material::Destroyed")
+	};
 };
 
 #endif MATERIAL_H

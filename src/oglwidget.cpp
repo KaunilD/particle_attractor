@@ -69,30 +69,27 @@ void OGLWidget::frameTimeUpdateTimerTicked() {
 
 
 void OGLWidget::initializeGLfromGrid() {
-	using std::make_unique;
-	using std::unique_ptr;
-
-
-	gameObjects = make_unique<vector<unique_ptr<GameObject>>>();
+	
+	gameObjects = make_unique<std::vector<unique_ptr<GameObject>>>();
 
 	m_sphereMesh = make_shared<Mesh>(Utils::readObj(QString(":/sphere")));
 	m_sphereMaterial = make_shared<Material>(QString(":/blattTexture"));
 
-	unique_ptr<GameObject> sunObject = make_unique<GameObject>(
-		true,
-		100.f,
-		m_sphereMesh,
-		m_sphereMaterial
-	); 
-	unique_ptr<GameObject> particleObject = make_unique<GameObject>(
-		true,
-		100.f,
-		m_sphereMesh,
-		m_sphereMaterial
-	);
 
-	gameObjects->push_back(std::move(sunObject));
-	gameObjects->push_back(std::move(particleObject));
+	gameObjects->push_back(make_unique<GameObject>(
+		true,
+		100.f,
+		m_sphereMesh,
+		m_sphereMaterial
+		)
+	);
+	gameObjects->push_back(make_unique<GameObject>(
+		true,
+		100.f,
+		m_sphereMesh,
+		m_sphereMaterial
+		)
+	);
 
 }
 

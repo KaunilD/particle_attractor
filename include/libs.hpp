@@ -31,10 +31,13 @@
 #include <QMainWindow>
 #include <QElapsedTimer>
 
-using std::vector;
-using std::cout;
-using std::endl;
+#define LOG(x) {qDebug() << x;}
+
 using std::shared_ptr;
 using std::make_shared;
+
+using std::unique_ptr;
+using std::make_unique;
+
 
 #endif
