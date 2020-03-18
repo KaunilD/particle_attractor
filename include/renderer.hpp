@@ -12,13 +12,15 @@ public:
 	Renderer() {
 		initializeOpenGLFunctions();
 	}
+
 	void render(
-		ShaderProgram* shaderProgram,
-		const GameObject& gameObject,
-		const Camera& camera
+		ShaderProgram& shaderProgram,
+		GameObject& gameObject,
+		Camera& camera
 	) {
-		shaderProgram->activate();
-		shaderProgram->sendMatricesToShader(
+
+		shaderProgram.activate();
+		shaderProgram.sendMatricesToShader(
 			camera.getProjectionMatrix(),
 			camera.getViewMatrix(),
 			gameObject.getModelMatrix()
@@ -29,19 +31,19 @@ public:
 		gameObject.m_mesh->m_IBO->bind();
 
 		// POSITION
-		positionAttribLoc = shaderProgram->program->attributeLocation("vertex_position");
-		shaderProgram->program->enableAttributeArray(positionAttribLoc);
-		shaderProgram->program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
+		positionAttribLoc = shaderProgram.program->attributeLocation("vertex_position");
+		shaderProgram.program->enableAttributeArray(positionAttribLoc);
+		shaderProgram.program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
 
 		// NORMAL
-		normalAttribLoc = shaderProgram->program->attributeLocation("vertex_normal");
-		shaderProgram->program->enableAttributeArray(normalAttribLoc);
-		shaderProgram->program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
+		normalAttribLoc = shaderProgram.program->attributeLocation("vertex_normal");
+		shaderProgram.program->enableAttributeArray(normalAttribLoc);
+		shaderProgram.program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
 
 		// COLOR
-		colorAttribLoc = shaderProgram->program->attributeLocation("vertex_color");
-		shaderProgram->program->enableAttributeArray(colorAttribLoc);
-		shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
+		colorAttribLoc = shaderProgram.program->attributeLocation("vertex_color");
+		shaderProgram.program->enableAttributeArray(colorAttribLoc);
+		shaderProgram.program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
 
 
 		glDrawElements(GL_TRIANGLES, gameObject.m_mesh->i_count, GL_UNSIGNED_INT, 0);
@@ -50,6 +52,10 @@ public:
 		glDisableVertexAttribArray(normalAttribLoc);
 		glDisableVertexAttribArray(colorAttribLoc);
 	};
+
+	~Renderer() {
+		LOG("Renderer::Destroyed");
+	}
 };
 
 #endif

@@ -19,6 +19,7 @@ OGLWidget::OGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 
 OGLWidget::~OGLWidget() {
+	LOG("OGLWidget::Destroyed");
 }
 
 void OGLWidget::initializeGL() {
@@ -34,7 +35,7 @@ void OGLWidget::initializeGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
-	camera = new Camera(
+	camera = make_unique<Camera>(
 		QVector3D(0.0f, 0.0f, 10.0f),
 		QVector3D(0.0f, 0.0f, -1.0f),
 		QVector3D(0.0f, 1.0f, 0.0f),
@@ -42,13 +43,13 @@ void OGLWidget::initializeGL() {
 	);
 	camera->setSpeed(0.5);
 
-	particleObjShader = new ShaderProgram(this);
+	particleObjShader = make_unique<ShaderProgram>(this);
 	particleObjShader->loadShaders(
 		":/vertexShader",
 		":/fragShader"
 	);
 	
-	renderer = new Renderer();
+	renderer = make_unique<Renderer>();
 	
 	initializeGLfromGrid();
 	
@@ -101,11 +102,12 @@ void OGLWidget::paintGL() {
 	/*
 	 render sun
 	*/
+	//gameObjects->at(0).update();
 
 	renderer->render(
-		particleObjShader,
-		*(gameObjects->at(0)),
-		*(camera)
+		*particleObjShader.get(),
+		*gameObjects->at(0).get(),
+		*camera.get()
 	);
 	
 	frame += 1;

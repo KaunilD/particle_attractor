@@ -20,6 +20,7 @@ public:
 	}
 
 	~Material() {
+		delete texture;
 		LOG("Material::Destroyed")
 	};
 };

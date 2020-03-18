@@ -42,16 +42,11 @@ void GameObject::setScale(QVector3D _scale) {
 }
 
 void GameObject::setupModelMatrix(QVector3D _translate, QVector3D _scale) {
-	modelMatrix = new QMatrix4x4();
+	modelMatrix = make_unique<QMatrix4x4>();
 	modelMatrix->setToIdentity();
 
 	setScale(_scale);
 	setTranslate(_translate);
-}
-
-
-QMatrix4x4 & GameObject::getModelMatrix() const {
-	return *modelMatrix;
 }
 
 void GameObject::updateObject(int frames, QKeyEvent * event) {
@@ -64,12 +59,6 @@ float GameObject::getForceVector(GameObject * p) {
 	float magnitude = sqrt(pow(distance.x(), 2) + pow(distance.y(), 2) + pow(distance.z(), 2));
 	magnitude = qBound(5.f, magnitude, 20.f);
 	return ( g * mass * p->mass) / (magnitude * magnitude);
-}
-
-QVector3D * GameObject::sqrt3D(QVector3D *a) {
-	return new QVector3D(
-		sqrt(a->x()), sqrt(a->y()), sqrt(a->z())
-	);
 }
 
 

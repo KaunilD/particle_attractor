@@ -16,14 +16,12 @@ public:
 	explicit OGLWidget(QWidget *parent = 0);
 	~OGLWidget();
 
-
-	ShaderProgram *particleObjShader;
-
 	unique_ptr<std::vector<unique_ptr<GameObject>>> gameObjects;
 	
-	QMatrix4x4 *projectionMatrix, *viewMatrix;
-	Camera *camera;
-	Renderer *renderer;
+	unique_ptr<ShaderProgram> particleObjShader;
+	unique_ptr<Camera> camera;
+	
+	unique_ptr<Renderer> renderer;
 	void initializeGL() override;
 	void paintGL() override;
 	void resizeGL(int w, int h) override;
