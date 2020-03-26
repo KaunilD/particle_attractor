@@ -15,7 +15,7 @@ class GameObject: protected QOpenGLFunctions {
 	~GameObject();
 
 	bool m_npc;
-	QVector3D velocity = QVector3D(0.0, 0.0, 0.0);
+	QVector3D velocity = QVector3D(1.0, 2.0, -1.0);
 	QVector3D acceleration = QVector3D(0, 0, 0);
 	float m_mass, g = 0.4f, angle = 0, angularVelocity = 0, angularAcceleration = 0.01;
 

@@ -87,7 +87,7 @@ void OGLWidget::initializeGLfromGrid() {
 	// setup particles
 	
 	unique_ptr<ParticleObject> particleObject;
-	for (int i = 1; i < 100; i++) {
+	for (int i = 1; i < 1000; i++) {
 		particleObject = make_unique<ParticleObject>(false);
 		particleObject->setMass(
 			Algorithms::randomInt(10) / 10.f + 0.01

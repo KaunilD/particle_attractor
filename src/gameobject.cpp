@@ -51,16 +51,16 @@ void GameObject::setupModelMatrix(QVector3D t_scale, QVector3D t_position) {
 
 float GameObject::getForceVector(const GameObject& p) const {
 	QVector3D distance = p.getPosition() - m_position;
-	float magnitude = sqrt(pow(distance.x(), 2) + pow(distance.y(), 2) + pow(distance.z(), 2));
+	float magnitude = sqrt(pow(distance.x(), 2) + pow(distance.y(), 2) + pow(distance.z(), 2)) + 0.15;
 	magnitude = qBound(5.f, magnitude, 20.f);
-	return ( g * m_mass * p.m_mass) / (magnitude * magnitude);
+	return ( g * m_mass * p.m_mass) / (magnitude*magnitude * magnitude);
 }
 
 
 void GameObject::applyForceVector(float force, QVector3D distance) {
 	QVector3D resForce = (distance.normalized())*force;
 	acceleration += (resForce / m_mass);
-	velocity += acceleration*(1/60.f);
+	velocity += acceleration * (1 / 60.f);
 	m_position += velocity * (1 / 60.f);
 	acceleration *= 0;
 
