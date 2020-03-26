@@ -1,12 +1,5 @@
 #include "algorithms/algorithms.hpp"
 
-Algorithms::Algorithms(){
-
-	
-}
-
-Algorithms::~Algorithms() {
-}
 int Algorithms::randomInt(int max) {
 	std::random_device dev;
 	std::mt19937 rng(dev());

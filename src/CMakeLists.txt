@@ -43,6 +43,7 @@ set(SRCS
 	"camera.cpp"
 	"renderer.cpp"
 	"objreader.cpp"
+	"algorithms.cpp"
 )
 
 set(UI
@@ -55,6 +56,9 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/vertex.hpp
 	${PROJECT_SOURCE_DIR}/include/shaderprogram.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/gameobject.hpp
+	${PROJECT_SOURCE_DIR}/include/gameobject/sunobject.hpp
+	${PROJECT_SOURCE_DIR}/include/gameobject/particleobject.hpp
+	${PROJECT_SOURCE_DIR}/include/algorithms/algorithms.hpp
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
 	${PROJECT_SOURCE_DIR}/include/libs.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/mesh.hpp

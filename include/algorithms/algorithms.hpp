@@ -3,17 +3,16 @@
 
 #include "libs.hpp"
 
-class Algorithms {
+namespace Algorithms {
 
-public:
-
-	Algorithms();
-	~Algorithms();
+	struct twoInts {
+		int n1, n2;
+	};
 
 	int xyToIndex(int x, int y);
-	vector<int> indexToxy(int index);
+	twoInts indexToxy(int index);
 	bool inBounds(int x, int y);
 	int randomInt(int max);
 };
 
-#endif
+#endif ALGORITHMS_H

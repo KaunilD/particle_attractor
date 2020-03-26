@@ -76,22 +76,41 @@ void OGLWidget::initializeGLfromGrid() {
 	m_sphereMesh = make_shared<Mesh>(Utils::readObj(QString(":/sphere")));
 	m_sphereMaterial = make_shared<Material>(QString(":/blattTexture"));
 
+	// setup sun
+	unique_ptr<SunObject> sunObject = make_unique<SunObject>(true);
+	sunObject->setMass(1000.0f);
+	sunObject->setMesh(m_sphereMesh);
+	sunObject->setMaterial(m_sphereMaterial);
+	sunObject->setScale(QVector3D(10.0f, 10.0f, 10.0f));
+	gameObjects->push_back(std::move(sunObject));
 
-	gameObjects->push_back(make_unique<GameObject>(
-		true,
-		100.f,
-		m_sphereMesh,
-		m_sphereMaterial
-		)
-	);
-	gameObjects->push_back(make_unique<GameObject>(
-		true,
-		100.f,
-		m_sphereMesh,
-		m_sphereMaterial
-		)
-	);
+	// setup particles
+	
+	unique_ptr<ParticleObject> particleObject;
+	for (int i = 1; i < 100; i++) {
+		particleObject = make_unique<ParticleObject>(false);
+		particleObject->setMass(
+			Algorithms::randomInt(10) / 10.f + 0.01
+		);
+		particleObject->setMesh(m_sphereMesh);
+		particleObject->setMaterial(m_sphereMaterial);
+		particleObject->setScale(
+			QVector3D(
+				particleObject->m_mass, particleObject->m_mass, particleObject->m_mass
+			)
+		);
 
+		particleObject->setPosition(
+			QVector3D(
+				Algorithms::randomInt(10) - 5,
+				Algorithms::randomInt(10) - 5,
+				Algorithms::randomInt(10) - 5
+			)
+		);
+
+		gameObjects->push_back(std::move(particleObject));
+	}
+	
 }
 
 
@@ -99,16 +118,21 @@ void OGLWidget::paintGL() {
 
 	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	/*
-	 render sun
-	*/
-	//gameObjects->at(0).update();
 
-	renderer->render(
-		*particleObjShader.get(),
-		*gameObjects->at(0).get(),
-		*camera.get()
-	);
+	/*
+		update and render gameObjects
+	*/
+	for (int i = 0; i < gameObjects->size(); i++) {
+		gameObjects->at(i)->updateObject(
+			frame, 0, *gameObjects->at(0)
+		);
+
+		renderer->render(
+			*particleObjShader.get(),
+			*gameObjects->at(i).get(),
+			*camera.get()
+		);
+	}
 	
 	frame += 1;
 	elapsedTime = elapsedTimer.nsecsElapsed();
@@ -135,9 +159,11 @@ void OGLWidget::signalGameOver() {
 }
 
 void OGLWidget::keyPressEvent(QKeyEvent * event) {
+	/*
 	for (int i = 0; i < gameObjects->size(); i++) {
 		gameObjects->at(i)->updateObject(frame, event);
 	}
+	*/
 }
 
 void OGLWidget::wheelEvent(QWheelEvent * event) {

@@ -5,7 +5,12 @@
 #include "camera.hpp"
 #include "renderer.hpp"
 #include "shaderprogram.hpp"
+
 #include "gameobject/gameobject.hpp"
+#include "gameobject/sunobject.hpp"
+#include "gameobject/particleobject.hpp"
+
+#include "algorithms/algorithms.hpp"
 
 class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -20,8 +25,8 @@ public:
 	
 	unique_ptr<ShaderProgram> particleObjShader;
 	unique_ptr<Camera> camera;
-	
 	unique_ptr<Renderer> renderer;
+
 	void initializeGL() override;
 	void paintGL() override;
 	void resizeGL(int w, int h) override;
