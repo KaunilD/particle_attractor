@@ -5,22 +5,23 @@
 
 class Material {
 public:
-	QOpenGLTexture *texture;
-
+	QString m_texturePath;
+	unique_ptr<QOpenGLTexture> m_texture;
 	Material() = default;
-	Material(const Material& t_material):
-		texture(t_material.texture)
-	{
+	Material(const Material& t_material): m_texturePath(t_material.m_texturePath){
 
+		m_texture = make_unique<QOpenGLTexture>(
+			QImage(t_material.m_texturePath).mirrored()
+		);
 	}
-	Material(QString texturePath) {
-		texture = new QOpenGLTexture(
+
+	Material(QString texturePath): m_texturePath(texturePath) {
+		m_texture = make_unique<QOpenGLTexture>(
 			QImage(texturePath).mirrored()
 		);
 	}
 
 	~Material() {
-		delete texture;
 		LOG("Material::Destroyed")
 	};
 };
