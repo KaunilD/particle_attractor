@@ -8,22 +8,31 @@ class ShaderProgram{
 	public:
 
 		ShaderProgram();
-		ShaderProgram(QObject * parent);
 
-		unique_ptr<QOpenGLShaderProgram> program;
+		GLuint program;
 
 		void loadShaders(const char * vs_path, const char * fs_path);
-		bool activate();
-		void deactivate();
+		void activate();
+		
+		
+		void ShaderProgram::setMat4(std::string name, glm::mat4 matrix) {
+			glUniformMatrix4fv(
+				glGetUniformLocation(program, name.c_str()),
+				1,
+				GL_FALSE,
+				glm::value_ptr(matrix)
+			);
+		}
 
-		
-		
-		template <typename T>
-		void setUniform(const std::string& t_name, const T& t_val) {
-			assert(this->program->isLinked(), "ShaderProgram:: Setting variable of an unlinked Program!");
-			GLuint id = program->uniformLocation(t_name.c_str());
-			program->setUniformValue(id, t_val);
-		};
+		void ShaderProgram::setVec3(std::string name, glm::vec3 vector) {
+			glUniform3fv(
+				glGetUniformLocation(program, name.c_str()),
+				1,
+				glm::value_ptr(vector)
+			);
+		}
+
+		void checkCompileErrors(unsigned int shader, std::string type);
 
 };
 

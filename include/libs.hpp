@@ -8,36 +8,30 @@
 #include <sstream>
 #include <exception>
 #include <random>
+#include <cstdint>
+#include <algorithm>
+#include <iomanip>
+#include <random>
+#include <math.h>
+
 // GL
 #include "GL/glew.h"
+// GLFW
+#include <GLFW/glfw3.h>
 // OpenMP
 #include <omp.h>
 // GLM
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-// Qt
-#include <QKeyEvent>
-#include <QWidget>
-#include <QTimer>
-#include <QOpenGLWidget>
-#include <QOpenGLShaderProgram>
-#include <QObject>
-#include <QMatrix4x4>
-#include <QVector3D>
-#include <QWheelEvent>
-#include <QVector>
-#include <QFile>
-#include <QMatrix4x4>
-#include <QOpenGLBuffer>
-#include <QOpenGLFunctions>
-#include <QImage>
-#include <QOpenGLTexture>
-#include <QDialog>
-#include <QMessageBox>
-#include <QMainWindow>
-#include <QElapsedTimer>
+#define LOG(x) {std::cout << x << std::endl;}
 
-#define LOG(x) {qDebug() << x;}
+constexpr auto VIEWPORT_WIDTH = 800;
+constexpr auto VIEWPORT_HEIGHT = 800;
 
 using std::shared_ptr;
 using std::make_shared;

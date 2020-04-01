@@ -1,61 +1,60 @@
 #include "renderer/particlerenderer.hpp"
 
-void ParticleRenderer::render(shared_ptr <ShaderProgram> shaderProgram, shared_ptr <GameObject> gameObject, shared_ptr <Camera> camera) {
+void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<GameObject> gameObject, shared_ptr<Camera> camera) {
 	{
 
 		shaderProgram->activate();
 		
-		shaderProgram->setUniform(
+		shaderProgram->setMat4(
 			"projectionMatrix",
 			camera->getProjectionMatrix()
 		);
-		shaderProgram->setUniform(
+		shaderProgram->setMat4(
 			"modelMatrix",
 			gameObject->getModelMatrix()
 		);
-		shaderProgram->setUniform(
+		shaderProgram->setMat4(
 			"viewMatrix",
 			camera->getViewMatrix()
 		);
 
-		shaderProgram->setUniform(
+		shaderProgram->setVec3(
 			"cameraEye",
 			camera->posVector
 		);
-		shaderProgram->setUniform(
+		shaderProgram->setVec3(
 			"lightPos",
-			QVector3D(0.f, 0.f, 0.f)
+			glm::vec3(0.f, 0.f, 0.f)
 		);
-		shaderProgram->setUniform(
+		shaderProgram->setVec3(
 			"lightColor",
-			QVector3D(1.0f, 0.0f, 1.0f)
+			glm::vec3(1.0f, 0.0f, 1.0f)
 		);
 
-		shaderProgram->setUniform(
+		shaderProgram->setVec3(
 			"lightAmbient",
-			QVector3D(1.0f, 0.0f, 1.0f)
+			glm::vec3(1.0f, 0.0f, 1.0f)
 
 		);
 
 
 		GLuint textureAttribLoc, positionAttribLoc, normalAttribLoc, colorAttribLoc;
-		gameObject->m_mesh->m_VAO->bind();
-		gameObject->m_mesh->m_IBO->bind();
-
+		glBindVertexArray(gameObject->m_mesh->m_VAO);
+		
 		// POSITION
-		positionAttribLoc = shaderProgram->program->attributeLocation("vertex_position");
-		shaderProgram->program->enableAttributeArray(positionAttribLoc);
-		shaderProgram->program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
+		positionAttribLoc = glGetAttribLocation(shaderProgram->program, "vertex_position");
+		glEnableVertexAttribArray(positionAttribLoc);
+		glVertexAttribPointer(positionAttribLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
 
 		// NORMAL
-		normalAttribLoc = shaderProgram->program->attributeLocation("vertex_normal");
-		shaderProgram->program->enableAttributeArray(normalAttribLoc);
-		shaderProgram->program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
+		normalAttribLoc = glGetAttribLocation(shaderProgram->program, "vertex_normal");
+		glEnableVertexAttribArray(normalAttribLoc);
+		glVertexAttribPointer(normalAttribLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normals));
 
 		// COLOR
-		colorAttribLoc = shaderProgram->program->attributeLocation("vertex_color");
-		shaderProgram->program->enableAttributeArray(colorAttribLoc);
-		shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
+		colorAttribLoc = glGetAttribLocation(shaderProgram->program, "vertex_color");
+		glEnableVertexAttribArray(colorAttribLoc);
+		glVertexAttribPointer(colorAttribLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, color));
 
 
 		glDrawElements(GL_TRIANGLES, gameObject->m_mesh->i_count, GL_UNSIGNED_INT, 0);

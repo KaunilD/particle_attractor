@@ -9,6 +9,6 @@ namespace Utils {
 		std::vector<GLsizei> i;
 	};
 
-	ObjReaderRet readObj(QString filePath);
+	ObjReaderRet readObj(const char *filePath);
 };
 #endif OBJREADER_H

@@ -3,12 +3,9 @@
 Camera::Camera(){}
 
 Camera::Camera(
-	QVector3D posVector, QVector3D frontVector, QVector3D upVector, 
+	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector, 
 	float fov, int fbW, int fbH, float Cnear, float Cfar
 ): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(Cnear), _far(Cfar) {
-	
-	viewMatrix = new QMatrix4x4();
-	projectionMatrix = new QMatrix4x4();
 	
 	updateViewMatrix();
 	updateProjectionMatrix(fbW, fbH);
@@ -35,9 +32,7 @@ void Camera::processKB(Movement movement, float speed){
 
 
 void Camera::updateViewMatrix() {
-
-	viewMatrix->setToIdentity();
-	viewMatrix->lookAt(
+	viewMatrix = glm::lookAt(
 		posVector, posVector + frontVector, upVector
 	);
 }
@@ -47,36 +42,30 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 	frameBufferWidth = _frameBufferWidth;
 	frameBufferHeight = _frameBufferHeight;
 
-	projectionMatrix->setToIdentity();
-	projectionMatrix->perspective(
-		fov,
+	projectionMatrix = glm::perspective(
+		glm::radians(fov),
 		_frameBufferWidth/(float)_frameBufferHeight,
 		_near, _far
 	);
 }
 
 void Camera::resetProjectionMatrix() {
-	projectionMatrix->setToIdentity();
-	projectionMatrix->perspective(
-		fov,
+	projectionMatrix = glm::perspective(
+		glm::radians(fov),
 		frameBufferWidth/ (float) frameBufferHeight,
 		_near, _far
 	);
 }
 
-QMatrix4x4 Camera::getProjectionMatrix() const {
-	return *projectionMatrix;
+glm::mat4x4 Camera::getProjectionMatrix() const {
+	return projectionMatrix;
 }
 
-QMatrix4x4 Camera::getViewMatrix() const  {
-	return *viewMatrix;
+glm::mat4x4 Camera::getViewMatrix() const  {
+	return viewMatrix;
 }
 
-void Camera::update(QWheelEvent * event) {
-	if (event->delta() < 0)
-		fov += speed;
-	else if (fov > 1)
-		fov -= speed;
+void Camera::update() {
 
 	resetProjectionMatrix();
 

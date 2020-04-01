@@ -5,7 +5,7 @@ public:
 	SunObject() : GameObject() {};
 	SunObject(bool npc) : GameObject(npc){};
 	
-	virtual void updateObject(int frames, QKeyEvent* event, const GameObject& gameObject) override {
+	virtual void updateObject(int frames, const GameObject& gameObject) override {
 		updateModelMatrix();
 		return;
 	};

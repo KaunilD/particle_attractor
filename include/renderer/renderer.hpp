@@ -6,12 +6,10 @@
 #include "shaderprogram.hpp"
 #include "gameobject/gameobject.hpp"
 
-class Renderer: protected QOpenGLFunctions {
+class Renderer{
 
 public:
-	Renderer() {
-		initializeOpenGLFunctions();
-	}
+	Renderer() = default;
 
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,

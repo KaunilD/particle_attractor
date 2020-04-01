@@ -20,13 +20,13 @@ public:
 
 	double speed;
 
-	QMatrix4x4 *projectionMatrix, *viewMatrix;
+	glm::mat4x4 projectionMatrix, viewMatrix;
 
-	QVector3D posVector, upVector, frontVector;
+	glm::vec3 posVector, upVector, frontVector;
 
 	Camera();
 	Camera(
-		QVector3D posVector, QVector3D frontVector, QVector3D upVector, 
+		glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector,
 		float fov, int fbW, int fbH, float _near, float _far
 	);
 	~Camera();
@@ -38,10 +38,10 @@ public:
 	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
 	void resetProjectionMatrix();
 
-	QMatrix4x4 getProjectionMatrix() const;
-	QMatrix4x4 getViewMatrix() const;
+	glm::mat4x4 getProjectionMatrix() const;
+	glm::mat4x4 getViewMatrix() const;
 
-	void update(QWheelEvent *);
+	void update();
 };
 
 #endif

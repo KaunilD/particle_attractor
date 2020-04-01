@@ -7,33 +7,28 @@
 class Mesh {
 public:
 	size_t i_count = 0, v_count = 0;
-	QOpenGLBuffer *m_VAO, *m_IBO;
+	GLuint m_VAO, m_VBO, m_EBO;
 	
 	Mesh() = default;
 
 	Mesh(Utils::ObjReaderRet obj): i_count(obj.i.size()), v_count(obj.v.size()) {
 
-		m_VAO = new QOpenGLBuffer();
-		m_VAO->create();
-		m_VAO->bind();
-		m_VAO->allocate(
-			&obj.v[0],
-			obj.v.size() * static_cast<int>(sizeof(Vertex))
-		);
+		glGenVertexArrays(1, &m_VAO);
+		glGenBuffers(1, &m_VBO);
+		glGenBuffers(1, &m_EBO);
 
-		m_IBO = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
-		m_IBO->create();
-		m_IBO->bind();
-		m_IBO->allocate(
-			&obj.i[0],
-			obj.i.size() * static_cast<int>(sizeof(GL_UNSIGNED_INT))
-		);
+		glBindVertexArray(m_VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		glBufferData(GL_ARRAY_BUFFER, obj.v.size() * sizeof(Vertex), &obj.v[0], GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.i.size() * sizeof(GLuint), &obj.i[0], GL_STATIC_DRAW);
+
 	};
 
 	~Mesh(){
 		LOG("Mesh::Destroyed")
-		m_IBO->destroy();
-		m_VAO->destroy();
 	}
 };
 

@@ -13,4 +13,5 @@ endif()
 
 # build the following
 add_subdirectory("external/glfw-3.3.2")
-add_subdirectory ("src")
+add_subdirectory("external/glm")
+add_subdirectory("src")
