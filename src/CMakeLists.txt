@@ -29,6 +29,9 @@ include_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/)
 # GLM
 include_directories(${PROJECT_SOURCE_DIR}/external/glm)
+# GLFW
+include_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/include)
+link_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/lib/Release/x64/)
 
 
 add_definitions(-DQT_PLUGIN)
@@ -115,6 +118,7 @@ target_link_libraries(
 	particle_attractor 
 		PUBLIC
 		glew32
+		glfw
 		${OPENGL_gl_LIBRARY} 
 		Qt5::Core Qt5::Gui  Qt5::Widgets
 )
