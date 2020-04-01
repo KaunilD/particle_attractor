@@ -10,21 +10,21 @@ class ShaderProgram{
 		ShaderProgram();
 		ShaderProgram(QObject * parent);
 
-		QOpenGLShaderProgram * program;
-
-		GLuint modelMatrix;
-		GLuint viewMatrix;
-		GLuint projectionMatrix;
-		GLuint colorVec3;
+		unique_ptr<QOpenGLShaderProgram> program;
 
 		void loadShaders(const char * vs_path, const char * fs_path);
 		bool activate();
 		void deactivate();
 
 		
-		void sendMatricesToShader(QMatrix4x4 projectionMatrix, QMatrix4x4 viewMatrix, QMatrix4x4 modelMatrix);
-		void sendColorToShader(QVector3D color);
-		void sendMatricesToShader(Camera camera);
+		
+		template <typename T>
+		void setUniform(const std::string& t_name, const T& t_val) {
+			assert(this->program->isLinked(), "ShaderProgram:: Setting variable of an unlinked Program!");
+			GLuint id = program->uniformLocation(t_name.c_str());
+			program->setUniformValue(id, t_val);
+		};
+
 };
 
 #endif // SHADERPROGRAM_H

@@ -3,8 +3,8 @@
 
 #include "libs.hpp"
 #include "camera.hpp"
-#include "renderer.hpp"
 #include "shaderprogram.hpp"
+#include "renderer/particlerenderer.hpp"
 
 #include "gameobject/gameobject.hpp"
 #include "gameobject/sunobject.hpp"
@@ -25,7 +25,7 @@ public:
 	
 	unique_ptr<ShaderProgram> particleObjShader;
 	unique_ptr<Camera> camera;
-	unique_ptr<Renderer> renderer;
+	unique_ptr<ParticleRenderer> particleRenderer;
 
 	void initializeGL() override;
 	void paintGL() override;

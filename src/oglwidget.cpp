@@ -49,7 +49,7 @@ void OGLWidget::initializeGL() {
 		":/fragShader"
 	);
 	
-	renderer = make_unique<Renderer>();
+	particleRenderer = make_unique<ParticleRenderer>();
 	
 	initializeGLfromGrid();
 	
@@ -87,7 +87,7 @@ void OGLWidget::initializeGLfromGrid() {
 	// setup particles
 	
 	unique_ptr<ParticleObject> particleObject;
-	for (int i = 1; i < 1000; i++) {
+	for (int i = 1; i < 100; i++) {
 		particleObject = make_unique<ParticleObject>(false);
 		particleObject->setMass(
 			Algorithms::randomInt(10) / 10.f + 0.01
@@ -127,10 +127,10 @@ void OGLWidget::paintGL() {
 			frame, 0, *gameObjects->at(0)
 		);
 
-		renderer->render(
-			*particleObjShader.get(),
-			*gameObjects->at(i).get(),
-			*camera.get()
+		particleRenderer->render(
+			*particleObjShader,
+			*gameObjects->at(i),
+			*camera
 		);
 	}
 	

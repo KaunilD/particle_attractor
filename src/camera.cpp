@@ -37,10 +37,9 @@ void Camera::processKB(Movement movement, float speed){
 void Camera::updateViewMatrix() {
 
 	viewMatrix->setToIdentity();
-		viewMatrix->lookAt(
+	viewMatrix->lookAt(
 		posVector, posVector + frontVector, upVector
 	);
-	
 }
 
 
