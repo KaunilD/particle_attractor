@@ -22,6 +22,21 @@ void ParticleRenderer::render(ShaderProgram& shaderProgram, GameObject& gameObje
 			"cameraEye",
 			camera.posVector
 		);
+		shaderProgram.setUniform(
+			"lightPos",
+			QVector3D(0.f, 0.f, 0.f)
+		);
+		shaderProgram.setUniform(
+			"lightColor",
+			QVector3D(1.0f, 0.0f, 1.0f)
+		);
+
+		shaderProgram.setUniform(
+			"lightAmbient",
+			QVector3D(1.0f, 0.0f, 1.0f)
+
+		);
+
 
 		GLuint textureAttribLoc, positionAttribLoc, normalAttribLoc, colorAttribLoc;
 		gameObject.m_mesh->m_VAO->bind();

@@ -122,11 +122,13 @@ void OGLWidget::paintGL() {
 	/*
 		update and render gameObjects
 	*/
+	#pragma omp parallel for
 	for (int i = 0; i < gameObjects->size(); i++) {
 		gameObjects->at(i)->updateObject(
 			frame, 0, *gameObjects->at(0)
 		);
-
+	}
+	for (int i = 0; i < gameObjects->size(); i++) {
 		particleRenderer->render(
 			*particleObjShader,
 			*gameObjects->at(i),

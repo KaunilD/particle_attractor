@@ -2,11 +2,17 @@
 
 uniform sampler2D textureSampler;
 
+uniform highp vec3 cameraEye;
+
+uniform highp vec3 lightPosition;
+uniform highp vec3 lightColor;
+uniform highp vec3 lightAmbient;
+
+
 in vec4 vs_position;
-in vec3 vs_color;
 in vec3 vs_normal;
 in vec2 vs_texture;
-in vec3 vs_eye;
+
 
 out vec4 gl_FragColor;
 
@@ -14,28 +20,25 @@ out vec4 gl_FragColor;
 void main()
 {
 
-	float ambientStrength = 0.5;
-
-	vec3 lightColor = vec3(1.0, 0.0, 1.0);
+	vec3 eye_vec = normalize(cameraEye - vs_position.xyz);
 	
-	vec3 ambient = ambientStrength * lightColor;
+	vec3 light_dist = lightPosition - vs_position.xyz;
+	vec3 light_vec = normalize(light_dist);
+	vec3 normal = normalize(vs_normal);
 
-	// diffuse 
-	vec3 norm = normalize(vs_normal);
-	vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0) - vs_position.xyz);
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightColor;
+	float normal_dot_light = max(dot(light_vec, normal), 0.0);
+	float light_mod = 50.0 / (1.0 + 0.25 * dot(light_dist, light_dist));
 
-	// specular lighting        
-	float specularStrength = 0.5;
-	
-	vec3 viewDir = normalize(vs_eye - vec3(0, 0, 10.f));
-	vec3 reflectDir = reflect(-lightDir, norm);
+	vec3 specular = vec3(0);
+	if (normal_dot_light > 0.0) {
+		vec3 half_vec = normalize(light_vec + eye_vec);
+		specular = light_mod * lightColor.rgb;
+	}
 
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-	vec3 specular = specularStrength * spec * lightColor;
+	vec3 ambient = lightAmbient;
+	vec3 diffuse = light_mod * normal_dot_light * lightColor;
 
-	gl_FragColor = vec4(vs_color * (ambient + diffuse + specular), 1.0);
+	gl_FragColor = sqrt(vec4(ambient + diffuse + specular, 1.0));
 }
 
 

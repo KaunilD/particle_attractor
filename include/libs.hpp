@@ -31,6 +31,9 @@
 #include <QMainWindow>
 #include <QElapsedTimer>
 
+// OpenMP
+#include <omp.h>
+
 #define LOG(x) {qDebug() << x;}
 
 using std::shared_ptr;
@@ -38,6 +41,5 @@ using std::make_shared;
 
 using std::unique_ptr;
 using std::make_unique;
-
 
 #endif
