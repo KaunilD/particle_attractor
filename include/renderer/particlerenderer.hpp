@@ -6,9 +6,9 @@ class ParticleRenderer : public Renderer{
 public:
 	ParticleRenderer() {};
 	virtual void render(
-		ShaderProgram& shaderProgram, 
-		GameObject& gameObject, 
-		Camera& camera) override;
+		shared_ptr<ShaderProgram> shaderProgram, 
+		shared_ptr<GameObject> gameObject,
+		shared_ptr<Camera> camera) override;
 };
 
 #endif PARTICLERENDERER_H

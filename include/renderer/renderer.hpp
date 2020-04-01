@@ -14,9 +14,9 @@ public:
 	}
 
 	virtual void render(
-		ShaderProgram& shaderProgram,
-		GameObject& gameObject,
-		Camera& camera
+		shared_ptr<ShaderProgram> shaderProgram,
+		shared_ptr<GameObject> gameObject,
+		shared_ptr<Camera> camera
 	) = 0;
 
 };

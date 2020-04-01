@@ -35,7 +35,7 @@ void OGLWidget::initializeGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
-	camera = make_unique<Camera>(
+	camera = make_shared<Camera>(
 		QVector3D(0.0f, 0.0f, 10.0f),
 		QVector3D(0.0f, 0.0f, -1.0f),
 		QVector3D(0.0f, 1.0f, 0.0f),
@@ -43,13 +43,13 @@ void OGLWidget::initializeGL() {
 	);
 	camera->setSpeed(0.5);
 
-	particleObjShader = make_unique<ShaderProgram>(this);
+	particleObjShader = make_shared<ShaderProgram>(this);
 	particleObjShader->loadShaders(
 		":/vertexShader",
 		":/fragShader"
 	);
 	
-	particleRenderer = make_unique<ParticleRenderer>();
+	particleRenderer = make_shared<ParticleRenderer>();
 	
 	initializeGLfromGrid();
 	
@@ -71,13 +71,13 @@ void OGLWidget::frameTimeUpdateTimerTicked() {
 
 void OGLWidget::initializeGLfromGrid() {
 	
-	gameObjects = make_unique<std::vector<unique_ptr<GameObject>>>();
+	gameObjects = make_shared<std::vector<shared_ptr<GameObject>>>();
 
 	m_sphereMesh = make_shared<Mesh>(Utils::readObj(QString(":/sphere")));
 	m_sphereMaterial = make_shared<Material>(QString(":/blattTexture"));
 
 	// setup sun
-	unique_ptr<SunObject> sunObject = make_unique<SunObject>(true);
+	shared_ptr<SunObject> sunObject = make_shared<SunObject>(true);
 	sunObject->setMass(1000.0f);
 	sunObject->setMesh(m_sphereMesh);
 	sunObject->setMaterial(m_sphereMaterial);
@@ -86,9 +86,9 @@ void OGLWidget::initializeGLfromGrid() {
 
 	// setup particles
 	
-	unique_ptr<ParticleObject> particleObject;
+	shared_ptr<ParticleObject> particleObject;
 	for (int i = 1; i < 100; i++) {
-		particleObject = make_unique<ParticleObject>(false);
+		particleObject = make_shared<ParticleObject>(false);
 		particleObject->setMass(
 			Algorithms::randomInt(10) / 10.f + 0.01
 		);
@@ -129,13 +129,13 @@ void OGLWidget::paintGL() {
 		);
 	}
 	for (int i = 0; i < gameObjects->size(); i++) {
+
 		particleRenderer->render(
-			*particleObjShader,
-			*gameObjects->at(i),
-			*camera
+			particleObjShader,
+			gameObjects->at(i),
+			camera
 		);
 	}
-	
 	frame += 1;
 	elapsedTime = elapsedTimer.nsecsElapsed();
 }

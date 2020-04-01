@@ -24,9 +24,10 @@ endif()
 
 # OpenGL
 find_package(OpenGL REQUIRED)
+# GLEW
+include_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include)
+link_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/)
 # GLM
-include_directories("glm")
-# misc opengl libraries
 include_directories(${PROJECT_SOURCE_DIR}/external/glm)
 
 
@@ -113,6 +114,7 @@ target_include_directories(
 target_link_libraries( 
 	particle_attractor 
 		PUBLIC
+		glew32
 		${OPENGL_gl_LIBRARY} 
 		Qt5::Core Qt5::Gui  Qt5::Widgets
 )

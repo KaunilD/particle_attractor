@@ -21,11 +21,11 @@ public:
 	explicit OGLWidget(QWidget *parent = 0);
 	~OGLWidget();
 
-	unique_ptr<std::vector<unique_ptr<GameObject>>> gameObjects;
+	shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects;
 	
-	unique_ptr<ShaderProgram> particleObjShader;
-	unique_ptr<Camera> camera;
-	unique_ptr<ParticleRenderer> particleRenderer;
+	shared_ptr<ShaderProgram> particleObjShader;
+	shared_ptr<Camera> camera;
+	shared_ptr<ParticleRenderer> particleRenderer;
 
 	void initializeGL() override;
 	void paintGL() override;

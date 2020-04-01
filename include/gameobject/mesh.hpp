@@ -12,6 +12,7 @@ public:
 	Mesh() = default;
 
 	Mesh(Utils::ObjReaderRet obj): i_count(obj.i.size()), v_count(obj.v.size()) {
+
 		m_VAO = new QOpenGLBuffer();
 		m_VAO->create();
 		m_VAO->bind();

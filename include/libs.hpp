@@ -8,6 +8,12 @@
 #include <sstream>
 #include <exception>
 #include <random>
+// GL
+#include "GL/glew.h"
+// OpenMP
+#include <omp.h>
+// GLM
+#include "glm/glm.hpp"
 
 // Qt
 #include <QKeyEvent>
@@ -31,11 +37,6 @@
 #include <QMainWindow>
 #include <QElapsedTimer>
 
-// OpenMP
-#include <omp.h>
-
-// GLM
-#include "glm/glm.hpp"
 #define LOG(x) {qDebug() << x;}
 
 using std::shared_ptr;
