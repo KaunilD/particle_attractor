@@ -1,4 +1,5 @@
--IC:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src
+-IC:/Users/dhruv/Development/git/particle_attractor/src/glm
+-IC:/Users/dhruv/Development/git/particle_attractor/external/glm
 -IC:/Users/dhruv/Development/git/particle_attractor/src
 -IC:/Users/dhruv/Development/git/particle_attractor/out/build/x64-Debug/src
 -DQT_PLUGIN

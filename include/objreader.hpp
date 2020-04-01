@@ -5,8 +5,8 @@
 #include "vertex.hpp"
 namespace Utils {
 	struct ObjReaderRet {
-		QVector<Vertex> v;
-		QVector<GLsizei> i;
+		std::vector<Vertex> v;
+		std::vector<GLsizei> i;
 	};
 
 	ObjReaderRet readObj(QString filePath);

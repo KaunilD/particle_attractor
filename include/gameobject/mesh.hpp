@@ -11,21 +11,21 @@ public:
 	
 	Mesh() = default;
 
-	Mesh(Utils::ObjReaderRet obj): i_count(obj.i.count()), v_count(obj.v.count()) {
+	Mesh(Utils::ObjReaderRet obj): i_count(obj.i.size()), v_count(obj.v.size()) {
 		m_VAO = new QOpenGLBuffer();
 		m_VAO->create();
 		m_VAO->bind();
 		m_VAO->allocate(
-			obj.v.constData(),
-			obj.v.count() * static_cast<int>(sizeof(Vertex))
+			&obj.v[0],
+			obj.v.size() * static_cast<int>(sizeof(Vertex))
 		);
 
 		m_IBO = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
 		m_IBO->create();
 		m_IBO->bind();
 		m_IBO->allocate(
-			obj.i.constData(),
-			obj.i.count() * static_cast<int>(sizeof(GL_UNSIGNED_INT))
+			&obj.i[0],
+			obj.i.size() * static_cast<int>(sizeof(GL_UNSIGNED_INT))
 		);
 	};
 

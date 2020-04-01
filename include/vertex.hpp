@@ -1,15 +1,13 @@
-#include <QVector3D>
-#include <QVector2D>
-
+#include "glm/glm.hpp"
 #ifndef VERTEX_H
 #define VERTEX_H
 
 struct Vertex {
-	QVector3D position; // 12bytes
-	QVector3D normals;
-	QVector2D texture;
-	QVector3D color; // 12 bytes
-	QVector3D tangent;
-	QVector3D bitTangent;
+	glm::vec3 position; // 12bytes
+	glm::vec3 normals;
+	glm::vec2 texture;
+	glm::vec3 color; // 12 bytes
+	glm::vec3 tangent;
+	glm::vec3 bitTangent;
 };
 #endif

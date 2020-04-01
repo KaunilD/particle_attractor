@@ -24,8 +24,10 @@ endif()
 
 # OpenGL
 find_package(OpenGL REQUIRED)
+# GLM
+include_directories("glm")
 # misc opengl libraries
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/external/glm)
 
 
 add_definitions(-DQT_PLUGIN)

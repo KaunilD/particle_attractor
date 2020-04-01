@@ -34,6 +34,8 @@
 // OpenMP
 #include <omp.h>
 
+// GLM
+#include "glm/glm.hpp"
 #define LOG(x) {qDebug() << x;}
 
 using std::shared_ptr;

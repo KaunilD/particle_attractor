@@ -2,12 +2,14 @@
 
 Utils::ObjReaderRet Utils::readObj(QString filePath)
 {
-	QVector<QVector3D> rawVertices, rawNormals;
-	QVector<QVector2D> rawTextures;
-	QVector<int> vertexIndices, textureIndices, normalIndices;
+	using std::vector;
+	
+	vector<glm::vec3> rawVertices, rawNormals;
+	vector<glm::vec2> rawTextures;
+	std::vector<int> vertexIndices, textureIndices, normalIndices;
 
-	QVector<Vertex> vertices;
-	QVector<GLsizei> indices;
+	vector<Vertex> vertices;
+	vector<GLsizei> indices;
 
 	qDebug() << "engine::ObjLoader:: Reading object: " << filePath;
 
@@ -22,7 +24,7 @@ Utils::ObjReaderRet Utils::readObj(QString filePath)
 			QStringList list = line.split(" ");
 			bool isTexture = list.count() == 4 ? false : true;
 			if (list[0] == "v" && !isTexture) {
-				QVector3D vertex;
+				glm::vec3 vertex;
 				for (int i = 1; i < list.count(); i++) {
 					vertex[i - 1] = list[i].toFloat();
 				}
@@ -30,14 +32,14 @@ Utils::ObjReaderRet Utils::readObj(QString filePath)
 				rawVertices.push_back(vertex);
 			}
 			else if (list[0] == "vt" && isTexture) {
-				QVector2D texture;
+				glm::vec2 texture;
 				for (int i = 1; i < list.count(); i++) {
 					texture[i - 1] = list[i].toFloat();
 				}
 				rawTextures.push_back(texture);
 			}
 			else if (list[0] == "vn" && !isTexture) {
-				QVector3D normal;
+				glm::vec3 normal;
 				for (int i = 1; i < list.count(); i++) {
 					normal[i - 1] = list[i].toFloat();
 				}
@@ -64,9 +66,9 @@ Utils::ObjReaderRet Utils::readObj(QString filePath)
 				rawVertices[vertexIndices[i] - 1],
 				rawNormals[normalIndices[i] - 1],
 				rawTextures[textureIndices[i] - 1],
-				QVector3D(1.0f, 1.0f, 1.0f),
-				QVector3D(1.0f, 1.0f, 1.0f),
-				QVector3D(1.0f, 1.0f, 1.0f),
+				glm::vec3(1.0f),
+				glm::vec3(1.0f, 1.0f, 1.0f),
+				glm::vec3(1.0f, 1.0f, 1.0f),
 			});
 		indices.push_back(i);
 	}
