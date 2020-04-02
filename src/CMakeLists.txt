@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Make this a GUI application on Windows
-if(WIN32)
-  set(CMAKE_WIN32_EXECUTABLE ON)
-endif()
-
-
 # OpenGL
 find_package(OpenGL REQUIRED)
 # GLEW
@@ -84,8 +78,7 @@ target_link_libraries(
 )
 
 
-# set output directory
-set_target_properties(particle_attractor PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
-set_target_properties(particle_attractor PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
-set_target_properties(particle_attractor PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
-set_target_properties(particle_attractor PROPERTIES OUTPUT_NAME "${PLUGIN_OUTPUT_FILENAME}")
+set_target_properties(${PROJECT_NAME} PROPERTIES
+	LINK_FLAGS /SUBSYSTEM:CONSOLE
+)
+

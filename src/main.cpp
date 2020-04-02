@@ -29,6 +29,7 @@ shared_ptr<ShaderProgram> particleObjShader;
 shared_ptr<ParticleRenderer> particleRenderer;
 shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects;
 shared_ptr<Mesh> m_sphereMesh;
+
 void frameBufferResizeCb(GLFWwindow* window, int fbW, int fbH) {
 
 	frameBufferWidth = fbW;
@@ -56,8 +57,8 @@ void initCSR() {
 
 	particleObjShader = make_shared<ShaderProgram>();
 	particleObjShader->loadShaders(
-		":/vertexShader",
-		":/fragShader"
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
 	);
 
 	particleRenderer = make_shared<ParticleRenderer>();
@@ -68,7 +69,12 @@ void initObjects() {
 
 	gameObjects = make_shared<std::vector<shared_ptr<GameObject>>>();
 
-	m_sphereMesh = make_shared<Mesh>(Utils::readObj(".//resources//sphere.obj"));
+	m_sphereMesh = make_shared<Mesh>(
+		Utils::readObj(
+			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
+		)
+	);
+
 	//m_sphereMaterial = make_shared<Material>(QString(".//resources//objects//blatt.png"));
 
 	// setup sun
@@ -221,11 +227,12 @@ int main(int argc, char *argv[])
 				update and render gameObjects
 			*/
 			#pragma omp parallel for
-			for (int i = 0; i < gameObjects->size(); i++) {
+			for (int i = 1; i < gameObjects->size(); i++) {
 				gameObjects->at(i)->updateObject(
 					frame, *gameObjects->at(0)
 				);
 			}
+
 			for (int i = 0; i < gameObjects->size(); i++) {
 
 				particleRenderer->render(

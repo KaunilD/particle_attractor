@@ -11,7 +11,7 @@ Utils::ObjReaderRet Utils::readObj(const char * filePath)
 	vector<Vertex> vertices;
 	vector<GLsizei> indices;
 
-	std::cout << "engine::ObjLoader:: Reading object: " << filePath << "\n";
+	LOG("ObjLoader:: Reading object");
 
 	std::ifstream objFile;
 	std::string line;
@@ -23,7 +23,7 @@ Utils::ObjReaderRet Utils::readObj(const char * filePath)
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "ERROR::ObjLoader::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		LOG("ERROR::ObjLoader::FILE_NOT_SUCCESFULLY_READ");
 	}
 
 	while (!objFile.eof()) {
@@ -92,5 +92,6 @@ Utils::ObjReaderRet Utils::readObj(const char * filePath)
 			});
 		indices.push_back(i);
 	}
+	LOG(vertexIndices.size());
 	return Utils::ObjReaderRet{ vertices, indices };
 }
