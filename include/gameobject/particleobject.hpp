@@ -6,9 +6,9 @@ public:
 	ParticleObject(bool t_npc) : GameObject(t_npc) {};
 
 
-	virtual void updateObject(int frames, const GameObject& gameObject) override {
+	virtual void updateObject(float dt, const GameObject& gameObject) override {
 		float force = getForceVector(gameObject);
-		this->applyForceVector(force, gameObject.getPosition() - this->getPosition());
+		this->applyForceVector(force, gameObject.getPosition() - this->getPosition(), dt);
 	}
 
 };

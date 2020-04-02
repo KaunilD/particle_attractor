@@ -15,9 +15,9 @@ class GameObject{
 	~GameObject();
 
 	bool m_npc;
-	glm::vec3 velocity = glm::vec3(1.0, 2.0, 1.0);
-	glm::vec3 acceleration = glm::vec3(0, 0, 0);
-	float m_mass, g = 0.4f, angle = 0, angularVelocity = 0, angularAcceleration = 0.01;
+	glm::vec3 velocity = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 acceleration = glm::vec3(0.0f);
+	float m_mass, g = 0.4f, angle = 0, angularVelocity = 0, angularAcceleration = 0.11;
 
 
 	glm::mat4x4 m_modelMatrix;
@@ -43,13 +43,13 @@ class GameObject{
 
 	glm::vec3 getPosition() const { return m_position; };
 
-	virtual void updateObject(int frames, const GameObject& referenceObj) = 0;
+	virtual void updateObject(float dt, const GameObject& referenceObj) = 0;
 
 	void updatePosition(glm::vec3);
 	void setVelocity(glm::vec3  const &);
 	void setAcceleration(glm::vec3 const &);
 
 	float getForceVector(const GameObject& p) const;
-	void applyForceVector(float, glm::vec3);
+	void applyForceVector(float, glm::vec3, float);
 };
 #endif

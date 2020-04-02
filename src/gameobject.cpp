@@ -4,9 +4,7 @@ GameObject::GameObject() {
 	m_modelMatrix = glm::mat4x4(1.0);
 };
 
-GameObject::GameObject(bool t_npc) {
-	m_npc = t_npc;
-	
+GameObject::GameObject(bool t_npc) : m_npc(t_npc){
 	m_modelMatrix = glm::mat4x4(1.0);
 };
 
@@ -45,22 +43,28 @@ void GameObject::setupModelMatrix(glm::vec3 t_scale, glm::vec3 t_position) {
 	setPosition(t_position);
 }
 
+void LOG_VEC(const glm::vec3& data) {
+	std::cout << data.x << " " << data.y << " " << data.z << std::endl;
+}
 
 float GameObject::getForceVector(const GameObject& p) const {
 	glm::vec3 distance = p.getPosition() - m_position;
-	float magnitude = sqrt(pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2)) + 0.15;
+	//LOG_VEC(distance);
+	float magnitude = sqrt(
+			pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2)
+		) + 0.15;
+	
 	magnitude = fmin(20.f, fmax(magnitude, 5.f));
-	return ( g * m_mass * p.m_mass) / (magnitude*magnitude * magnitude);
+	return ( g * m_mass * p.m_mass) / (magnitude * magnitude);
 }
 
 
-void GameObject::applyForceVector(float force, glm::vec3 distance) {
-	glm::vec3 resForce = glm::normalize(distance)*force;
+void GameObject::applyForceVector(float force, glm::vec3 distance, float dt) {
+	glm::vec3 resForce = glm::normalize(distance) * force;
 	acceleration += (resForce / m_mass);
-	velocity += acceleration * (1 / 60.f);
-	m_position += velocity * (1 / 60.f);
+	velocity += acceleration * dt;
+	m_position += velocity * dt;
 	acceleration *= 0;
-
 	updateModelMatrix();
 }
 

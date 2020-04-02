@@ -13,6 +13,11 @@ namespace Algorithms {
 	twoInts indexToxy(int index);
 	bool inBounds(int x, int y);
 	int randomInt(int max);
+
+	template <typename T>
+	T bound(T v, T lo, T up) {
+		return std::min(up, std::max(lo, v));
+	}
 };
 
 #endif ALGORITHMS_H

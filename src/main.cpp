@@ -17,7 +17,7 @@ double lastTime = 0.0;
 double deltaTime;
 double currentTime;
 int frame = 0;
-const double maxFPS = 360.0f;
+const double maxFPS = 60.0f;
 const double maxPeriod = 1.0 / maxFPS;
 
 // CAMERA
@@ -79,10 +79,11 @@ void initObjects() {
 
 	// setup sun
 	shared_ptr<SunObject> sunObject = make_shared<SunObject>(true);
-	sunObject->setMass(1000.0f);
+	sunObject->setMass(100.0f);
 	sunObject->setMesh(m_sphereMesh);
 	//sunObject->setMaterial(m_sphereMaterial);
-	sunObject->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
+	sunObject->setScale(glm::vec3(10.0f));
+	sunObject->setPosition(glm::vec3(0.0f));
 	gameObjects->push_back(std::move(sunObject));
 
 	// setup particles
@@ -91,14 +92,12 @@ void initObjects() {
 	for (int i = 1; i < 100; i++) {
 		particleObject = make_shared<ParticleObject>(false);
 		particleObject->setMass(
-			Algorithms::randomInt(10) / 10.f + 0.01
+			Algorithms::randomInt(10)/10.0f +0.01
 		);
 		particleObject->setMesh(m_sphereMesh);
 		//particleObject->setMaterial(m_sphereMaterial);
 		particleObject->setScale(
-			glm::vec3(
-				particleObject->m_mass, particleObject->m_mass, particleObject->m_mass
-			)
+			glm::vec3(0.5f)
 		);
 
 		particleObject->setPosition(
@@ -114,59 +113,32 @@ void initObjects() {
 
 }
 
+void updateGameObjects(float dt) {
+
+#pragma omp parallel for
+	for (int i = 1; i < gameObjects->size(); i++) {
+		gameObjects->at(i)->updateObject(
+			dt, *gameObjects->at(0)
+		);
+	}
+
+	for (int i = 0; i < gameObjects->size(); i++) {
+
+		particleRenderer->render(
+			particleObjShader,
+			gameObjects->at(i),
+			camera
+		);
+	}
+}
+
 void display(GLFWwindow* window) {
 	glfwSwapBuffers(window);
 	glFlush();
 }
 
 void updateInput(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-	}
-
-	cameraSpeed = 0.1f * (float)deltaTime;
-	/*
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.update(W, cameraSpeed);
-		slrCamera.processKB(W, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.processKB(S, cameraSpeed);
-		slrCamera.processKB(S, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-		camera.processKB(Q, cameraSpeed);
-		slrCamera.processKB(Q, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.processKB(A, cameraSpeed);
-		slrCamera.processKB(A, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
-		camera.processKB(Z, cameraSpeed);
-		slrCamera.processKB(Z, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-		camera.processKB(X, cameraSpeed);
-		slrCamera.processKB(X, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		camera.processKB(UP, cameraSpeed);
-		slrCamera.processKB(UP, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		camera.processKB(DOWN, cameraSpeed);
-		slrCamera.processKB(DOWN, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		camera.processKB(LEFT, cameraSpeed);
-		slrCamera.processKB(LEFT, cameraSpeed);
-	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		camera.processKB(RIGHT, cameraSpeed);
-		slrCamera.processKB(RIGHT, cameraSpeed);
-	}
-	*/
+	
 }
 
 
@@ -226,21 +198,9 @@ int main(int argc, char *argv[])
 			/*
 				update and render gameObjects
 			*/
-			#pragma omp parallel for
-			for (int i = 1; i < gameObjects->size(); i++) {
-				gameObjects->at(i)->updateObject(
-					frame, *gameObjects->at(0)
-				);
-			}
 
-			for (int i = 0; i < gameObjects->size(); i++) {
+			updateGameObjects(deltaTime/100.0f);
 
-				particleRenderer->render(
-					particleObjShader,
-					gameObjects->at(i),
-					camera
-				);
-			}
 			frame += 1;
 		}
 		display(window);
