@@ -9,7 +9,7 @@ GameObject::GameObject(bool t_npc) : m_npc(t_npc){
 };
 
 GameObject::~GameObject() {
-	LOG("GameObject::Destroyed")
+	//LOG("GameObject::Destroyed")
 }
 
 void GameObject::setMass(float t_mass) {

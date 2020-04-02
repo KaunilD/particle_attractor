@@ -5,37 +5,17 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 
 		shaderProgram->activate();
 		
-		shaderProgram->setMat4(
-			"projectionMatrix",
-			camera->getProjectionMatrix()
-		);
-		shaderProgram->setMat4(
-			"modelMatrix",
-			gameObject->getModelMatrix()
-		);
-		shaderProgram->setMat4(
-			"viewMatrix",
-			camera->getViewMatrix()
-		);
+		shaderProgram->setMat4("projectionMatrix", camera->getProjectionMatrix());
+		shaderProgram->setMat4("modelMatrix", gameObject->getModelMatrix());
+		shaderProgram->setMat4("viewMatrix", camera->getViewMatrix());
 
-		shaderProgram->setVec3(
-			"cameraEye",
-			camera->posVector
-		);
-		shaderProgram->setVec3(
-			"lightPos",
-			glm::vec3(0.f, 0.f, 0.f)
-		);
-		shaderProgram->setVec3(
-			"lightColor",
-			glm::vec3(1.0f, 0.0f, 1.0f)
-		);
+		shaderProgram->setVec3("color", gameObject->getColor());
 
-		shaderProgram->setVec3(
-			"lightAmbient",
-			glm::vec3(1.0f, 0.0f, 1.0f)
-
-		);
+		shaderProgram->setVec3("cameraEye", camera->m_posVector);
+		
+		shaderProgram->setVec3("lightPos", glm::vec3(0.f, 0.f, 0.f));
+		shaderProgram->setVec3("lightColor", glm::vec3(1.0f, 0.0f, 1.0f));
+		shaderProgram->setVec3("lightAmbient", glm::vec3(1.0f, 0.0f, 1.0f));
 
 
 		GLuint textureAttribLoc, positionAttribLoc, normalAttribLoc, colorAttribLoc;

@@ -5,69 +5,82 @@ Camera::Camera(){}
 Camera::Camera(
 	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector, 
 	float fov, int fbW, int fbH, float Cnear, float Cfar
-): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(Cnear), _far(Cfar) {
+): m_posVector(posVector), m_frontVector(frontVector), m_upVector(upVector), m_worldUpVector(upVector), m_fov(fov), m_frameBufferWidth(fbW), m_frameBufferHeight(fbH), m_near(Cnear), m_far(Cfar) {
 	
 	updateViewMatrix();
-	updateProjectionMatrix(fbW, fbH);
+	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
 }
 
 void Camera::setSpeed(double _speed) {
-	speed = _speed;
+	m_speed = _speed;
 }
 
 void Camera::processKB(Movement movement, float speed){
 	if (movement == W) {
-		posVector += speed * frontVector;
+		m_posVector += speed * m_frontVector;
 	}
 	if (movement == S) {
-		posVector -= speed * frontVector;
+		m_posVector -= speed * m_frontVector;
 	}
 	if (movement == D) {
-		posVector += speed * upVector;
+		m_posVector += speed * m_upVector;
 	}
 	if (movement == A) {
-		posVector -= speed * upVector;
+		m_posVector -= speed * m_upVector;
 	}
 }
 
 
 void Camera::updateViewMatrix() {
-	viewMatrix = glm::lookAt(
-		posVector, posVector + frontVector, upVector
+	m_viewMatrix = glm::lookAt(
+		m_posVector, m_posVector + m_frontVector, m_upVector
 	);
 }
 
 
-void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeight) {
-	frameBufferWidth = _frameBufferWidth;
-	frameBufferHeight = _frameBufferHeight;
+void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeight, float _fov) {
+	m_frameBufferWidth = _frameBufferWidth;
+	m_frameBufferHeight = _frameBufferHeight;
+	m_fov = _fov;
 
-	projectionMatrix = glm::perspective(
-		glm::radians(fov),
-		_frameBufferWidth/(float)_frameBufferHeight,
-		_near, _far
+	m_projectionMatrix = glm::perspective(
+		glm::radians(m_fov),
+		m_frameBufferWidth/(float)m_frameBufferHeight,
+		m_near, m_far
 	);
 }
 
 void Camera::resetProjectionMatrix() {
-	projectionMatrix = glm::perspective(
-		glm::radians(fov),
-		frameBufferWidth/ (float) frameBufferHeight,
-		_near, _far
+	m_projectionMatrix = glm::perspective(
+		glm::radians(m_fov),
+		m_frameBufferWidth/ (float) m_frameBufferHeight,
+		m_near, m_far
 	);
 }
 
 glm::mat4x4 Camera::getProjectionMatrix() const {
-	return projectionMatrix;
+	return m_projectionMatrix;
 }
 
 glm::mat4x4 Camera::getViewMatrix() const  {
-	return viewMatrix;
+	return m_viewMatrix;
 }
 
-void Camera::update() {
+void Camera::update(float t_yaw, float t_pitch, float fov) {
+	glm::vec3 direction;
 
-	resetProjectionMatrix();
+	direction.x = cos(glm::radians(t_yaw)) * cos(glm::radians(t_pitch));
+	direction.y = sin(glm::radians(t_pitch));
+	direction.z = sin(glm::radians(t_yaw)) * cos(glm::radians(t_pitch));
+	m_frontVector = glm::normalize(direction);
+
+	m_rightVector = glm::normalize(glm::cross(m_frontVector, m_worldUpVector));
+	m_upVector = glm::normalize(glm::cross(m_rightVector, m_frontVector));
+
+	m_fov = fov;
+
+	updateViewMatrix();
+	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
 
 }
 

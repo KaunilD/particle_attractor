@@ -9,7 +9,7 @@
 
 class GameObject{
 
-	public:
+public:
 	GameObject();
 	GameObject(bool);
 	~GameObject();
@@ -43,13 +43,14 @@ class GameObject{
 
 	glm::vec3 getPosition() const { return m_position; };
 
-	virtual void updateObject(float dt, const GameObject& referenceObj) = 0;
-
 	void updatePosition(glm::vec3);
 	void setVelocity(glm::vec3  const &);
 	void setAcceleration(glm::vec3 const &);
 
 	float getForceVector(const GameObject& p) const;
 	void applyForceVector(float, glm::vec3, float);
+
+	virtual void updateObject(float dt, const GameObject& referenceObj) = 0;
+
 };
 #endif

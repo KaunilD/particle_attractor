@@ -8,6 +8,7 @@ uniform highp vec3 lightPosition;
 uniform highp vec3 lightColor;
 uniform highp vec3 lightAmbient;
 
+uniform highp vec3 color;
 
 in vec4 vs_position;
 in vec3 vs_normal;
@@ -38,7 +39,7 @@ void main()
 	vec3 ambient = lightAmbient;
 	vec3 diffuse = light_mod * normal_dot_light * lightColor;
 
-	gl_FragColor = sqrt(vec4(ambient + diffuse + specular, 1.0));
+	gl_FragColor = (vec4(color, 1.0) + vec4(ambient + diffuse + specular, 1.0));
 }
 
 

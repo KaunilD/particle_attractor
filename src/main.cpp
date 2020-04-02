@@ -22,6 +22,7 @@ const double maxPeriod = 1.0 / maxFPS;
 
 // CAMERA
 float cameraSpeed = 0.05f; // adjust accordingly
+float fov = 45.0f;
 
 // GAMEOBJECTS
 shared_ptr<Camera> camera;
@@ -29,6 +30,11 @@ shared_ptr<ShaderProgram> particleObjShader;
 shared_ptr<ParticleRenderer> particleRenderer;
 shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects;
 shared_ptr<Mesh> m_sphereMesh;
+
+// MOUSE
+float lastX = 400, lastY = 300;
+float yaw = 0, pitch = 0;
+bool firstMouse = true;
 
 void frameBufferResizeCb(GLFWwindow* window, int fbW, int fbH) {
 
@@ -45,13 +51,12 @@ void initGlRenderFlags() {
 
 }
 
-
 void initCSR() {
 	camera = make_shared<Camera>(
-		glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(-10.0f, 0.0f, 5.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		90.0f, VIEWPORT_WIDTH, VIEWPORT_WIDTH, 0.001f, 100.f
+		fov, VIEWPORT_WIDTH, VIEWPORT_WIDTH, 0.001f, 100.f
 		);
 	camera->setSpeed(0.5);
 
@@ -81,7 +86,7 @@ void initObjects() {
 	shared_ptr<SunObject> sunObject = make_shared<SunObject>(true);
 	sunObject->setMass(100.0f);
 	sunObject->setMesh(m_sphereMesh);
-	//sunObject->setMaterial(m_sphereMaterial);
+	sunObject->setColor(glm::vec3(0.0, 1.0, 1.0));
 	sunObject->setScale(glm::vec3(10.0f));
 	sunObject->setPosition(glm::vec3(0.0f));
 	gameObjects->push_back(std::move(sunObject));
@@ -97,9 +102,9 @@ void initObjects() {
 		particleObject->setMesh(m_sphereMesh);
 		//particleObject->setMaterial(m_sphereMaterial);
 		particleObject->setScale(
-			glm::vec3(0.5f)
+			glm::vec3(particleObject->m_mass)
 		);
-
+		particleObject->setColor(glm::vec3(1.0, 0.0, 1.0));
 		particleObject->setPosition(
 			glm::vec3(
 				Algorithms::randomInt(10) - 5,
@@ -137,8 +142,43 @@ void display(GLFWwindow* window) {
 	glFlush();
 }
 
-void updateInput(GLFWwindow* window) {
-	
+void mouseCallback(GLFWwindow* window, double xpos, double ypos){
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
+	lastX = xpos;
+	lastY = ypos;
+
+	const float sensitivity = 0.05f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+}
+
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	if (fov > 1.0f && fov < 90.0f)
+		fov -= yoffset;
+	else if (fov <= 1.0f)
+		fov = 1.0f;
+	else if (fov >= 90.0f)
+		fov = 89.0f;
+
+	LOG(fov);
 }
 
 
@@ -152,30 +192,32 @@ int main(int argc, char *argv[])
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
+	
 	GLFWwindow* window;
 	window = glfwCreateWindow(
 		VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
 		"PC Viewer", NULL, NULL
 	);
-
+	
 	if (!window)
 	{
 		glfwTerminate();
 		return -1;
 	}
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetScrollCallback(window, scrollCallback);
+
 	glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
 	glViewport(0, 0, frameBufferWidth, frameBufferHeight);
 	glfwSetFramebufferSizeCallback(window, frameBufferResizeCb);
-
+	
 	glfwMakeContextCurrent(window);
-	// INIT OPENGL FLAGS
-
-	// INITIALIZE GLEW
+	
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		std::cout << "ERROR::MAIN.CPP::GLEW_INIT_FAILED" << "/n";
+		std::cout << "ERROR::MAIN.CPP::GLEW_INIT_FAILED" << std::endl;
 		glfwTerminate();
 	}
 
@@ -187,10 +229,8 @@ int main(int argc, char *argv[])
 		deltaTime = currentTime - lastTime;
 
 		glfwPollEvents();
-
-		updateInput(window);
-
-
+		camera->update(yaw, pitch, fov);
+		
 		if (deltaTime >= maxPeriod) {
 			glClearColor(0, 0, 0, 0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,7 +239,7 @@ int main(int argc, char *argv[])
 				update and render gameObjects
 			*/
 
-			updateGameObjects(deltaTime/100.0f);
+			updateGameObjects(deltaTime/1000.0f);
 
 			frame += 1;
 		}

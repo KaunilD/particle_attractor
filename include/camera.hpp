@@ -12,17 +12,17 @@ enum Movement {
 
 class Camera {
 public:
-	float fov;
-	float _near;
-	float _far;
+	float m_fov;
+	float m_near;
+	float m_far;
 
-	int frameBufferWidth, frameBufferHeight;
+	int m_frameBufferWidth, m_frameBufferHeight;
 
-	double speed;
+	double m_speed;
 
-	glm::mat4x4 projectionMatrix, viewMatrix;
+	glm::mat4x4 m_projectionMatrix, m_viewMatrix;
 
-	glm::vec3 posVector, upVector, frontVector;
+	glm::vec3 m_posVector, m_upVector, m_frontVector, m_worldUpVector, m_rightVector;
 
 	Camera();
 	Camera(
@@ -35,13 +35,13 @@ public:
 	void processKB(Movement mov, float speed);
 
 	void updateViewMatrix();
-	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
+	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight, float fov);
 	void resetProjectionMatrix();
 
 	glm::mat4x4 getProjectionMatrix() const;
 	glm::mat4x4 getViewMatrix() const;
 
-	void update();
+	void update(float , float, float);
 };
 
 #endif
