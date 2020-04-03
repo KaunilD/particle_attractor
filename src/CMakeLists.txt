@@ -23,6 +23,8 @@ set(SRCS
 	"renderer/renderer.cpp"
 	"renderer/sunrenderer.cpp"
 	"renderer/particlerenderer.cpp"
+
+	"window.cpp"
 )
 
 set(HEADERS
@@ -46,6 +48,13 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/renderer/renderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/sunrenderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/particlerenderer.hpp
+	
+	${PROJECT_SOURCE_DIR}/include/window.hpp
+	
+	${PROJECT_SOURCE_DIR}/include/events/events.hpp
+	${PROJECT_SOURCE_DIR}/include/events/updatable.hpp
+	${PROJECT_SOURCE_DIR}/include/events/mouseevents.hpp
+	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
 
 )
 

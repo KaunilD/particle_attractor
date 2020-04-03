@@ -7,9 +7,7 @@
 #include "gameobject/particleobject.hpp"
 #include "gameobject/mesh.hpp"
 #include "algorithms/algorithms.hpp"
-
-int frameBufferHeight = 0;
-int frameBufferWidth = 0;
+#include "window.hpp"
 
 // FPS CONTROLLER
 bool running = true;
@@ -35,13 +33,6 @@ shared_ptr<Mesh> m_sphereMesh;
 float lastX = 400, lastY = 300;
 float yaw = 0, pitch = 0;
 bool firstMouse = true;
-
-void frameBufferResizeCb(GLFWwindow* window, int fbW, int fbH) {
-
-	frameBufferWidth = fbW;
-	frameBufferHeight = fbW;
-	glViewport(0, 0, fbW, fbH);
-}
 
 void initGlRenderFlags() {
 	glEnable(GL_DEPTH_TEST);
@@ -193,37 +184,16 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 
 int main(int argc, char *argv[])
 {
-	if (!glfwInit())
-		return -1;
+	Window window(1000, 1000, "Particle Attractor");
+	
+	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
+	shared_ptr<KeyboardEvent> keyboardEvent(new KeyboardEvent());
 
+	window.attatchEventHandlers(mouseEvent, keyboardEvent);
+	window.makeCurrent();
 	
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	
-	GLFWwindow* window;
-	window = glfwCreateWindow(
-		VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
-		"PC Viewer", NULL, NULL
-	);
-	
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-	}
+	mouseEvent->addListener(camera);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	glfwSetCursorPosCallback(window, mouseCallback);
-	glfwSetScrollCallback(window, scrollCallback);
-
-	glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
-	glViewport(0, 0, frameBufferWidth, frameBufferHeight);
-	glfwSetFramebufferSizeCallback(window, frameBufferResizeCb);
-	
-	glfwMakeContextCurrent(window);
-	
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 		std::cout << "ERROR::MAIN.CPP::GLEW_INIT_FAILED" << std::endl;
@@ -232,13 +202,15 @@ int main(int argc, char *argv[])
 
 	initCSR();
 	initObjects();
-	while (!glfwWindowShouldClose(window)){
+	while (!glfwWindowShouldClose(window.window)){
 
 		currentTime = glfwGetTime();
 		deltaTime = currentTime - lastTime;
 
 		glfwPollEvents();
 		camera->update(yaw, pitch, fov);
+		
+		mouseEvent->dispatchEvents();
 		
 		if (deltaTime >= maxPeriod) {
 			glClearColor(0, 0, 0, 0);
@@ -252,11 +224,11 @@ int main(int argc, char *argv[])
 
 			frame += 1;
 		}
-		display(window);
+		display(window.window);
 
 	}
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(window.window);
 	glfwTerminate();
 
 	return 0;
