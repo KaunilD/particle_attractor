@@ -18,11 +18,11 @@ set(SRCS
 	"shaderprogram.cpp"
 	"gameobject.cpp"
 	"camera.cpp"
-	"renderer.cpp"
 	"objreader.cpp"
 	"algorithms.cpp"
-	"renderer.cpp"
-	"particlerenderer.cpp"
+	"renderer/renderer.cpp"
+	"renderer/sunrenderer.cpp"
+	"renderer/particlerenderer.cpp"
 )
 
 set(HEADERS
@@ -44,6 +44,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
 	
 	${PROJECT_SOURCE_DIR}/include/renderer/renderer.hpp
+	${PROJECT_SOURCE_DIR}/include/renderer/sunrenderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/particlerenderer.hpp
 
 )

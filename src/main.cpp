@@ -26,8 +26,8 @@ float fov = 45.0f;
 
 // GAMEOBJECTS
 shared_ptr<Camera> camera;
-shared_ptr<ShaderProgram> particleObjShader;
-shared_ptr<ParticleRenderer> particleRenderer;
+shared_ptr<ShaderProgram> particleShader, sunShader;
+shared_ptr<ParticleRenderer> particleRenderer, sunRenderer;
 shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects;
 shared_ptr<Mesh> m_sphereMesh;
 
@@ -45,10 +45,8 @@ void frameBufferResizeCb(GLFWwindow* window, int fbW, int fbH) {
 
 void initGlRenderFlags() {
 	glEnable(GL_DEPTH_TEST);
-
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 }
 
 void initCSR() {
@@ -60,13 +58,20 @@ void initCSR() {
 		);
 	camera->setSpeed(0.5);
 
-	particleObjShader = make_shared<ShaderProgram>();
-	particleObjShader->loadShaders(
+	particleShader = make_shared<ShaderProgram>();
+	particleShader->loadShaders(
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
 	);
 
+	sunShader = make_shared<ShaderProgram>();
+	sunShader->loadShaders(
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\sun_fs.glsl"
+	);
+
 	particleRenderer = make_shared<ParticleRenderer>();
+	sunRenderer = make_shared<ParticleRenderer>();
 
 }
 
@@ -86,7 +91,7 @@ void initObjects() {
 	shared_ptr<SunObject> sunObject = make_shared<SunObject>(true);
 	sunObject->setMass(100.0f);
 	sunObject->setMesh(m_sphereMesh);
-	sunObject->setColor(glm::vec3(0.0, 1.0, 1.0));
+	sunObject->setColor(glm::vec3(1.0f));
 	sunObject->setScale(glm::vec3(10.0f));
 	sunObject->setPosition(glm::vec3(0.0f));
 	gameObjects->push_back(std::move(sunObject));
@@ -127,10 +132,16 @@ void updateGameObjects(float dt) {
 		);
 	}
 
-	for (int i = 0; i < gameObjects->size(); i++) {
+	sunRenderer->render(
+		sunShader,
+		gameObjects->at(0),
+		camera
+	);
+
+	for (int i = 1; i < gameObjects->size(); i++) {
 
 		particleRenderer->render(
-			particleObjShader,
+			particleShader,
 			gameObjects->at(i),
 			camera
 		);
