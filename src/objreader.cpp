@@ -92,6 +92,6 @@ Utils::ObjReaderRet Utils::readObj(const char * filePath)
 			});
 		indices.push_back(i);
 	}
-	LOG(vertexIndices.size());
+	
 	return Utils::ObjReaderRet{ vertices, indices };
 }

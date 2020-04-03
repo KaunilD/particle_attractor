@@ -188,8 +188,6 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 		fov = 1.0f;
 	else if (fov > 90.0f)
 		fov = 89.0f;
-
-	LOG(fov);
 }
 
 

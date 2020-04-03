@@ -31,6 +31,12 @@ class ShaderProgram{
 				glm::value_ptr(vector)
 			);
 		}
+		void ShaderProgram::setFloat(std::string name, float val) {
+			glUniform1f(
+				glGetUniformLocation(program, name.c_str()),
+				val
+			);
+		}
 
 		void checkCompileErrors(unsigned int shader, std::string type);
 

@@ -3,7 +3,9 @@
 #define SUNRENDERER_H
 
 class SunRenderer : public Renderer {
+	int64_t time = 0;
 public:
+
 	SunRenderer() {};
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,
