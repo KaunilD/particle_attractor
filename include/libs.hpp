@@ -29,7 +29,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "events/updatable.hpp"
+
 #define LOG(x) {std::cout << x << std::endl;}
 
 constexpr auto VIEWPORT_WIDTH = 800;

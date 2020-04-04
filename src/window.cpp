@@ -30,6 +30,8 @@ Window::Window(int t_width, int t_height, std::string t_title)
 	glfwGetFramebufferSize(this->window, &m_width, &m_height);
 	glViewport(0, 0, m_width, m_height);
 
+	
+
 
 };
 

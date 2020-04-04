@@ -1,33 +1,21 @@
 #include "camera.hpp"
 
-Camera::Camera(){}
+Camera::Camera(){
+	LOG("Camera::Camera() default c_tor");
+}
 
 Camera::Camera(
 	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector, 
 	float fov, int fbW, int fbH, float Cnear, float Cfar
 ): m_posVector(posVector), m_frontVector(frontVector), m_upVector(upVector), m_worldUpVector(upVector), m_fov(fov), m_frameBufferWidth(fbW), m_frameBufferHeight(fbH), m_near(Cnear), m_far(Cfar) {
-	
+	LOG("Camera::Camera() overloaded c_tor");
+
 	updateViewMatrix();
 	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
 }
 
 void Camera::setSpeed(double _speed) {
 	m_speed = _speed;
-}
-
-void Camera::processKB(Movement movement, float speed){
-	if (movement == W) {
-		m_posVector += speed * m_frontVector;
-	}
-	if (movement == S) {
-		m_posVector -= speed * m_frontVector;
-	}
-	if (movement == D) {
-		m_posVector += speed * m_upVector;
-	}
-	if (movement == A) {
-		m_posVector -= speed * m_upVector;
-	}
 }
 
 
@@ -82,7 +70,10 @@ void Camera::update(float t_yaw, float t_pitch, float fov) {
 	updateViewMatrix();
 	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
 
-}
+};
+
+void Camera::update(MouseProps props){
+};
 
 Camera::~Camera() {
 

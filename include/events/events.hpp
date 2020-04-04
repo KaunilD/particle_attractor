@@ -1,30 +1,23 @@
-#ifndef EVENT_H
-#define EVENT_H
+#ifndef EVENTS_H
+#define EVENTS_H
 
 #include "libs.hpp"
+#include "events/updatable.hpp"
 
 class Event {
 public:
-
-	unique_ptr<std::list<shared_ptr<Updatable>>> observers;
+	unique_ptr<std::vector<shared_ptr<Updatable>>> observers;
+	
 	Event() {
-		observers = make_unique<std::list<shared_ptr<Updatable>>>() ;
+		LOG("Event::default c_tor()");
+		observers = make_unique<std::vector<shared_ptr<Updatable>>>() ;
 	}
 
 	void addListener(shared_ptr<Updatable> t_updatable) {
 		observers->push_back(t_updatable);
 	}
 
-	void dispatchEvents() {
-		auto it = observers->begin();
-		while (it!=observers->end()) {
-			LOG("EVENT::dispatchEvents()");
-			(*it)->update();
-			it++;
-		}
-	}
-
-
+	virtual void dispatchEvents() = 0;
 };
 
-#endif EVENT_H
+#endif EVENTS_H
