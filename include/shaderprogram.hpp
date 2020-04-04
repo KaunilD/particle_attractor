@@ -13,7 +13,8 @@ class ShaderProgram{
 
 		void loadShaders(const char * vs_path, const char * fs_path);
 		void activate();
-		
+		void deactivate();
+
 		
 		void ShaderProgram::setMat4(std::string name, glm::mat4 matrix) {
 			glUniformMatrix4fv(

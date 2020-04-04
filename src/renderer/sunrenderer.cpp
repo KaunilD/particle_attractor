@@ -3,11 +3,18 @@
 void SunRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<GameObject> gameObject, shared_ptr<Camera> camera) {
 	{
 		shaderProgram->activate();
-
+		
 		shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
 		shaderProgram->setMat4("modelMat", gameObject->getModelMatrix());
 
 		shaderProgram->setVec3("color", gameObject->getColor());
+
+
+		glm::vec3 lightColor(sin(glfwGetTime()), 0, 1.0f);
+
+		
+		shaderProgram->setVec3("color", lightColor);
+		//shaderProgram->setVec3("light.diffuse", diffuseColor);
 
 		GLuint textureAttribLoc, positionAttribLoc, normalAttribLoc, colorAttribLoc;
 		glBindVertexArray(gameObject->m_mesh->m_VAO);
@@ -26,6 +33,8 @@ void SunRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<Gam
 
 		glDisableVertexAttribArray(positionAttribLoc);
 		glDisableVertexAttribArray(normalAttribLoc);
+
+		shaderProgram->deactivate();
 	};
 
 }

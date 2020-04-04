@@ -91,8 +91,11 @@ void ShaderProgram::checkCompileErrors(unsigned int shader, std::string type) {
 	}
 }
 
-
 void ShaderProgram::activate() {
 	glUseProgram(program);
+}
+
+void ShaderProgram::deactivate() {
+	glUseProgram(0);
 }
 

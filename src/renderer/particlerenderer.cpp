@@ -44,6 +44,8 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 
 		glDisableVertexAttribArray(positionAttribLoc);
 		glDisableVertexAttribArray(normalAttribLoc);
+
+		shaderProgram->deactivate();
 	};
 
 }
