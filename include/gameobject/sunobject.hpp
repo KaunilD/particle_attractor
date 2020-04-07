@@ -5,7 +5,7 @@ public:
 	SunObject() : GameObject() {};
 	SunObject(bool npc) : GameObject(npc){};
 	
-	virtual void updateObject(float dt, const GameObject& gameObject) override {
+	virtual void updateObject(float dt, const shared_ptr<GameObject>& gameObject) override {
 		updateModelMatrix();
 		return;
 	};

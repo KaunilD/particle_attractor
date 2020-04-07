@@ -47,10 +47,10 @@ public:
 	void setVelocity(glm::vec3  const &);
 	void setAcceleration(glm::vec3 const &);
 
-	float getForceVector(const GameObject& p) const;
+	float getForceVector(const shared_ptr<GameObject>& p) const;
 	void applyForceVector(float, glm::vec3, float);
 
-	virtual void updateObject(float dt, const GameObject& referenceObj) = 0;
+	virtual void updateObject(float dt, const shared_ptr<GameObject>& referenceObj) = 0;
 
 };
 #endif

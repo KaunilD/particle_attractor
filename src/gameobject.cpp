@@ -47,15 +47,15 @@ void LOG_VEC(const glm::vec3& data) {
 	std::cout << data.x << " " << data.y << " " << data.z << std::endl;
 }
 
-float GameObject::getForceVector(const GameObject& p) const {
-	glm::vec3 distance = p.getPosition() - m_position;
+float GameObject::getForceVector(const shared_ptr<GameObject>& p) const {
+	glm::vec3 distance = p->getPosition() - m_position;
 	//LOG_VEC(distance);
 	float magnitude = sqrt(
 			pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2)
 		) + 0.15;
 	
 	magnitude = fmin(20.f, fmax(magnitude, 5.f));
-	return ( g * m_mass * p.m_mass) / (magnitude * magnitude);
+	return ( g * m_mass * p->m_mass) / (magnitude * magnitude);
 }
 
 

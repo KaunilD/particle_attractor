@@ -41,12 +41,11 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 	sunObject->setScale(glm::vec3(1.00f));
 	sunObject->setPosition(glm::vec3(0.0f));
 	gameObjects->push_back(std::move(sunObject));
-
 	// setup particles
-
-	shared_ptr<ParticleObject> particleObject;
+	unique_ptr<ParticleObject> particleObject;
 	for (int i = 1; i < 100; i++) {
-		particleObject = make_shared<ParticleObject>(false);
+
+		particleObject = make_unique<ParticleObject>(false);
 		particleObject->setMass(
 			Algorithms::randomInt(10) / 10.0f + 0.01
 		);
@@ -57,9 +56,9 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 		);
 		particleObject->setColor(glm::vec3(1.0, 0.0, 1.0));
 		particleObject->setPosition(glm::vec3(
-			Algorithms::randomInt(10) - 5,
-			Algorithms::randomInt(10) - 5,
-			Algorithms::randomInt(10) - 5
+			-10+i/10.0f,
+			-10+i/10.0f,
+			-10+i/10.0f
 		));
 
 		gameObjects->push_back(std::move(particleObject));
@@ -71,7 +70,7 @@ void updateObjects(float dt,
 	#pragma omp parallel for
 	for (int i = 1; i < gameObjects->size(); i++) {
 		gameObjects->at(i)->updateObject(
-			dt, *gameObjects->at(0)
+			dt, gameObjects->at(0)
 		);
 	}
 }
@@ -114,7 +113,7 @@ int main(int argc, char *argv[])
 
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
-			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
+			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\globe-sphere.obj"
 		)
 	));
 
@@ -150,6 +149,10 @@ int main(int argc, char *argv[])
 		
 		particleRenderer->render(
 			particleShader, gameObjects, camera
+		);
+
+		sunRenderer->render(
+			sunShader, gameObjects->at(0), camera
 		);
 		
 		window.update();
