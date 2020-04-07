@@ -49,7 +49,6 @@ void LOG_VEC(const glm::vec3& data) {
 
 float GameObject::getForceVector(const shared_ptr<GameObject>& p) const {
 	glm::vec3 distance = p->getPosition() - m_position;
-	//LOG_VEC(distance);
 	float magnitude = sqrt(
 			pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2)
 		) + 0.15;
@@ -61,10 +60,10 @@ float GameObject::getForceVector(const shared_ptr<GameObject>& p) const {
 
 void GameObject::applyForceVector(float force, glm::vec3 distance, float dt) {
 	glm::vec3 resForce = glm::normalize(distance) * force;
-	acceleration += (resForce / m_mass);
-	velocity += acceleration * dt;
-	m_position += velocity * dt;
-	acceleration *= 0;
+	acceleration	+= (resForce / m_mass);
+	velocity		+= acceleration * dt;
+	m_position		+= velocity * dt;
+	acceleration	*= 0;
 	updateModelMatrix();
 }
 
