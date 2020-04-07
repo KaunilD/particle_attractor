@@ -30,15 +30,15 @@ void GameObject::setColor(glm::vec3 t_color) {
 
 void GameObject::setPosition(glm::vec3 t_position) {
 	m_position = t_position;
+	updateModelMatrix();
 }
 
 void GameObject::setScale(glm::vec3 t_scale) {
 	m_scale = t_scale;
+	updateModelMatrix();
 }
 
 void GameObject::setupModelMatrix(glm::vec3 t_scale, glm::vec3 t_position) {
-	m_modelMatrix = glm::mat4x4(1.0f);
-
 	setScale(t_scale);
 	setPosition(t_position);
 }

@@ -15,7 +15,7 @@ public:
 	~GameObject();
 
 	bool m_npc;
-	glm::vec3 velocity = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 velocity = glm::vec3(1.0f, 2.0f, 1.0f);
 	glm::vec3 acceleration = glm::vec3(0.0f);
 	float m_mass, g = 0.4f, angle = 0, angularVelocity = 0, angularAcceleration = 0.11;
 

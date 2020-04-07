@@ -38,7 +38,7 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 	sunObject->setMass(100.0f);
 	sunObject->setMesh(mesh);
 	sunObject->setColor(glm::vec3(1.0f));
-	sunObject->setScale(glm::vec3(10.0f));
+	sunObject->setScale(glm::vec3(1.00f));
 	sunObject->setPosition(glm::vec3(0.0f));
 	gameObjects->push_back(std::move(sunObject));
 
@@ -53,16 +53,14 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 		particleObject->setMesh(mesh);
 		//particleObject->setMaterial(m_sphereMaterial);
 		particleObject->setScale(
-			glm::vec3(particleObject->m_mass)
+			glm::vec3(0.5f)
 		);
 		particleObject->setColor(glm::vec3(1.0, 0.0, 1.0));
-		particleObject->setPosition(
-			glm::vec3(
-				Algorithms::randomInt(10) - 5,
-				Algorithms::randomInt(10) - 5,
-				Algorithms::randomInt(10) - 5
-			)
-		);
+		particleObject->setPosition(glm::vec3(
+			Algorithms::randomInt(10) - 5,
+			Algorithms::randomInt(10) - 5,
+			Algorithms::randomInt(10) - 5
+		));
 
 		gameObjects->push_back(std::move(particleObject));
 	}
@@ -122,7 +120,7 @@ int main(int argc, char *argv[])
 
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
 	);
 	shared_ptr<ShaderProgram> sunShader(new ShaderProgram());
@@ -148,7 +146,12 @@ int main(int argc, char *argv[])
 		mouseEvent->dispatchEvents();
 		updateObjects(dt, gameObjects);
 		window.clearCanvas();
-		renderObjects(gameObjects, particleShader, sunShader, particleRenderer, sunRenderer, camera);
+		// render particles
+		
+		particleRenderer->render(
+			particleShader, gameObjects, camera
+		);
+		
 		window.update();
 		
 	}

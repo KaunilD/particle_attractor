@@ -4,6 +4,10 @@ ShaderProgram::ShaderProgram(){
 	LOG("ShaderProgram::Shader Created");
 }
 
+ShaderProgram::~ShaderProgram() {
+	glDeleteProgram(program);
+}
+
 void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
 	// 1. retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
