@@ -53,7 +53,7 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 		particleObject->setMesh(mesh);
 		//particleObject->setMaterial(m_sphereMaterial);
 		particleObject->setScale(
-			glm::vec3(0.5f)
+			glm::vec3(particleObject->m_mass)/5.0f
 		);
 		particleObject->setColor(glm::vec3(1.0, 0.0, 1.0));
 		particleObject->setPosition(glm::vec3(
