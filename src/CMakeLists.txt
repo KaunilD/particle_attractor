@@ -54,6 +54,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/events/events.hpp
 	${PROJECT_SOURCE_DIR}/include/events/updatable.hpp
 	${PROJECT_SOURCE_DIR}/include/events/mouseevents.hpp
+	${PROJECT_SOURCE_DIR}/include/events/windowevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
 
 )

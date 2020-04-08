@@ -23,18 +23,20 @@ public:
 
 		glGenBuffers(1, &m_VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, obj.v.size() * sizeof(Vertex), &obj.v[0], GL_STATIC_DRAW);
-
-		// set up vertex attributes, specify layout
-		glEnableVertexAttribArray(Buffers::POSITION);
-		glVertexAttribPointer(Buffers::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-		
-		glEnableVertexAttribArray(Buffers::NORMAL);
-		glVertexAttribPointer(Buffers::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normals));
+		glBufferData(GL_ARRAY_BUFFER, v_count * sizeof(Vertex), &obj.v[0], GL_STATIC_DRAW);
 
 		glGenBuffers(1, &m_EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.i.size() * sizeof(GLuint), &obj.i[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, i_count * sizeof(GLuint), &obj.i[0], GL_STATIC_DRAW);
+
+		// set up vertex attributes, specify layout
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+		
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normals));
+
+		glBindVertexArray(0);
 
 	};
 
@@ -47,14 +49,14 @@ public:
 
 	void draw(shared_ptr<std::vector<glm::mat4x4>> models) {
 
+		glBindVertexArray(m_VAO);
 		GLuint buffer;
 		glGenBuffers(1, &buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, buffer);
 		glBufferData(GL_ARRAY_BUFFER, models->size() * sizeof(glm::mat4), &models->at(0), GL_STATIC_DRAW);
 
-		glBindVertexArray(m_VAO);
-
-		std::size_t vec4Size = sizeof(glm::vec4);
+		
+		auto vec4Size = sizeof(glm::vec4);
 
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
@@ -76,9 +78,14 @@ public:
 		glDrawElementsInstanced(
 			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, models->size());
 
+		glBindVertexArray(0);
 	}
 	~Mesh(){
-		LOG("Mesh::Destroyed")
+		LOG("Mesh::Destroyed");
+
+		glDisableVertexAttribArray(m_VAO);
+		glDisableVertexAttribArray(m_VBO);
+		glDisableVertexAttribArray(m_EBO);
 	}
 };
 

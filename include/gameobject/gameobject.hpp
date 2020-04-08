@@ -12,18 +12,19 @@ class GameObject{
 public:
 	GameObject();
 	GameObject(bool);
-	~GameObject();
+	~GameObject() = default;
 
 	bool m_npc;
 	glm::vec3 velocity = glm::vec3(1.0f, 2.0f, 1.0f);
 	glm::vec3 acceleration = glm::vec3(0.0f);
-	float m_mass, g = 0.4f, angle = 0, angularVelocity = 0, angularAcceleration = 0.11;
+	float m_mass, g = 0.4f;
 
 
 	glm::mat4x4 m_modelMatrix;
 	glm::vec3 m_position, m_color, m_scale;
 
 	shared_ptr<Mesh> m_mesh;
+	
 	//shared_ptr<Material> m_material;
 
 	glm::mat4x4 getModelMatrix() const { return m_modelMatrix; };

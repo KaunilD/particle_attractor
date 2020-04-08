@@ -87,11 +87,11 @@ Utils::ObjReaderRet Utils::readObj(const char * filePath)
 				rawNormals[normalIndices[i] - 1],
 				rawTextures[textureIndices[i] - 1],
 				glm::vec3(1.0f),
-				glm::vec3(1.0f, 1.0f, 1.0f),
-				glm::vec3(1.0f, 1.0f, 1.0f),
+				glm::vec3(1.0f),
+				glm::vec3(1.0f),
 			});
 		indices.push_back(i);
 	}
-	
-	return Utils::ObjReaderRet{ vertices, indices };
+	LOG(rawVertices.size());
+	return Utils::ObjReaderRet{ std::move(vertices), std::move(indices) };
 }

@@ -6,6 +6,7 @@
 #include "events/events.hpp"
 #include "events/keyboardevents.hpp"
 #include "events/mouseevents.hpp"
+#include "events/windowevents.hpp"
 
 class Window {
 
@@ -17,17 +18,14 @@ public:
 	
 	GLFWwindow* window;
 	shared_ptr<MouseEvent> mouseEvent;
-	shared_ptr<KeyboardEvent> keyboardEvent;
+	shared_ptr<WindowEvent> windowEvent;
 
 	Window();
 	Window(int width, int height, std::string title);
 
-	void handleWindowResize(GLFWwindow*, int, int);
-
-	void attatchEventHandlers(shared_ptr<MouseEvent> t_mouseEvent, shared_ptr<KeyboardEvent> t_keyboardEvent) {
+	void attachEventHandler(shared_ptr<MouseEvent> t_mouseEvent) {
 		mouseEvent = t_mouseEvent;
-		keyboardEvent = t_keyboardEvent;
-
+	
 		glfwSetCursorPosCallback(
 			this->window, [](GLFWwindow * t_window, double x, double y) {
 				Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(t_window));
@@ -35,8 +33,7 @@ public:
 					window->mouseEvent->props->setXPos(x);
 					window->mouseEvent->props->setYPos(y);
 				}
-			}
-		);
+			});
 
 		glfwSetScrollCallback(this->window, [](GLFWwindow* t_window, double x, double y) {
 				Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(t_window));
@@ -44,9 +41,22 @@ public:
 					window->mouseEvent->props->setXOff(x);
 					window->mouseEvent->props->setYOff(y);
 				}
-			}
-		);
+			});
+
 	};
+
+	void attachEventHandler(shared_ptr<WindowEvent> t_windowEvent) {
+		windowEvent = t_windowEvent;
+		glfwSetFramebufferSizeCallback(this->window, [](GLFWwindow* t_window, int h, int w) {
+			Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(t_window));
+			if (window) {
+				window->m_width = w;
+				window->m_height = h;
+				glViewport(0, 0, w, h);
+			}
+			});
+
+	}
 
 	void clearCanvas() {
 		glClearColor(0, 0, 0, 0);
@@ -66,7 +76,9 @@ public:
 			std::cout << "ERROR::MAIN.CPP::GLEW_INIT_FAILED" << std::endl;
 			glfwTerminate();
 		}
-
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_STENCIL_TEST);
 	};
 
 	void destroy() {

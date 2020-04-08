@@ -12,5 +12,5 @@ out vec3 vs_normal;
 void main() {
 	gl_Position = projViewMat * instance_matrix * vec4(vertex_position, 1.f);
 	vs_position = instance_matrix * vec4(vertex_position, 1.f);
-	vs_normal = vertex_normal;
+	vs_normal	= vertex_normal;
 }

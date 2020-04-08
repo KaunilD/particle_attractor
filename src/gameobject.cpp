@@ -8,10 +8,6 @@ GameObject::GameObject(bool t_npc) : m_npc(t_npc){
 	m_modelMatrix = glm::mat4x4(1.0);
 };
 
-GameObject::~GameObject() {
-	//LOG("GameObject::Destroyed")
-}
-
 void GameObject::setMass(float t_mass) {
 	m_mass = t_mass;
 }
@@ -43,12 +39,8 @@ void GameObject::setupModelMatrix(glm::vec3 t_scale, glm::vec3 t_position) {
 	setPosition(t_position);
 }
 
-void LOG_VEC(const glm::vec3& data) {
-	std::cout << data.x << " " << data.y << " " << data.z << std::endl;
-}
-
 float GameObject::getForceVector(const shared_ptr<GameObject>& p) const {
-	glm::vec3 distance = p->getPosition() - m_position;
+	glm::vec3 distance(p->getPosition() - m_position);
 	float magnitude = sqrt(
 			pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2)
 		) + 0.15;
@@ -59,7 +51,7 @@ float GameObject::getForceVector(const shared_ptr<GameObject>& p) const {
 
 
 void GameObject::applyForceVector(float force, glm::vec3 distance, float dt) {
-	glm::vec3 resForce = glm::normalize(distance) * force;
+	glm::vec3 resForce(glm::normalize(distance) * force);
 	acceleration	+= (resForce / m_mass);
 	velocity		+= acceleration * dt;
 	m_position		+= velocity * dt;

@@ -35,5 +35,6 @@ public:
 	void update(float, float, float);
 
 	virtual void update(MouseProps props);
+	virtual void update(WindowProps props);
 };
 #endif CAMERA_H

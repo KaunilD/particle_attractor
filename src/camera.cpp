@@ -72,7 +72,11 @@ void Camera::update(float t_yaw, float t_pitch, float fov) {
 
 };
 
-void Camera::update(MouseProps props){
+void Camera::update(MouseProps props) {
+};
+
+void Camera::update(WindowProps props) {
+	updateProjectionMatrix(props.fbW, props.fbH, m_fov);
 };
 
 Camera::~Camera() {

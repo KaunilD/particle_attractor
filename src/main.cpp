@@ -10,27 +10,6 @@
 #include "algorithms/algorithms.hpp"
 #include "window.hpp"
 
-void initShaders() {
-	shared_ptr<ShaderProgram> particleShader, sunShader;
-	shared_ptr<ParticleRenderer> particleRenderer, sunRenderer;
-
-	particleShader = make_shared<ShaderProgram>();
-	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
-	);
-
-	sunShader = make_shared<ShaderProgram>();
-	sunShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\sun_fs.glsl"
-	);
-
-	particleRenderer = make_shared<ParticleRenderer>();
-	sunRenderer = make_shared<ParticleRenderer>();
-
-}
-
 void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects, shared_ptr<Mesh> mesh) {
 	
 	// setup sun
@@ -52,13 +31,13 @@ void initGameObejcts(shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects
 		particleObject->setMesh(mesh);
 		//particleObject->setMaterial(m_sphereMaterial);
 		particleObject->setScale(
-			glm::vec3(particleObject->m_mass)/5.0f
+			glm::vec3(particleObject->m_mass)
 		);
 		particleObject->setColor(glm::vec3(1.0, 0.0, 1.0));
 		particleObject->setPosition(glm::vec3(
-			-10+i/10.0f,
-			-10+i/10.0f,
-			-10+i/10.0f
+			Algorithms::randomInt(10) - 5,
+			Algorithms::randomInt(10) - 5,
+			Algorithms::randomInt(10) - 5
 		));
 
 		gameObjects->push_back(std::move(particleObject));
@@ -75,22 +54,8 @@ void updateObjects(float dt,
 	}
 }
 /*
-	NEEDSTO BE REFACTORED INTO SCENES
+	NEEDS TO BE REFACTORED INTO SCENES
 */
-void renderObjects(
-	shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects,
-	shared_ptr<ShaderProgram> particleShader, shared_ptr<ShaderProgram> sunShader,
-	shared_ptr<ParticleRenderer> particleRenderer, shared_ptr<SunRenderer> sunRenderer,
-	shared_ptr<Camera> camera) {
-	for (int i = 0; i < gameObjects->size(); i++) {
-		particleRenderer->render(
-			particleShader, gameObjects->at(i), camera
-		);
-	}
-	sunRenderer->render(
-		sunShader, gameObjects->at(0), camera
-	);
-}
 
 int main(int argc, char *argv[])
 {
@@ -99,9 +64,10 @@ int main(int argc, char *argv[])
 	window.makeCurrent();
 
 	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
-	shared_ptr<KeyboardEvent> keyboardEvent(new KeyboardEvent());
+	shared_ptr<WindowEvent> windowEvent(new WindowEvent(1000, 1000));
 
-	window.attatchEventHandlers(mouseEvent, keyboardEvent);
+	window.attachEventHandler(mouseEvent);
+	window.attachEventHandler(windowEvent);
 
 	shared_ptr<Camera> camera(new Camera(
 		glm::vec3(0.0f, 0.0f, 10.0f),
@@ -138,25 +104,26 @@ int main(int argc, char *argv[])
 
 	
 	mouseEvent->addListener(camera);
+	windowEvent->addListener(camera);
 
 	while (!glfwWindowShouldClose(window.window)){
 
 		glfwPollEvents();
 		mouseEvent->dispatchEvents();
-		updateObjects(dt, gameObjects);
-		window.clearCanvas();
-		// render particles
+		windowEvent->dispatchEvents();
 		
+		updateObjects(dt, gameObjects);
+		
+		window.clearCanvas();
+		
+		sunRenderer->render(
+			sunShader, gameObjects->at(0), camera
+		);
 		particleRenderer->render(
 			particleShader, gameObjects, camera
 		);
 
-		sunRenderer->render(
-			sunShader, gameObjects->at(0), camera
-		);
-		
 		window.update();
-		
 	}
 	window.destroy();
 	return 0;
