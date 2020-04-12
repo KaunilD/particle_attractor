@@ -18,15 +18,16 @@ int main(int argc, char *argv[])
 	Window window(1000, 1000, "Particle Attractor");
 	window.makeCurrent();
 
-	unique_ptr<Scene> scene(new Scene(19200));
+	shared_ptr<Scene> scene(new Scene(19200));
 	scene->init();
 
-
+	
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
 			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
 		)
 	));
+	scene->addMesh(m_shpereMesh);
 
 
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
@@ -55,6 +56,8 @@ int main(int argc, char *argv[])
 	mouseEvent->addListener(camera);
 	windowEvent->addListener(camera);
 
+
+
 	while (!glfwWindowShouldClose(window.window)){
 
 		glfwPollEvents();
@@ -65,11 +68,9 @@ int main(int argc, char *argv[])
 
 		window.clearCanvas();
 			
-		/*
 		particleRenderer->render(
 			particleShader, scene, camera
 		);
-		*/
 
 		window.update();
 	}

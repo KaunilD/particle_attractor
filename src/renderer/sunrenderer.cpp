@@ -16,7 +16,7 @@ void SunRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<Gam
 
 	shaderProgram->setVec3("color", lightColor);
 	//shaderProgram->setVec3("light.diffuse", diffuseColor);
-	gameObject->m_mesh->draw();
+	gameObject->m_mesh->drawInstanced(100);
 
 	shaderProgram->deactivate();
 

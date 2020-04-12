@@ -50,7 +50,7 @@ __global__ void kernel_update(
 void launch_kernel_update(
 	float4* d_positions, float4* d_velocities, 
 	float4* h_positions, float4* h_velocities, 
-	float* masses, size_t numel) {
+	float* masses, int numel) {
 	dim3 blockSize(32, 1, 1);
 	dim3 gridSize(1);
 	gridSize.x = numel / blockSize.x;

@@ -27,22 +27,13 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	gameObject->m_mesh->draw();
+	gameObject->m_mesh->drawInstanced(100);
 
 	shaderProgram->deactivate();
 };
 
 
 void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects, shared_ptr<Camera> camera) {
-
-	
-	unique_ptr<std::vector<glm::mat4x4>> model_mats = make_unique<std::vector<glm::mat4x4>>();
-	
-	for (int i = 1; i < gameObjects->size(); i++) {
-		model_mats->push_back(
-			gameObjects->at(i)->getModelMatrix()
-		);
-	}
 
 	
 	shaderProgram->activate();
@@ -59,12 +50,40 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 	/* material */
 	shaderProgram->setFloat("material.shininess",	32.0f);
 	shaderProgram->setVec3("material.ambient",		glm::vec3(0.2f));
-	shaderProgram->setVec3("material.diffuse",		gameObjects->at(1)->m_color);
+	shaderProgram->setVec3("material.diffuse",		glm::vec3(1.0f));
 	shaderProgram->setVec3("material.specular",		glm::vec3(1.0f));
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	gameObjects->at(0)->m_mesh->draw(std::move(model_mats));
+	gameObjects->at(0)->m_mesh->drawInstanced(100);
+
+	shaderProgram->deactivate();
+};
+
+
+void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<Scene> scene, shared_ptr<Camera> camera) {
+
+
+	shaderProgram->activate();
+
+	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
+	/* object */
+
+	/* light */
+	shaderProgram->setVec3("light.position", -camera->m_posVector);
+	shaderProgram->setVec3("light.ambient", glm::vec3(0.2f));
+	shaderProgram->setVec3("light.diffuse", glm::vec3(0.5f));
+	shaderProgram->setVec3("light.specular", glm::vec3(1.00f));
+
+	/* material */
+	shaderProgram->setFloat("material.shininess", 32.0f);
+	shaderProgram->setVec3("material.ambient", glm::vec3(0.2f));
+	shaderProgram->setVec3("material.diffuse", glm::vec3(1.0f));
+	shaderProgram->setVec3("material.specular", glm::vec3(1.0f));
+
+	shaderProgram->setVec3("cameraEye", camera->m_posVector);
+
+	scene->m_meshes.at(0)->drawInstanced(scene->m_numparticles);
 
 	shaderProgram->deactivate();
 };

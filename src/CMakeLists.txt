@@ -75,14 +75,16 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/events/mouseevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/windowevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
-
+	
 	${PROJECT_SOURCE_DIR}/include/cuda/update_gameobject.hpp
+	${PROJECT_SOURCE_DIR}/include/cuda/update_models.hpp
 
 
 )
 
 set (KERNELS
 	"cuda/update_gameobject.cu"
+	"cuda/update_models.cu"
 )
 
 if(WIN32)
