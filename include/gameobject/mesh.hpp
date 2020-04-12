@@ -108,6 +108,7 @@ public:
 	}
 
 	void drawInstanced(int numInstances) {
+		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_models);
 		glDrawElementsInstanced(
 			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, numInstances);
