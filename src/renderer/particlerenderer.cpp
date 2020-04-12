@@ -36,22 +36,10 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects, shared_ptr<Camera> camera) {
 
 	
-	unique_ptr<std::vector<glm::mat4x4>> model_mats = make_unique<std::vector<glm::mat4x4>>();
-	
-	for (int i = 1; i < gameObjects->size(); i++) {
-		model_mats->push_back(
-			gameObjects->at(i)->getModelMatrix()
-		);
-	}
-
-	
 	shaderProgram->activate();
 
 	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
-	/* object */
 	
-	/* light */
-
 	/* light */
 	shaderProgram->setVec3("light.position",	glm::vec3(0.f));
 	shaderProgram->setVec3("light.ambient",		glm::vec3(0.2f));
@@ -66,7 +54,7 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	gameObjects->at(0)->m_mesh->draw(std::move(model_mats));
+	gameObjects->at(0)->m_mesh->drawInstanced(gameObjects->size());
 
 	shaderProgram->deactivate();
 };

@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
 		)
 	));
 
+	
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
@@ -101,6 +102,14 @@ int main(int argc, char *argv[])
 	shared_ptr<std::vector<shared_ptr<GameObject>>> gameObjects(
 		new std::vector<shared_ptr<GameObject>>());
 	initGameObejcts(gameObjects, m_shpereMesh);
+
+	shared_ptr<std::vector<glm::mat4x4>> model_mats = make_shared<std::vector<glm::mat4x4>>();
+	for (int i = 1; i < gameObjects->size(); i++) {
+		model_mats->push_back(
+			gameObjects->at(i)->getModelMatrix()
+		);
+	}
+	m_shpereMesh->prepareInstances(model_mats);
 
 	
 	mouseEvent->addListener(camera);

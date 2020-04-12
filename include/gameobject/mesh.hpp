@@ -7,7 +7,7 @@
 class Mesh {
 public:
 	size_t i_count = 0, v_count = 0;
-	GLuint m_VAO, m_VBO, m_EBO;
+	GLuint m_VAO, m_VBO, m_EBO, buffer;
 	
 	Mesh() = default;
 	enum Buffers {
@@ -38,6 +38,7 @@ public:
 
 		glBindVertexArray(0);
 
+
 	};
 
 	void draw() {
@@ -47,10 +48,11 @@ public:
 		glBindVertexArray(0);
 	}
 
-	void draw(shared_ptr<std::vector<glm::mat4x4>> models) {
+
+	void prepareInstances(shared_ptr<std::vector<glm::mat4x4>> models) {
 
 		glBindVertexArray(m_VAO);
-		GLuint buffer;
+
 		glGenBuffers(1, &buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, buffer);
 		glBufferData(GL_ARRAY_BUFFER, models->size() * sizeof(glm::mat4), &models->at(0), GL_STATIC_DRAW);
@@ -75,11 +77,16 @@ public:
 		glVertexAttribDivisor(4, 1);
 		glVertexAttribDivisor(5, 1);
 
-		glDrawElementsInstanced(
-			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, models->size());
 
-		glBindVertexArray(0);
 	}
+
+	void drawInstanced(int count) {
+		glBindVertexArray(m_VAO);
+		glDrawElementsInstanced(
+			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, count);
+
+	}
+
 	~Mesh(){
 		LOG("Mesh::Destroyed");
 
