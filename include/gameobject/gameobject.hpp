@@ -3,6 +3,7 @@
 
 #include "libs.hpp"
 #include "vertex.hpp"
+
 #include "shaderprogram.hpp"
 #include "gameobject/mesh.hpp"
 #include "gameobject/material.hpp"
@@ -22,6 +23,9 @@ public:
 
 	glm::mat4x4 m_modelMatrix;
 	glm::vec3 m_position, m_color, m_scale;
+
+	float4* d_modelMatrix;
+	float4* d_position;
 
 	shared_ptr<Mesh> m_mesh;
 	

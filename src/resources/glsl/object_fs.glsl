@@ -37,7 +37,7 @@ void main()
         diffuse lighting
     */
     vec3 normal = normalize(vs_normal);
-    vec3 lightDirection = normalize(light.position - vs_position.xyz);
+    vec3 lightDirection = normalize(-light.position);
     float diffuseStrength = max(dot(normal, lightDirection), 0.0);
     vec3 diffuse = (diffuseStrength * material.diffuse) * light.diffuse;
     /*
@@ -47,7 +47,7 @@ void main()
     vec3 reflectDirection = reflect(-lightDirection, normal);
     
     float specularStrength = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
-    vec3 specular = (specularStrength * material.specular) * light.diffuse;
+    vec3 specular = (specularStrength * material.specular) * light.specular;
 
     vec3 result = (ambient + diffuse + specular);
     gl_FragColor = vec4(result, 1.0f);

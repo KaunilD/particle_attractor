@@ -12,6 +12,8 @@ Camera::Camera(
 
 	updateViewMatrix();
 	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
+
+	// allocate space for viewProjection matrices in
 }
 
 void Camera::setSpeed(double _speed) {
@@ -23,6 +25,8 @@ void Camera::updateViewMatrix() {
 	m_viewMatrix = glm::lookAt(
 		m_posVector, m_posVector + m_frontVector, m_upVector
 	);
+
+
 }
 
 

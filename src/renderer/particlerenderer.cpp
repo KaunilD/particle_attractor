@@ -14,9 +14,9 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 	shaderProgram->setVec3("color", gameObject->getColor());
 
 	/* light */
-	shaderProgram->setVec3("light.position",	glm::vec3(0.f));
-	shaderProgram->setVec3("light.ambient",		glm::vec3(0.5f));
-	shaderProgram->setVec3("light.diffuse",		glm::vec3(0.2f));
+	shaderProgram->setVec3("light.position",	camera->m_posVector);
+	shaderProgram->setVec3("light.ambient",		glm::vec3(0.6f));
+	shaderProgram->setVec3("light.diffuse",		glm::vec3(1.0f, 0.0f, 1.0f));
 	shaderProgram->setVec3("light.specular",	glm::vec3(1.0f));
 
 	/* material */
@@ -49,20 +49,18 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 
 	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
 	/* object */
-	
-	/* light */
 
 	/* light */
-	shaderProgram->setVec3("light.position",	glm::vec3(0.f));
+	shaderProgram->setVec3("light.position",	-camera->m_posVector);
 	shaderProgram->setVec3("light.ambient",		glm::vec3(0.2f));
-	shaderProgram->setVec3("light.diffuse",		glm::vec3(1.0f));
-	shaderProgram->setVec3("light.specular",	glm::vec3(1.0f));
+	shaderProgram->setVec3("light.diffuse",		glm::vec3(0.5f));
+	shaderProgram->setVec3("light.specular",	glm::vec3(1.00f));
 
 	/* material */
 	shaderProgram->setFloat("material.shininess",	32.0f);
-	shaderProgram->setVec3("material.ambient",		glm::vec3(1.0f, 0.5f, 0.31f));
-	shaderProgram->setVec3("material.diffuse",		glm::vec3(1.0f, 0.5f, 0.31f));
-	shaderProgram->setVec3("material.specular",		glm::vec3(0.5f));
+	shaderProgram->setVec3("material.ambient",		glm::vec3(0.2f));
+	shaderProgram->setVec3("material.diffuse",		gameObjects->at(1)->m_color);
+	shaderProgram->setVec3("material.specular",		glm::vec3(1.0f));
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
