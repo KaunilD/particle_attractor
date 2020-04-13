@@ -96,7 +96,6 @@ public:
 	}
 
 
-
 	~Mesh(){
 		LOG("Mesh::Destroyed");
 

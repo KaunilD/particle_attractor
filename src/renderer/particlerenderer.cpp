@@ -39,7 +39,6 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 	shaderProgram->activate();
 
 	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
-	/* object */
 
 	/* light */
 	shaderProgram->setVec3("light.position",	-camera->m_posVector);
