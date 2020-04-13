@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.10)
 project ("particle_attractor" 
 	VERSION 1.1 
 	DESCRIPTION "My experiment with particle physics in Qt5 and OpenGL 4.4" 
-	LANGUAGES CXX
+	LANGUAGES CXX CUDA
 )
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

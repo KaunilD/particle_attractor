@@ -1,13 +1,30 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# CUDA
+find_package( CUDA 9.0 REQUIRED )
+if(CUDA_FOUND)
+	message(STATUS "CUDA library status:")
+	message(STATUS "    NVCC_EXECUTABLE: ${CUDA_NVCC_EXECUTABLE}")
+	message(STATUS "    INCLUDE_PATH: ${CUDA_INCLUDE_DIRS}")
+	message(STATUS "    TOOLKIT_DIR: ${CUDA_TOOLKIT_ROOT_DIR}")
+	set(CUDA_NVCC_FLAGS "-gencode;arch=compute_61,code=sm_61;")
+	set(CUDA_NVCC_FLAGS_DEBUG ${CUDA_NVCC_FLAGS_DEBUG} "-G")
+else(CUDA_FOUND)
+	message("CUDA is not installed on this system.")
+endif()
+include_directories( ${CUDA_INCLUDE_DIRS})
+
 # OpenGL
 find_package(OpenGL REQUIRED)
+
 # GLEW
 include_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/)
+
 # GLM
 include_directories(${PROJECT_SOURCE_DIR}/external/glm)
+
 # GLFW
 include_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/lib/Release/x64/)
@@ -44,6 +61,8 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/algorithms/algorithms.hpp
 	
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
+
+	${PROJECT_SOURCE_DIR}/include/scene.hpp
 	
 	${PROJECT_SOURCE_DIR}/include/renderer/renderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/sunrenderer.hpp
@@ -56,21 +75,37 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/events/mouseevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/windowevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
+	
+	${PROJECT_SOURCE_DIR}/include/cuda/update_gameobject.hpp
+	${PROJECT_SOURCE_DIR}/include/cuda/update_models.hpp
 
+
+)
+
+set (KERNELS
+	"cuda/update_gameobject.cu"
+	"cuda/update_models.cu"
 )
 
 if(WIN32)
 	add_executable(particle_attractor WIN32
+		${KERNELS}
 		${SRCS}
 		${HEADERS}
 	)
 else()
 	add_executable(particle_attractor
+		${KERNELS}
 		${SRCS}
 		${HEADERS}
 	)
 endif()
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
+set_target_properties( ${PROJECT_NAME}
+                       PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+                      )
 target_include_directories(
 	particle_attractor 
 		PUBLIC 
@@ -86,6 +121,7 @@ target_link_libraries(
 		glew32
 		glfw
 		${OPENGL_gl_LIBRARY} 
+		${CUDA_LIBRARIES}
 )
 
 

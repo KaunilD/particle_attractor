@@ -14,7 +14,10 @@
 #include <random>
 #include <math.h>
 #include <list>
-
+#include <chrono>
+// CUDA
+#include <cuda.h>
+#include <cuda_runtime.h>
 // GL
 #include "GL/glew.h"
 // GLFW
@@ -25,8 +28,8 @@
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 
