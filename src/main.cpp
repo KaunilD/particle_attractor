@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	Window window(1000, 1000, "Particle Attractor");
 	window.makeCurrent();
 
-	shared_ptr<Scene> scene(new Scene(19200));
+	shared_ptr<Scene> scene(new Scene(1024));
 	scene->init();
 
 	
@@ -64,15 +64,13 @@ int main(int argc, char *argv[])
 		mouseEvent->dispatchEvents();
 		windowEvent->dispatchEvents();
 		
-		scene->update();
-
 		window.clearCanvas();
 			
 		particleRenderer->render(
 			particleShader, scene, camera
 		);
-
 		window.update();
+	
 	}
 
 	window.destroy();

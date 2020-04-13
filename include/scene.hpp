@@ -27,30 +27,25 @@ public:
 	void init() {
 		for (int i = 0; i < m_numparticles; i++) {
 			h_positions[i] = make_float4(
-				Algorithms::randomInt(10) / 100.0f,
-				Algorithms::randomInt(10) / 100.0f,
-				Algorithms::randomInt(10) / 100.0f,
-				1.0f
-			);
-
-			h_velocities[i] = make_float4(
-				Algorithms::randomInt(10) / 10.0f,
-				Algorithms::randomInt(10) / 10.0f,
-				Algorithms::randomInt(10) / 10.0f,
+				Algorithms::randomInt(10)-5,
+				Algorithms::randomInt(10)-5,
+				Algorithms::randomInt(10)-5,
 				1.0f
 			);
 			
-			h_masses[i] = Algorithms::randomInt(10) / 10.0f + 0.001;
+			h_velocities[i] = make_float4(1.0, 2.0, 0.0, 0);
+			
+			h_masses[i] = Algorithms::randomInt(10) / 10.0f + 0.01;
 
-			glm::mat4x4 mat = glm::mat4x4(1.0f);
+			glm::mat4 mat(1.0f);
 			mat = glm::translate(mat, glm::vec3(h_positions[i].x, h_positions[i].y, h_positions[i].z));
-			mat = glm::scale(mat, glm::vec3(1.0f));
 			h_models.push_back(mat);
 		}
 
 		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
+
 
 	}
 
@@ -60,19 +55,22 @@ public:
 			d_positions, d_velocities, 
 			h_positions, h_velocities, 
 			d_masses, 
-			m_numparticles);
+			m_numparticles
+		);
+		
 		m_meshes.at(0)->getCUDAptr();
-
+		
 		launch_kernel_models(
 			d_positions,
 			m_meshes.at(0)->d_modelBuffer, 
-			m_meshes.at(0)->num_bytes);
+			m_numparticles
+		);
 
 		m_meshes.at(0)->drawInstanced(m_numparticles);
 	};
 
 	void addMesh(shared_ptr<Mesh> t_mesh) {
-		t_mesh->prepareInstances(h_models, m_numparticles);
+		t_mesh->prepareInstances(h_models);
 		m_meshes.push_back(t_mesh);
 	}
 
@@ -90,7 +88,7 @@ public:
 	float4* d_positions, * h_positions;
 	float4* d_velocities, * h_velocities;
 	float* d_masses, * h_masses;
-	std::vector<glm::mat4x4> h_models;
+	std::vector<glm::mat4> h_models;
 
 	std::vector<shared_ptr<Mesh>> m_meshes;
 };

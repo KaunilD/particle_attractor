@@ -10,7 +10,7 @@ public:
 	size_t i_count = 0, v_count = 0;
 	GLuint m_VAO, m_VBO, m_EBO, m_models;
 	struct cudaGraphicsResource* m_models_CUDA;
-	float* d_modelBuffer;
+	float4* d_modelBuffer;
 	size_t num_bytes;
 
 	Mesh() = default;
@@ -45,12 +45,12 @@ public:
 
 	};
 
-	void prepareInstances(const std::vector<glm::mat4x4>& models, int count) {
+	void prepareInstances(const std::vector<glm::mat4>& models) {
 		glBindVertexArray(m_VAO);
 
 		glGenBuffers(1, &m_models);
 		glBindBuffer(GL_ARRAY_BUFFER, m_models);
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &models.at(0) , GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models.at(0) , GL_STATIC_DRAW);
 
 		auto vec4Size = sizeof(glm::vec4);
 
@@ -71,25 +71,28 @@ public:
 		glVertexAttribDivisor(4, 1);
 		glVertexAttribDivisor(5, 1);
 
-		cudaGraphicsGLRegisterBuffer(&m_models_CUDA, m_models, cudaGraphicsMapFlagsWriteDiscard);
+
+		glBindVertexArray(0);
+		
+
+		cudaGraphicsGLRegisterBuffer(&m_models_CUDA, m_models, cudaGraphicsRegisterFlagsWriteDiscard);
+
 	}
 
 	void getCUDAptr() {
 		cudaGraphicsMapResources(1, &m_models_CUDA, 0);
 		cudaGraphicsResourceGetMappedPointer((void**)&d_modelBuffer, &num_bytes, m_models_CUDA);
-		
 	}
 
 	void drawInstanced(int numInstances) {
 
+		cudaGraphicsUnmapResources(1, &m_models_CUDA, 0);
 
 		glBindVertexArray(m_VAO);
 		glDrawElementsInstanced(
 			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, numInstances);
-
-
-		cudaGraphicsUnmapResources(1, &m_models_CUDA, 0);
-
+		glBindVertexArray(0);
+		
 	}
 
 

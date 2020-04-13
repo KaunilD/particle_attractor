@@ -78,12 +78,12 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 	/* material */
 	shaderProgram->setFloat("material.shininess", 32.0f);
 	shaderProgram->setVec3("material.ambient", glm::vec3(0.2f));
-	shaderProgram->setVec3("material.diffuse", glm::vec3(1.0f));
+	shaderProgram->setVec3("material.diffuse", glm::vec3(0.5, 1, 1.0f));
 	shaderProgram->setVec3("material.specular", glm::vec3(1.0f));
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	scene->m_meshes.at(0)->drawInstanced(scene->m_numparticles);
+	scene->update();
 
 	shaderProgram->deactivate();
 };
