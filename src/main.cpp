@@ -48,10 +48,6 @@ int main(int argc, char *argv[])
 	*/
 	scene->addMesh(m_shpereMesh);
 
-<<<<<<< Updated upstream
-
-	
-=======
 	/*
 		Initialiize Renderer
 	*/
@@ -60,7 +56,6 @@ int main(int argc, char *argv[])
 	/*
 		Initialiize Shader
 	*/
->>>>>>> Stashed changes
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
@@ -77,14 +72,10 @@ int main(int argc, char *argv[])
 		45.0f, 1000, 1000, 0.001f, 100.f
 	));
 	camera->setSpeed(0.05);
-<<<<<<< Updated upstream
-
-=======
 	/*
 		Add Mouse and Window event-listeners 
 		to Camera
 	*/
->>>>>>> Stashed changes
 	mouseEvent->addListener(camera);
 	windowEvent->addListener(camera);
 
