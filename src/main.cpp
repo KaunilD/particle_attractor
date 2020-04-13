@@ -14,30 +14,11 @@
 
 int main(int argc, char *argv[])
 {
-	float dt = 1/20.0f;
+	/*
+		Initialize Window
+	*/
 	Window window(1000, 1000, "Particle Attractor");
 	window.makeCurrent();
-
-	shared_ptr<Scene> scene(new Scene(1024));
-	scene->init();
-
-	
-	shared_ptr<Mesh> m_shpereMesh(new Mesh(
-		Utils::readObj(
-			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
-		)
-	));
-	scene->addMesh(m_shpereMesh);
-
-
-	
-	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
-	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
-	);
-
-	shared_ptr<ParticleRenderer> particleRenderer(new ParticleRenderer());
 
 	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
 	shared_ptr<WindowEvent> windowEvent(new WindowEvent(1000, 1000));
@@ -45,6 +26,50 @@ int main(int argc, char *argv[])
 	window.attachEventHandler(mouseEvent);
 	window.attachEventHandler(windowEvent);
 
+	cudaSetDevice(0);
+
+	/*
+		Initialiize Scene
+	*/
+	shared_ptr<Scene> scene(new Scene(1024, 1024));
+	scene->init();
+
+	/*
+		Initialiize Meshes
+	*/
+	shared_ptr<Mesh> m_shpereMesh(new Mesh(
+		Utils::readObj(
+			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
+		)
+	));
+	
+	/*
+		Add mesh to scene
+	*/
+	scene->addMesh(m_shpereMesh);
+
+<<<<<<< Updated upstream
+
+	
+=======
+	/*
+		Initialiize Renderer
+	*/
+	shared_ptr<ParticleRenderer> particleRenderer(new ParticleRenderer());
+	
+	/*
+		Initialiize Shader
+	*/
+>>>>>>> Stashed changes
+	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
+	particleShader->loadShaders(
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
+	);
+
+	/*
+		Initialiize Camera
+	*/
 	shared_ptr<Camera> camera(new Camera(
 		glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
@@ -52,7 +77,14 @@ int main(int argc, char *argv[])
 		45.0f, 1000, 1000, 0.001f, 100.f
 	));
 	camera->setSpeed(0.05);
+<<<<<<< Updated upstream
 
+=======
+	/*
+		Add Mouse and Window event-listeners 
+		to Camera
+	*/
+>>>>>>> Stashed changes
 	mouseEvent->addListener(camera);
 	windowEvent->addListener(camera);
 
