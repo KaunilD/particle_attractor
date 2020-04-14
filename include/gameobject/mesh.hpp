@@ -74,7 +74,6 @@ public:
 
 		glBindVertexArray(0);
 		
-
 		cudaGraphicsGLRegisterBuffer(&m_models_CUDA, m_models, cudaGraphicsRegisterFlagsWriteDiscard);
 
 	}
@@ -89,10 +88,12 @@ public:
 		cudaGraphicsUnmapResources(1, &m_models_CUDA, 0);
 
 		glBindVertexArray(m_VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_models);
 		glDrawElementsInstanced(
 			GL_TRIANGLES, i_count, GL_UNSIGNED_INT, 0, numInstances);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
-		
+
 	}
 
 

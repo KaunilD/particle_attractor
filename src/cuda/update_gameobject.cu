@@ -32,16 +32,16 @@ __global__ void kernel_update(
 
 
 	d_velocities[col] = make_float4(
-		d_velocities[col].x + acceleration.x * 0.005f,
-		d_velocities[col].y + acceleration.y * 0.005f,
-		d_velocities[col].z + acceleration.z * 0.005f,
+		d_velocities[col].x + acceleration.x * 0.05f,
+		d_velocities[col].y + acceleration.y * 0.05f,
+		d_velocities[col].z + acceleration.z * 0.05f,
 		1.0f
 	);
 
 	d_positions[col] = make_float4(
-		d_positions[col].x + d_velocities[col].x * 0.005f,
-		d_positions[col].y + d_velocities[col].y * 0.005f,
-		d_positions[col].z + d_velocities[col].z * 0.005f,
+		d_positions[col].x + d_velocities[col].x * 0.05f,
+		d_positions[col].y + d_velocities[col].y * 0.05f,
+		d_positions[col].z + d_velocities[col].z * 0.05f,
 		1.0f
 	);
 
