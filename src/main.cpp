@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	window.makeCurrent();
 
 	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
-	shared_ptr<WindowEvent> windowEvent(new WindowEvent(1000, 1000));
+	shared_ptr<WindowEvent> windowEvent(new WindowEvent(512, 512));
 
 	window.attachEventHandler(mouseEvent);
 	window.attachEventHandler(windowEvent);
