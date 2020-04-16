@@ -1,5 +1,5 @@
 # Lucas Kanade based Optical Flow simulation using a particle engine.
-...
+
 #### Demo:
 You can find the demo of the project [here on Vimeo](https://vimeo.com/408605423).
 
