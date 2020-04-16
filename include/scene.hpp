@@ -12,10 +12,10 @@
 
 class Scene {
 public:
-	
+
 	Scene();
 
-	Scene(int H, int W) : m_numparticles(H*W), m_height(H), m_width(W)  {
+	Scene(int H, int W) : m_numparticles(H* W), m_height(H), m_width(W) {
 		h_positions = new float4[H * W];
 		h_velocities = new float4[H * W];
 		h_masses = new float[H * W];
@@ -31,34 +31,40 @@ public:
 	};
 
 	void init() {
-		float dx = 10 / (float)m_width;
-		float dy = 10 / (float)m_height;
+		float W = 1, aspect = m_height / (float)m_width, H = W / aspect;
+
+		float dx = W / (float)m_width;
+		float dy = H / (float)m_height;
+
 		int count = 0;
-		for (float i = 0; i < 10; i+=dx) {
-			for (float j = 0; j < 10; j+=dy) {
-				h_positions[count] = make_float4(i - 5, j - 5, 1.0, 1.0f);
-
+		//std::cout << H << " " << W << " " << aspect << " " << dx << " " << dy << "\n";
+		for (float i = 0; i < H-dy; i = i + dy) {
+			for (float j = 0; j < W-dx; j = j + dx) {
+				h_positions[count] = make_float4(i - H / 2.0f, j - W / 2.0f, 1.0, 1.0f);
 				h_velocities[count] = make_float4(
-					Algorithms::randomInt(10) / 10 - 0.5,
-					Algorithms::randomInt(10) / 10 - 0.5,
-					Algorithms::randomInt(10) / 10 - 0.5,
-					1.0f);
-
-				h_masses[count] = Algorithms::randomInt(10) / 10.0f + 0.01;
+					Algorithms::randomInt(10) / 100.0f + 0.01,
+					Algorithms::randomInt(10) / 100.0f + 0.01,
+					Algorithms::randomInt(10) / 100.0f + 0.01,
+					1.0f
+				);
+				h_masses[count] = Algorithms::randomInt(10) / 100.0f + 0.01;
 
 				glm::mat4 mat(1.0f);
 				mat = glm::translate(mat, glm::vec3(h_positions[count].x, h_positions[count].y, h_positions[count].z));
 				h_models.push_back(mat);
 
 				count++;
-	
 			}
 		}
 		
 		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
+
+		/* we donot need these after the data has been transfered to the GPU*/
 	}
+
+
 
 	void update() {
 		/*
@@ -66,12 +72,10 @@ public:
 			gravity calculations performed here.
 		*/
 		launch_kernel_update(
-			d_positions, d_velocities, 
-			h_positions, h_velocities, 
-			d_masses, 
+			d_positions, d_velocities,
+			d_masses,
 			m_numparticles
 		);
-
 		/*
 			Setup draw for each mesh
 		*/
@@ -85,7 +89,7 @@ public:
 			*/
 			launch_kernel_models(
 				d_positions,
-				m_meshes.at(i)->d_modelBuffer, 
+				m_meshes.at(i)->d_modelBuffer,
 				m_numparticles
 			);
 			/*
@@ -106,9 +110,6 @@ public:
 		cudaFree(d_velocities);
 		cudaFree(d_masses);
 
-		delete[] h_positions;
-		delete[] h_velocities;
-		delete[] h_masses;
 	};
 
 	int m_numparticles;

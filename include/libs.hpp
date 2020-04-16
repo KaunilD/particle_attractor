@@ -19,7 +19,9 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 // GL
+#ifdef _WIN32
 #include "GL/glew.h"
+#endif // _WIN32
 // GLFW
 #include <GLFW/glfw3.h>
 // OpenMP
@@ -31,7 +33,9 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+// OpenCV
+#include "opencv2/imgproc.hpp"
+#include "opencv2/imgcodecs.hpp"
 
 #define LOG(x) {std::cout << x << std::endl;}
 

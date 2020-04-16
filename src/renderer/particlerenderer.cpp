@@ -60,7 +60,9 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 };
 
 
-void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_ptr<Scene> scene, shared_ptr<Camera> camera) {
+void ParticleRenderer::render(
+	shared_ptr<ShaderProgram> shaderProgram, 
+	shared_ptr<Scene> scene, shared_ptr<Camera> camera) {
 
 
 	shaderProgram->activate();
@@ -77,10 +79,28 @@ void ParticleRenderer::render(shared_ptr<ShaderProgram> shaderProgram, shared_pt
 	/* material */
 	shaderProgram->setFloat("material.shininess", 32.0f);
 	shaderProgram->setVec3("material.ambient", glm::vec3(0.2f));
-	shaderProgram->setVec3("material.diffuse", glm::vec3(0.5, 1, 1.0f));
+	shaderProgram->setVec3("material.diffuse", glm::vec3(1.0f));
 	shaderProgram->setVec3("material.specular", glm::vec3(1.0f));
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
+
+	scene->update();
+
+	shaderProgram->deactivate();
+};
+
+
+void ParticleRenderer::render(
+	shared_ptr<ShaderProgram> shaderProgram,
+	shared_ptr<Scene> scene, shared_ptr<Material> material, shared_ptr<Camera> camera) {
+
+	shaderProgram->activate();
+
+	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
+	
+	shaderProgram->setVec3("cameraEye", camera->m_posVector);
+
+	glBindTexture(GL_TEXTURE_2D, material->m_texture);
 
 	scene->update();
 

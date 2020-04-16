@@ -17,7 +17,7 @@ class ShaderProgram{
 		void deactivate();
 
 		
-		void ShaderProgram::setMat4(std::string name, glm::mat4 matrix) {
+		void setMat4(std::string name, glm::mat4 matrix) {
 			glUniformMatrix4fv(
 				glGetUniformLocation(program, name.c_str()),
 				1,
@@ -26,20 +26,23 @@ class ShaderProgram{
 			);
 		}
 
-		void ShaderProgram::setVec3(std::string name, glm::vec3 vector) {
+		void setVec3(std::string name, glm::vec3 vector) {
 			glUniform3fv(
 				glGetUniformLocation(program, name.c_str()),
 				1,
 				glm::value_ptr(vector)
 			);
 		}
-		void ShaderProgram::setFloat(std::string name, float val) {
+		void setFloat(std::string name, float val) {
 			glUniform1f(
 				glGetUniformLocation(program, name.c_str()),
 				val
 			);
 		}
 
+		void setUniform() {
+			return;
+		}
 		void checkCompileErrors(unsigned int shader, std::string type);
 
 };

@@ -2,7 +2,7 @@
 #ifndef PARTICLERENDERER_H
 #define PARTICLERENDERER_H
 
-class ParticleRenderer : public Renderer{
+class ParticleRenderer : public Renderer {
 public:
 	ParticleRenderer() {};
 	virtual void render(
@@ -17,6 +17,10 @@ public:
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,
 		shared_ptr<Scene> scene,
+		shared_ptr<Camera> camera) override;
+	virtual void render(
+		shared_ptr<ShaderProgram> shaderProgram,
+		shared_ptr<Scene> scene, shared_ptr<Material> material,
 		shared_ptr<Camera> camera) override;
 };
 

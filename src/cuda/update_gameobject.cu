@@ -7,7 +7,6 @@ __device__ float dot(float4 a, float4 b){
 
 __global__ void kernel_update(
 	float4* d_positions, float4* d_velocities,
-	float4* h_positions, float4* h_velocities,
 	float* d_masses, size_t numel) {
 
 	size_t col = threadIdx.x + blockIdx.x * blockDim.x;
@@ -39,9 +38,9 @@ __global__ void kernel_update(
 	);
 
 	d_positions[col] = make_float4(
-		d_positions[col].x + d_velocities[col].x * 0.05f,
-		d_positions[col].y + d_velocities[col].y * 0.05f,
-		d_positions[col].z + d_velocities[col].z * 0.05f,
+		min(1.0f, max(-1.0f, d_positions[col].x + d_velocities[col].x * 0.05f)),
+		min(1.0f, max(-1.0f, d_positions[col].y + d_velocities[col].y * 0.05f)),
+		min(1.0f, max(-1.0f, d_positions[col].z + d_velocities[col].z * 0.05f)),
 		1.0f
 	);
 
@@ -49,14 +48,12 @@ __global__ void kernel_update(
 
 void launch_kernel_update(
 	float4* d_positions, float4* d_velocities, 
-	float4* h_positions, float4* h_velocities, 
 	float* masses, int numel) {
 	dim3 blockSize(1024, 1, 1);
 	dim3 gridSize(1);
 	gridSize.x = numel / blockSize.x;
 	kernel_update << <gridSize, blockSize >> > (
 		d_positions, d_velocities,
-		h_positions, h_velocities,
 		masses, numel
 	);
 	cudaDeviceSynchronize();

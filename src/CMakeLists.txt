@@ -15,12 +15,15 @@ else(CUDA_FOUND)
 endif()
 include_directories( ${CUDA_INCLUDE_DIRS})
 
+
 # OpenGL
 find_package(OpenGL REQUIRED)
 
 # GLEW
+if(WIN32)
 include_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/)
+endif()
 
 # GLM
 include_directories(${PROJECT_SOURCE_DIR}/external/glm)
@@ -29,17 +32,33 @@ include_directories(${PROJECT_SOURCE_DIR}/external/glm)
 include_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/lib/Release/x64/)
 
+# OpenCV
+set(OpenCV_DIR "C:/Users/dhruv/Development/packages/opencv-4.3.0/out/install/x64-Debug/")
+find_package(OpenCV REQUIRED)
+message(STATUS "OpenCV library status:")
+message(STATUS "    VERSION: ${OpenCV_VERSION}")
+message(STATUS "    LIBS: ${OpenCV_LIBS}")
+message(STATUS "    INCLUDE_PATH: ${OpenCV_INCLUDE_DIRS}")
+
+if(CMAKE_VERSION VERSION_LESS "2.8.11")
+	# Add OpenCV headers location to include paths
+	include_directories(${OpenCV_INCLUDE_DIRS})
+endif()
 
 set(SRCS
 	"main.cpp"
 	"shaderprogram.cpp"
-	"gameobject.cpp"
 	"camera.cpp"
 	"objreader.cpp"
 	"algorithms.cpp"
+
 	"renderer/renderer.cpp"
 	"renderer/sunrenderer.cpp"
 	"renderer/particlerenderer.cpp"
+
+	"gameobject/gameobject.cpp"
+	"gameobject/mesh.cpp"
+	"gameobject/material.cpp"
 
 	"window.cpp"
 )
@@ -114,7 +133,17 @@ target_include_directories(
 			$<INSTALL_INTERFACE:include>
 
 )
-
+if(WIN32)
+target_link_libraries( 
+	particle_attractor 
+		PUBLIC
+		glew32
+		glfw
+		${OPENGL_gl_LIBRARY} 
+		${CUDA_LIBRARIES}
+		${OpenCV_LIBS}
+)
+else()
 target_link_libraries( 
 	particle_attractor 
 		PUBLIC
@@ -123,7 +152,7 @@ target_link_libraries(
 		${OPENGL_gl_LIBRARY} 
 		${CUDA_LIBRARIES}
 )
-
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 	LINK_FLAGS /SUBSYSTEM:CONSOLE
