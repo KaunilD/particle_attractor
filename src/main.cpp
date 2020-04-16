@@ -17,11 +17,11 @@ int main(int argc, char* argv[])
 	/*
 		Initialize Window
 	*/
-	Window window(640, 480, "Particle Attractor");
+	Window window(1280, 720, "Particle Attractor");
 	window.makeCurrent();
 
 	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
-	shared_ptr<WindowEvent> windowEvent(new WindowEvent(640, 480));
+	shared_ptr<WindowEvent> windowEvent(new WindowEvent(1280, 720));
 
 	window.attachEventHandler(mouseEvent);
 	window.attachEventHandler(windowEvent);
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	/*
 		Initialiize Scene
 	*/
-	shared_ptr<Scene> scene(new Scene(480, 640));
+	shared_ptr<Scene> scene(new Scene(360, 640));
 	scene->init();
 
 	/*
@@ -39,13 +39,13 @@ int main(int argc, char* argv[])
 	*/
 
 	shared_ptr<Material> m_material(new Material(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\250.png"
+		"resources\\250.png"
 		)
 	);
 	
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
-			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
+			"resources\\objects\\sphere.obj"
 		)
 	));
 
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
 	*/
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_vs_instanced.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
+		"glsl\\object_vs_instanced.glsl",
+		"glsl\\object_fs.glsl"
 	);
 
 	/*
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open(0)) {
+	if (!cap.open("movie.mp4")) {
 		return 0;
 	}
 	// the camera will be closed automatically upon exit

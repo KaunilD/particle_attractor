@@ -33,7 +33,6 @@ include_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/include)
 link_directories(${PROJECT_SOURCE_DIR}/external/glfw-3.3.2/lib/Release/x64/)
 
 # OpenCV
-set(OpenCV_DIR "C:/Users/dhruv/Development/packages/opencv-4.3.0/out/install/x64-Debug/")
 find_package(OpenCV REQUIRED)
 message(STATUS "OpenCV library status:")
 message(STATUS "    VERSION: ${OpenCV_VERSION}")

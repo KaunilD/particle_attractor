@@ -3,7 +3,6 @@
 Material::Material(const std::string& texturePath) {
     LOG("Material:: reading image");
     cv::Mat mat = cv::imread(texturePath);
-    cv::flip(mat, mat, 0);
     glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_2D, m_texture);
 
@@ -31,7 +30,6 @@ Material::Material(const std::string& texturePath) {
 };
 
 void Material::updateFrame(cv::Mat mat) {
-    cv::flip(mat, mat, 0);
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glTexImage2D(GL_TEXTURE_2D, // Type of texture
         0,                      // Pyramid level (for mip-mapping) - 0 is the top level
