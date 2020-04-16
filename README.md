@@ -1,4 +1,7 @@
 # Lucas Kanade based Optical Flow simulation using a particle engine.
+...
+#### Demo:
+You can find the demo of the project [here on Vimeo](https://vimeo.com/408605423).
 
 #### Dependencies:
 
@@ -9,7 +12,7 @@
 5. [GLEW](https://github.com/nigels-com/glew/archive/glew-2.1.0.tar.gz) (Only Windows)
 6. [GLM](https://github.com/g-truc/glm/archive/0.9.9.8.tar.gz)
 
-#### Installation
+#### Installation:
 
 1. Let `$PROJECT_ROOT` be the root directory of the project.
 2. Download an example video from [here](https://drive.google.com/open?id=17ydViQMNjSS5pO2UBRHf9ntapH9-HCjR) and place it in `$PROJECT_ROOT/src`.
