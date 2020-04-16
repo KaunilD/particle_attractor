@@ -86,6 +86,13 @@ int main(int argc, char* argv[])
 	windowEvent->addListener(camera);
 
 
+	cv::VideoCapture cap;
+	if (!cap.open(0)) {
+		return 0;
+	}
+	// the camera will be closed automatically upon exit
+	// cap.close();
+
 
 	while (!glfwWindowShouldClose(window.window)){
 
@@ -95,6 +102,11 @@ int main(int argc, char* argv[])
 		
 		window.clearCanvas();
 			
+		cv::Mat frame;
+		cap >> frame;
+		if (!frame.empty()) {
+			m_material->updateFrame(frame);
+		}
 		particleRenderer->render(
 			particleShader, scene, m_material, camera
 		);

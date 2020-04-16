@@ -101,7 +101,7 @@ public:
 	};
 
 	void addMesh(shared_ptr<Mesh> t_mesh) {
-		t_mesh->prepareInstances(h_models);
+		t_mesh->prepareInstances(h_models, h_positions);
 		m_meshes.push_back(t_mesh);
 	}
 

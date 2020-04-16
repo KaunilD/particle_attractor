@@ -23,7 +23,7 @@ public:
 		COLOR
 	};
 	Mesh(Utils::ObjReaderRet obj);
-	void prepareInstances(const std::vector<glm::mat4>& models);
+	void prepareInstances(const std::vector<glm::mat4>& models, float4* positions);
 	void getCUDAptr();
 	void drawInstanced(int numInstances);
 	

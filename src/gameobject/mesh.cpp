@@ -25,7 +25,7 @@ Mesh::Mesh(Utils::ObjReaderRet obj): i_count(obj.i.size()), v_count(obj.v.size()
 
 };
 
-void Mesh::prepareInstances(const std::vector<glm::mat4>& models) {
+void Mesh::prepareInstances(const std::vector<glm::mat4>& models, float4* positions) {
 	glBindVertexArray(m_VAO);
 
 	glGenBuffers(1, &m_models);
@@ -55,9 +55,9 @@ void Mesh::prepareInstances(const std::vector<glm::mat4>& models) {
 
 	glGenBuffers(1, &m_positions);
 	glBindBuffer(GL_ARRAY_BUFFER, m_positions);
-	glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::vec4), &models.at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::vec4), &positions[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vec4Size, (void*)(vec4Size));
 	glVertexAttribDivisor(6, 1);
 
 	glBindVertexArray(0);
