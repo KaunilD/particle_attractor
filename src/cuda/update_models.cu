@@ -13,16 +13,6 @@ __global__ void kernel_update_models(float4* d_positions, float4* d_modelBuffer,
 		d_positions[col].z,
 		1
 	);
-
-	/*
-	if (col%32 == 0) {
-
-		for (int i = 0; i < 4; i++) {
-			printf("%f, %f, %f, %f\n", d_modelBuffer[col + i].x, d_modelBuffer[col + i].y, d_modelBuffer[col + i].z, d_modelBuffer[col + i].w);
-		}
-		printf("\n");
-	}
-	*/
 	__syncthreads();
 }
 

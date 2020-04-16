@@ -12,37 +12,43 @@
 #include "window.hpp"
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	/*
 		Initialize Window
 	*/
-	Window window(1000, 1000, "Particle Attractor");
+	Window window(1280, 720, "Particle Attractor");
 	window.makeCurrent();
 
 	shared_ptr<MouseEvent> mouseEvent(new MouseEvent());
-	shared_ptr<WindowEvent> windowEvent(new WindowEvent(512, 512));
+	shared_ptr<WindowEvent> windowEvent(new WindowEvent(1280, 720));
 
 	window.attachEventHandler(mouseEvent);
 	window.attachEventHandler(windowEvent);
 
-	cudaSetDevice(0);
+	cudaGLSetGLDevice(0);
 
 	/*
 		Initialiize Scene
 	*/
-	shared_ptr<Scene> scene(new Scene(1024, 1024));
+	shared_ptr<Scene> scene(new Scene(360, 640));
 	scene->init();
 
 	/*
 		Initialiize Meshes
 	*/
+
+	shared_ptr<Material> m_material(new Material(
+		"resources\\250.png"
+		)
+	);
+	
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
-			"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\objects\\sphere.obj"
+			"resources\\objects\\sphere.obj"
 		)
 	));
-	
+
 	/*
 		Add mesh to scene
 	*/
@@ -58,15 +64,15 @@ int main(int argc, char *argv[])
 	*/
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_vs_instanced.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\resources\\glsl\\object_fs.glsl"
+		"glsl\\object_vs_instanced.glsl",
+		"glsl\\object_fs.glsl"
 	);
 
 	/*
 		Initialiize Camera
 	*/
 	shared_ptr<Camera> camera(new Camera(
-		glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 2.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		45.0f, 1000, 1000, 0.001f, 100.f
@@ -80,6 +86,13 @@ int main(int argc, char *argv[])
 	windowEvent->addListener(camera);
 
 
+	cv::VideoCapture cap;
+	if (!cap.open("movie.mp4")) {
+		return 0;
+	}
+	// the camera will be closed automatically upon exit
+	// cap.close();
+
 
 	while (!glfwWindowShouldClose(window.window)){
 
@@ -89,8 +102,13 @@ int main(int argc, char *argv[])
 		
 		window.clearCanvas();
 			
+		cv::Mat frame;
+		cap >> frame;
+		if (!frame.empty()) {
+			m_material->updateFrame(frame);
+		}
 		particleRenderer->render(
-			particleShader, scene, camera
+			particleShader, scene, m_material, camera
 		);
 		window.update();
 	

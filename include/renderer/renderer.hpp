@@ -7,7 +7,7 @@
 #include "gameobject/gameobject.hpp"
 #include "scene.hpp"
 
-class Renderer{
+class Renderer {
 
 public:
 	Renderer() = default;
@@ -29,6 +29,11 @@ public:
 		shared_ptr<Scene> scene,
 		shared_ptr<Camera> camera
 	) = 0;
+
+	virtual void render(
+		shared_ptr<ShaderProgram> shaderProgram,
+		shared_ptr<Scene> scene, shared_ptr<Material> material,
+		shared_ptr<Camera> camera) = 0;
 
 };
 
