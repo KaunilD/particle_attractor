@@ -10,7 +10,7 @@ struct WindowProps {
 		this->fbH = h;
 	}
 
-	void setfbW(double w) {
+	void setfbW(int w) {
 		this->fbW = w;
 	}
 };

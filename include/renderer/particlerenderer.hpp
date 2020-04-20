@@ -4,7 +4,9 @@
 
 class ParticleRenderer : public Renderer {
 public:
-	ParticleRenderer() {};
+	ParticleRenderer() {
+		LOG("ParticleRenderer::c_tor()");
+	};
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,
 		shared_ptr<GameObject> gameObject,
@@ -20,7 +22,7 @@ public:
 		shared_ptr<Camera> camera) override;
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,
-		shared_ptr<Scene> scene, shared_ptr<Material> material,
+		shared_ptr<Scene> scene, GLuint material, const OpticalFlow& optflow,
 		shared_ptr<Camera> camera) override;
 };
 

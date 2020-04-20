@@ -10,10 +10,10 @@
 #include "algorithms/algorithms.hpp"
 #include "scene.hpp"
 #include "window.hpp"
-
-
+#include "cuda/optflow.hpp"
 int main(int argc, char* argv[])
 {
+
 	/*
 		Initialize Window
 	*/
@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
 	window.attachEventHandler(mouseEvent);
 	window.attachEventHandler(windowEvent);
 
-	cudaGLSetGLDevice(0);
-
+	cudaSetDevice(0);
+	cudaSetDeviceFlags(cudaDeviceScheduleBlockingSync);
 	/*
 		Initialiize Scene
 	*/
@@ -38,11 +38,15 @@ int main(int argc, char* argv[])
 		Initialiize Meshes
 	*/
 
-	shared_ptr<Material> m_material(new Material(
+	shared_ptr<Material> m_currentMaterial(new Material(
 		"resources\\250.png"
 		)
 	);
 	
+	shared_ptr<Material> m_lastMaterial(new Material(
+		720, 1280
+	));
+
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
 			"resources\\objects\\sphere.obj"
@@ -90,9 +94,13 @@ int main(int argc, char* argv[])
 	if (!cap.open("movie.mp4")) {
 		return 0;
 	}
-	// the camera will be closed automatically upon exit
-	// cap.close();
+	int frameCount = 0;
+	cv::Mat frame, lastFrame, lastFrameGray, currentFrame, currentFrameGray;
 
+	OpticalFlow optFlow(720, 1280);
+
+
+	cap >> currentFrame;
 
 	while (!glfwWindowShouldClose(window.window)){
 
@@ -101,17 +109,42 @@ int main(int argc, char* argv[])
 		windowEvent->dispatchEvents();
 		
 		window.clearCanvas();
-			
-		cv::Mat frame;
-		cap >> frame;
-		if (!frame.empty()) {
-			m_material->updateFrame(frame);
-		}
-		particleRenderer->render(
-			particleShader, scene, m_material, camera
-		);
-		window.update();
 	
+		
+		lastFrame = std::move(currentFrame);
+		cap >> currentFrame;
+
+		optFlow.copy(lastFrame, currentFrame);
+
+		m_lastMaterial->updateFrame(lastFrame);
+		m_currentMaterial->updateFrame(currentFrame);
+		
+		launch_partials(
+			optFlow.d_f1ptr, 
+			optFlow.d_f1dx, optFlow.d_f1dy, 
+			720, 1280
+		);
+		launch_sub(
+			optFlow.d_f1ptr, optFlow.d_f2ptr, 
+			optFlow.d_dt, 
+			720, 1280
+		);
+		launch_optflow(
+			optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_dt, 
+			optFlow.d_uv, 
+			720, 1280
+		);
+		
+		particleRenderer->render(
+			particleShader,
+			scene,
+			m_currentMaterial->m_texture, optFlow,
+			camera
+		);
+
+		frameCount++;
+		
+		window.update();
 	}
 
 	window.destroy();

@@ -29,6 +29,37 @@ Material::Material(const std::string& texturePath) {
 
 };
 
+Material::Material(int h, int w) {
+    LOG("Material:: empty texture");
+    
+    glGenTextures(1, &m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Set texture clamping method
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+
+    glTexImage2D(GL_TEXTURE_2D, // Type of texture
+        0,                      // Pyramid level (for mip-mapping) - 0 is the top level
+        GL_RED,                 // Internal colour format to convert to
+        w,                      // Image width  i.e. 640 for Kinect in standard mode
+        h,                      // Image height i.e. 480 for Kinect in standard mode
+        0,                      // Border width in pixels (can either be 1 or 0)
+        GL_RED,                 // Input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
+        GL_UNSIGNED_BYTE,       // Image data type
+        NULL                    // The actual image data itself
+    );
+
+    glBindImageTexture(0, m_texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RED);
+
+    LOG("Material:: texture reated");
+
+}
+
 void Material::updateFrame(cv::Mat mat) {
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glTexImage2D(GL_TEXTURE_2D, // Type of texture

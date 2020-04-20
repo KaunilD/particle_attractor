@@ -60,19 +60,17 @@ public:
 		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
-
-		/* we donot need these after the data has been transfered to the GPU*/
 	}
 
 
 
-	void update() {
+	void update(float4 * uv) {
 		/*
 			Upadte positions.
 			gravity calculations performed here.
 		*/
 		launch_kernel_update(
-			d_positions, d_velocities,
+			d_positions, uv,
 			d_masses,
 			m_numparticles
 		);
@@ -92,6 +90,7 @@ public:
 				m_meshes.at(i)->d_modelBuffer,
 				m_numparticles
 			);
+
 			/*
 				Draw!
 			*/
@@ -101,6 +100,7 @@ public:
 	};
 
 	void addMesh(shared_ptr<Mesh> t_mesh) {
+		LOG("Scene::addMesh();")
 		t_mesh->prepareInstances(h_models, h_positions);
 		m_meshes.push_back(t_mesh);
 	}
@@ -110,6 +110,10 @@ public:
 		cudaFree(d_velocities);
 		cudaFree(d_masses);
 
+
+		delete[]h_positions;
+		delete[]h_velocities;
+		delete[]h_masses;
 	};
 
 	int m_numparticles;
@@ -117,8 +121,11 @@ public:
 	float4* d_positions, * h_positions;
 	float4* d_velocities, * h_velocities;
 	float* d_masses, * h_masses;
+	
 	std::vector<glm::mat4> h_models;
 	std::vector<shared_ptr<Mesh>> m_meshes;
+
+
 };
 
 #endif SCENE_H

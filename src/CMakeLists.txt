@@ -8,6 +8,7 @@ if(CUDA_FOUND)
 	message(STATUS "    NVCC_EXECUTABLE: ${CUDA_NVCC_EXECUTABLE}")
 	message(STATUS "    INCLUDE_PATH: ${CUDA_INCLUDE_DIRS}")
 	message(STATUS "    TOOLKIT_DIR: ${CUDA_TOOLKIT_ROOT_DIR}")
+	message(STATUS "    CUBLAS_DIR: ${CUDA_CUBLAS_LIBRARIES}")
 	set(CUDA_NVCC_FLAGS "-gencode;arch=compute_61,code=sm_61;")
 	set(CUDA_NVCC_FLAGS_DEBUG ${CUDA_NVCC_FLAGS_DEBUG} "-G")
 else(CUDA_FOUND)
@@ -96,12 +97,14 @@ set(HEADERS
 	
 	${PROJECT_SOURCE_DIR}/include/cuda/update_gameobject.hpp
 	${PROJECT_SOURCE_DIR}/include/cuda/update_models.hpp
+	${PROJECT_SOURCE_DIR}/include/cuda/optflow.hpp
 
 
 )
 
 set (KERNELS
 	"cuda/update_gameobject.cu"
+	"cuda/optflow.cu"
 	"cuda/update_models.cu"
 )
 
@@ -140,7 +143,8 @@ target_link_libraries(
 		glfw
 		${OPENGL_gl_LIBRARY} 
 		${CUDA_LIBRARIES}
-		${OpenCV_LIBS}
+		${CUDA_CUBLAS_LIBRARIES} 
+        ${OpenCV_LIBS}
 )
 else()
 target_link_libraries( 
@@ -150,10 +154,12 @@ target_link_libraries(
 		glfw
 		${OPENGL_gl_LIBRARY} 
 		${CUDA_LIBRARIES}
+		"${CUDA_CUBLAS_LIBRARIES}" 
 )
 endif()
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-	LINK_FLAGS /SUBSYSTEM:CONSOLE
-)
-
+if(WIN32)
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		LINK_FLAGS /SUBSYSTEM:CONSOLE
+	)
+endif()
