@@ -22,8 +22,8 @@ __global__ void kernel_update(
 	);
 
 	d_positions[col] = make_float4(
-		d_positions[col].x + d_velocities[col].x + 0.02 * distance.x,
-		d_positions[col].y + d_velocities[col].y + 0.02 * distance.y,
+		d_positions[col].x + d_velocities[col].x * 0.00002 + 0.00002 * distance.x,
+		d_positions[col].y + d_velocities[col].y * 0.00002 + 0.00002 * distance.y,
 		0,
 		0
 	);

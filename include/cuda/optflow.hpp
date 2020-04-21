@@ -58,6 +58,7 @@ public:
 
 void launch_partials(uchar3* , float* , float* , int H, int W);
 void launch_sub(uchar3* d_f1ptr, uchar3* d_f2ptr, float* d_dt, int H, int W);
+void launch_fill(float4* d_uv, float val, int numel);
 void launch_add(float1* a, float1* b, float1* c, int H, int W);
 void launch_prod(float1* a, float1* b, float1* c, int H, int W);
 void launch_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* d_dy2, float* d_dt, float4* uv, int H, int W);

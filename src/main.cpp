@@ -105,17 +105,18 @@ int main(int argc, char* argv[])
 		
 		window.clearCanvas();
 	
-		
 		lastFrame = std::move(currentFrame);
 		cap >> currentFrame;
+		
 		if (lastFrame.empty() || currentFrame.empty()) {
+			cap.set(cv::CAP_PROP_POS_FRAMES, 0);
 			continue;
 		}
+		
 		cv::flip(lastFrame, lastFrame, 0);
 		cv::flip(currentFrame, currentFrame, 0);
-
+		
 		optFlow.copy(lastFrame, currentFrame);
-
 		m_currentMaterial->updateFrame(currentFrame);
 		
 		launch_partials(
@@ -135,12 +136,15 @@ int main(int argc, char* argv[])
 			optFlow.d_dt, 
 			height, width
 		);
-		launch_optflow(
-			optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
-			optFlow.d_uv, 
-			height, width
-		);
-		
+		for (int i = 0; i < 8; i++) {
+
+			launch_optflow(
+				optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
+				optFlow.d_uv, 
+				height, width
+			);
+		}
+
 		particleRenderer->render(
 			particleShader,
 			scene,
@@ -148,6 +152,7 @@ int main(int argc, char* argv[])
 			camera
 		);
 
+		launch_fill(optFlow.d_uv, 0.0, height*width);
 		frameCount++;
 		
 		window.update();
