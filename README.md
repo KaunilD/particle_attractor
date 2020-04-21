@@ -33,6 +33,8 @@ make -j4
 #### Roadmap:
 
 - [x] CUDA based particle engine.
+  - [x] Event system for Mouse, Keyboard and Window
+  - [x] Object file reader
   - [x] Shader code parser
   - [x] Rendering Engine
   - [x] Instanced Rendering for "pixel" objects
