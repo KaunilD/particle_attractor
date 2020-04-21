@@ -1,5 +1,8 @@
 # Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
+#### Theory
+[Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
+
 #### Demo:
 You can find the demo of the project [here on Vimeo](https://vimeo.com/408605423).
 
