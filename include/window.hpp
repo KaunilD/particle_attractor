@@ -21,7 +21,7 @@ public:
 	shared_ptr<WindowEvent> windowEvent;
 
 	Window();
-	Window(int width, int height, std::string title);
+	Window(int height, int width, std::string title);
 
 	void attachEventHandler(shared_ptr<MouseEvent> t_mouseEvent);
 	void attachEventHandler(shared_ptr<WindowEvent> t_windowEvent);

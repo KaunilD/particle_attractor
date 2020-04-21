@@ -1,7 +1,7 @@
 #include "window.hpp"
 Window::Window() {};
-Window::Window(int t_width, int t_height, std::string t_title)
-	:m_width(t_width), m_height(t_height), m_title(t_title)
+Window::Window(int t_height, int t_width, std::string t_title)
+	:m_height(t_height), m_width(t_width), m_title(t_title)
 {
 
 	if (!glfwInit()) {

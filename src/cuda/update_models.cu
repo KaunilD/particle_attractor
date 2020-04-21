@@ -16,10 +16,11 @@ __global__ void kernel_update_models(float4* d_positions, float4* d_modelBuffer,
 	__syncthreads();
 }
 
+
 void launch_kernel_models(float4* d_positions, float4* d_modelBuffer, int numel) {
 	dim3 blockSize(1024, 1, 1);
 	dim3 gridSize(1);
-	gridSize.x = numel / blockSize.x;
+	gridSize.x = numel / blockSize.x + 1;
 
 	kernel_update_models <<< gridSize, blockSize >>> (d_positions, d_modelBuffer, numel);
 

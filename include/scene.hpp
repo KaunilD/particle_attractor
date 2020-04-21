@@ -21,6 +21,7 @@ public:
 		h_masses = new float[H * W];
 
 		CHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
+		CHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
 		CHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
 		CHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
 
@@ -41,6 +42,7 @@ public:
 		for (float i = 0; i < H-dy; i = i + dy) {
 			for (float j = 0; j < W-dx; j = j + dx) {
 				h_positions[count] = make_float4(i - H / 2.0f, j - W / 2.0f, 1.0, 1.0f);
+				
 				h_velocities[count] = make_float4(
 					Algorithms::randomInt(10) / 100.0f + 0.01,
 					Algorithms::randomInt(10) / 100.0f + 0.01,
@@ -58,21 +60,20 @@ public:
 		}
 		
 		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_og_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
-
-		/* we donot need these after the data has been transfered to the GPU*/
 	}
 
 
 
-	void update() {
+	void update(float4 * uv) {
 		/*
 			Upadte positions.
 			gravity calculations performed here.
 		*/
 		launch_kernel_update(
-			d_positions, d_velocities,
+			d_positions, d_og_positions, uv,
 			d_masses,
 			m_numparticles
 		);
@@ -92,6 +93,7 @@ public:
 				m_meshes.at(i)->d_modelBuffer,
 				m_numparticles
 			);
+
 			/*
 				Draw!
 			*/
@@ -101,24 +103,33 @@ public:
 	};
 
 	void addMesh(shared_ptr<Mesh> t_mesh) {
+		LOG("Scene::addMesh();")
 		t_mesh->prepareInstances(h_models, h_positions);
 		m_meshes.push_back(t_mesh);
 	}
 
 	~Scene() {
 		cudaFree(d_positions);
+		cudaFree(d_og_positions);
 		cudaFree(d_velocities);
 		cudaFree(d_masses);
 
+
+		delete[]h_positions;
+		delete[]h_velocities;
+		delete[]h_masses;
 	};
 
 	int m_numparticles;
 	int m_height, m_width;
-	float4* d_positions, * h_positions;
+	float4* d_positions, * h_positions, *d_og_positions;
 	float4* d_velocities, * h_velocities;
 	float* d_masses, * h_masses;
+	
 	std::vector<glm::mat4> h_models;
 	std::vector<shared_ptr<Mesh>> m_meshes;
+
+
 };
 
 #endif SCENE_H

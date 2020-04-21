@@ -84,7 +84,7 @@ void ParticleRenderer::render(
 
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	scene->update();
+	//scene->update();
 
 	shaderProgram->deactivate();
 };
@@ -92,17 +92,17 @@ void ParticleRenderer::render(
 
 void ParticleRenderer::render(
 	shared_ptr<ShaderProgram> shaderProgram,
-	shared_ptr<Scene> scene, shared_ptr<Material> material, shared_ptr<Camera> camera) {
-
+	shared_ptr<Scene> scene, 
+	GLuint material, const OpticalFlow& optflow,
+	shared_ptr<Camera> camera
+) {
 	shaderProgram->activate();
-
 	shaderProgram->setMat4("projViewMat", camera->getProjectionMatrix() * camera->getViewMatrix());
-	
 	shaderProgram->setVec3("cameraEye", camera->m_posVector);
 
-	glBindTexture(GL_TEXTURE_2D, material->m_texture);
+	glBindTexture(GL_TEXTURE_2D, material);
 
-	scene->update();
+	scene->update(optflow.d_uv);
 
 	shaderProgram->deactivate();
 };
