@@ -6,7 +6,7 @@ Camera::Camera(){
 
 Camera::Camera(
 	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector, 
-	float fov, int fbW, int fbH, float Cnear, float Cfar
+	float fov, int fbH, int fbW, float Cnear, float Cfar
 ): m_posVector(posVector), m_frontVector(frontVector), m_upVector(upVector), m_worldUpVector(upVector), m_fov(fov), m_frameBufferWidth(fbW), m_frameBufferHeight(fbH), m_near(Cnear), m_far(Cfar) {
 	LOG("Camera::Camera() overloaded c_tor");
 

@@ -21,6 +21,7 @@ public:
 		h_masses = new float[H * W];
 
 		CHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
+		CHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
 		CHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
 		CHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
 
@@ -41,6 +42,7 @@ public:
 		for (float i = 0; i < H-dy; i = i + dy) {
 			for (float j = 0; j < W-dx; j = j + dx) {
 				h_positions[count] = make_float4(i - H / 2.0f, j - W / 2.0f, 1.0, 1.0f);
+				
 				h_velocities[count] = make_float4(
 					Algorithms::randomInt(10) / 100.0f + 0.01,
 					Algorithms::randomInt(10) / 100.0f + 0.01,
@@ -58,6 +60,7 @@ public:
 		}
 		
 		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_og_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
 	}
@@ -70,7 +73,7 @@ public:
 			gravity calculations performed here.
 		*/
 		launch_kernel_update(
-			d_positions, uv,
+			d_positions, d_og_positions, uv,
 			d_masses,
 			m_numparticles
 		);
@@ -107,6 +110,7 @@ public:
 
 	~Scene() {
 		cudaFree(d_positions);
+		cudaFree(d_og_positions);
 		cudaFree(d_velocities);
 		cudaFree(d_masses);
 
@@ -118,7 +122,7 @@ public:
 
 	int m_numparticles;
 	int m_height, m_width;
-	float4* d_positions, * h_positions;
+	float4* d_positions, * h_positions, *d_og_positions;
 	float4* d_velocities, * h_velocities;
 	float* d_masses, * h_masses;
 	
