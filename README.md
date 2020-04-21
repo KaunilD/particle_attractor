@@ -33,6 +33,10 @@ make -j4
 #### Roadmap:
 
 - [x] CUDA based particle engine.
+  - [x] Shader code parser
+  - [x] Rendering Engine
+  - [x] Instanced Rendering for "pixel" objects
+  - [x] Materials and Lighting (Specular, Ambient and Diffuse)
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
 - [x] Compute Shader for creating Laplacian image pyramid.
