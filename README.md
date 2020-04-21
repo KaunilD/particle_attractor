@@ -1,4 +1,4 @@
-# Lucas Kanade based Optical Flow simulation using a particle engine.
+# Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
 #### Demo:
 You can find the demo of the project [here on Vimeo](https://vimeo.com/408605423).
@@ -32,6 +32,6 @@ make -j4
 - [x] CUDA based particle engine.
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
-- [ ] Compute Shader for creating Laplacian image pyramid.
-- [ ] Compute Shader for LK based velocity vector computation.
-- [ ] Update particle engine physics to simulate Hooke's Law.
+- [x] Compute Shader for creating Laplacian image pyramid.
+- [x] Compute Shader for ~LK~ HS based velocity vector computation.
+- [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
