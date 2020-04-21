@@ -20,10 +20,10 @@ public:
 		h_velocities = new float4[H * W];
 		h_masses = new float[H * W];
 
-		CHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
 
 		cudaMemset(d_positions, H * W * sizeof(float4), 0);
 		cudaMemset(d_velocities, H * W * sizeof(float4), 0);

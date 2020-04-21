@@ -19,23 +19,23 @@ public:
 	OpticalFlow(int H, int W) : m_H(H), m_W(W), m_numpixels(H* W) {
 		LOG("OpticalFlow::c_tor()");
 
-		CHECK(cudaMalloc(&d_f1ptr, m_numpixels * sizeof(uchar3)));
-		CHECK(cudaMalloc(&d_f2ptr, m_numpixels * sizeof(uchar3)));
+		CUDACHECK(cudaMalloc(&d_f1ptr, m_numpixels * sizeof(uchar3)));
+		CUDACHECK(cudaMalloc(&d_f2ptr, m_numpixels * sizeof(uchar3)));
 
-		CHECK(cudaMalloc(&d_f1dx, m_numpixels * sizeof(float)));
-		CHECK(cudaMalloc(&d_f1dy, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f1dx, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f1dy, m_numpixels * sizeof(float)));
 
-		CHECK(cudaMalloc(&d_f2dx, m_numpixels * sizeof(float)));
-		CHECK(cudaMalloc(&d_f2dy, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f2dx, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f2dy, m_numpixels * sizeof(float)));
 
-		CHECK(cudaMalloc(&d_uv, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_uv, m_numpixels * sizeof(float4)));
 
-		CHECK(cudaMalloc(&d_dt, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_dt, m_numpixels * sizeof(float)));
 	}
 
 	void copy(const cv::Mat& f1, const cv::Mat& f2) {
-		cudaError_t e1 = cudaMemcpy(d_f1ptr, (uchar3*)f1.ptr<unsigned char>(), m_numpixels * sizeof(uchar3), cudaMemcpyHostToDevice);
-		cudaError_t e2 = cudaMemcpy(d_f2ptr, (uchar3*)f2.ptr<unsigned char>(), m_numpixels * sizeof(uchar3), cudaMemcpyHostToDevice);
+		CUDACHECK(cudaMemcpy(d_f1ptr, (uchar3*)f1.ptr<unsigned char>(), m_numpixels * sizeof(uchar3), cudaMemcpyHostToDevice));
+		CUDACHECK(cudaMemcpy(d_f2ptr, (uchar3*)f2.ptr<unsigned char>(), m_numpixels * sizeof(uchar3), cudaMemcpyHostToDevice));
 	}
 
 	~OpticalFlow() {

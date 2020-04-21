@@ -14,7 +14,7 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 360, width = 640;
+	int height = 1080, width = 1920;
 
 	/*
 		Initialize Window
@@ -84,9 +84,8 @@ int main(int argc, char* argv[])
 	mouseEvent->addListener(camera);
 	windowEvent->addListener(camera);
 
-
 	cv::VideoCapture cap;
-	if (!cap.open("lemon_low.mp4")) {
+	if (!cap.open("lemon_high.mp4")) {
 		return 0;
 	}
 	int frameCount = 0;
@@ -107,7 +106,7 @@ int main(int argc, char* argv[])
 	
 		lastFrame = std::move(currentFrame);
 		cap >> currentFrame;
-		
+
 		if (lastFrame.empty() || currentFrame.empty()) {
 			cap.set(cv::CAP_PROP_POS_FRAMES, 0);
 			continue;
@@ -119,6 +118,8 @@ int main(int argc, char* argv[])
 		optFlow.copy(lastFrame, currentFrame);
 		m_currentMaterial->updateFrame(currentFrame);
 		
+		launch_fill(optFlow.d_uv, 0.0, height * width);
+
 		launch_partials(
 			optFlow.d_f1ptr,
 			optFlow.d_f1dx, optFlow.d_f1dy,
@@ -152,7 +153,6 @@ int main(int argc, char* argv[])
 			camera
 		);
 
-		launch_fill(optFlow.d_uv, 0.0, height*width);
 		frameCount++;
 		
 		window.update();
