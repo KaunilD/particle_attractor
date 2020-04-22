@@ -1,6 +1,12 @@
-# Horn Shuncke based Optical Flow simulation using a particle engine.
+# Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
 ![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/screen.png)
+
+#### Theory
+[Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
+
+#### Demo:
+You can find the coolest state of the project [here on Vimeo](https://vimeo.com/408605423).
 
 #### Dependencies:
 
@@ -11,7 +17,7 @@
 5. [GLEW](https://github.com/nigels-com/glew/archive/glew-2.1.0.tar.gz) (Only Windows)
 6. [GLM](https://github.com/g-truc/glm/archive/0.9.9.8.tar.gz)
 
-#### Installation
+#### Installation:
 
 1. Let `$PROJECT_ROOT` be the root directory of the project.
 2. Download an example video from [here](https://drive.google.com/open?id=17ydViQMNjSS5pO2UBRHf9ntapH9-HCjR) and place it in `$PROJECT_ROOT/src`.
@@ -29,8 +35,15 @@ make -j4
 #### Roadmap:
 
 - [x] CUDA based particle engine.
+  - [x] Event system for Mouse, Keyboard and Window
+  - [x] Object file reader
+  - [x] Shader code parser
+  - [x] Rendering Engine
+  - [x] Instanced Rendering for "pixel" objects
+  - [x] Materials and Lighting (Specular, Ambient and Diffuse)
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
-- [ ] Compute Shader for creating Laplacian image pyramid.
-- [ ] Compute Shader for LK based velocity vector computation.
-- [ ] Update particle engine physics to simulate Hooke's Law.
+- [x] Compute Shader for creating Laplacian image pyramid.
+- [x] Compute Shader for ~LK~ HS based velocity vector computation.
+- [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
+- [x] Navier Stokes based CFD Physics.
