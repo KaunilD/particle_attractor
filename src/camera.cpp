@@ -1,13 +1,13 @@
 #include "camera.hpp"
 
-Camera::Camera(){
+Camera::Camera() {
 	LOG("Camera::Camera() default c_tor");
 }
 
 Camera::Camera(
-	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector, 
+	glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector,
 	float fov, int fbH, int fbW, float Cnear, float Cfar
-): m_posVector(posVector), m_frontVector(frontVector), m_upVector(upVector), m_worldUpVector(upVector), m_fov(fov), m_frameBufferWidth(fbW), m_frameBufferHeight(fbH), m_near(Cnear), m_far(Cfar) {
+) : m_posVector(posVector), m_frontVector(frontVector), m_upVector(upVector), m_worldUpVector(upVector), m_fov(fov), m_frameBufferWidth(fbW), m_frameBufferHeight(fbH), m_near(Cnear), m_far(Cfar) {
 	LOG("Camera::Camera() overloaded c_tor");
 
 	updateViewMatrix();
@@ -37,7 +37,7 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 
 	m_projectionMatrix = glm::perspective(
 		glm::radians(m_fov),
-		m_frameBufferWidth/(float)m_frameBufferHeight,
+		m_frameBufferWidth / (float)m_frameBufferHeight,
 		m_near, m_far
 	);
 }
@@ -45,7 +45,7 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 void Camera::resetProjectionMatrix() {
 	m_projectionMatrix = glm::perspective(
 		glm::radians(m_fov),
-		m_frameBufferWidth/ (float) m_frameBufferHeight,
+		m_frameBufferWidth / (float)m_frameBufferHeight,
 		m_near, m_far
 	);
 }
@@ -54,7 +54,7 @@ glm::mat4x4 Camera::getProjectionMatrix() const {
 	return m_projectionMatrix;
 }
 
-glm::mat4x4 Camera::getViewMatrix() const  {
+glm::mat4x4 Camera::getViewMatrix() const {
 	return m_viewMatrix;
 }
 

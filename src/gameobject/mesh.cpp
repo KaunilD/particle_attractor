@@ -50,8 +50,8 @@ void Mesh::prepareInstances(const std::vector<glm::mat4>& models, float4* positi
 	glVertexAttribDivisor(3, 1);
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
-
-
+	
+	cudaGraphicsGLRegisterBuffer(&m_models_CUDA, m_models, cudaGraphicsRegisterFlagsWriteDiscard);
 
 	glGenBuffers(1, &m_positions);
 	glBindBuffer(GL_ARRAY_BUFFER, m_positions);
@@ -60,13 +60,21 @@ void Mesh::prepareInstances(const std::vector<glm::mat4>& models, float4* positi
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vec4Size, (void*)(vec4Size));
 	glVertexAttribDivisor(6, 1);
 
-	glBindVertexArray(0);
-	cudaGraphicsGLRegisterBuffer(&m_models_CUDA, m_models, cudaGraphicsRegisterFlagsWriteDiscard);
+	glGenBuffers(1, &m_velocities);
+	glBindBuffer(GL_ARRAY_BUFFER, m_velocities);
+	glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, vec4Size, (void*)(vec4Size));
+	glVertexAttribDivisor(7, 1);
+	
+	cudaGraphicsGLRegisterBuffer(&m_velocities_CUDA, m_velocities, cudaGraphicsRegisterFlagsWriteDiscard);
 
+	glBindVertexArray(0);
 };
 void Mesh::drawInstanced(int numInstances) {
 
 	cudaGraphicsUnmapResources(1, &m_models_CUDA, 0);
+	cudaGraphicsUnmapResources(1, &m_velocities_CUDA, 0);
 
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_models);
@@ -80,4 +88,7 @@ void Mesh::drawInstanced(int numInstances) {
 void Mesh::getCUDAptr() {
 	cudaGraphicsMapResources(1, &m_models_CUDA, 0);
 	cudaGraphicsResourceGetMappedPointer((void**)&d_modelBuffer, &num_bytes, m_models_CUDA);
+
+	cudaGraphicsMapResources(1, &m_velocities_CUDA, 0);
+	cudaGraphicsResourceGetMappedPointer((void**)&d_velocitiesBuffer, &num_bytes_velocities, m_velocities_CUDA);
 }

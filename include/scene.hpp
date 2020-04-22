@@ -6,6 +6,7 @@
 
 #include "cuda/update_gameobject.hpp"
 #include "cuda/update_models.hpp"
+#include "cuda/update_velocities.hpp"
 #include "cuda/utils.hpp"
 
 #include "algorithms/algorithms.hpp"
@@ -20,10 +21,10 @@ public:
 		h_velocities = new float4[H * W];
 		h_masses = new float[H * W];
 
-		CHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
-		CHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_positions, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_og_positions, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_velocities, H * W * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_masses, H * W * sizeof(float)));
 
 		cudaMemset(d_positions, H * W * sizeof(float4), 0);
 		cudaMemset(d_velocities, H * W * sizeof(float4), 0);
@@ -32,17 +33,16 @@ public:
 	};
 
 	void init() {
-		float W = 1, aspect = m_height / (float)m_width, H = W / aspect;
+		float W = 1, aspect = m_height / (float)m_width, H = 1;
 
 		float dx = W / (float)m_width;
 		float dy = H / (float)m_height;
 
 		int count = 0;
 		//std::cout << H << " " << W << " " << aspect << " " << dx << " " << dy << "\n";
-		for (float i = 0; i < H-dy; i = i + dy) {
-			for (float j = 0; j < W-dx; j = j + dx) {
-				h_positions[count] = make_float4(i - H / 2.0f, j - W / 2.0f, 1.0, 1.0f);
-				
+		for (float i = 0; i < H - dy; i = i + dy) {
+			for (float j = 0; j < W - dx; j = j + dx) {
+				h_positions[count] = make_float4(j - W / 2.0f, i - H / 2.0f, 0.0, 1.0f);
 				h_velocities[count] = make_float4(
 					Algorithms::randomInt(10) / 100.0f + 0.01,
 					Algorithms::randomInt(10) / 100.0f + 0.01,
@@ -58,11 +58,11 @@ public:
 				count++;
 			}
 		}
-		
-		cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
-		cudaMemcpy(d_og_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
-		cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice);
-		cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice);
+
+		CUDACHECK(cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice));
+		CUDACHECK(cudaMemcpy(d_og_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice));
+		CUDACHECK(cudaMemcpy(d_velocities, h_velocities, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice));
+		CUDACHECK(cudaMemcpy(d_masses, h_masses, m_numparticles * sizeof(float), cudaMemcpyHostToDevice));
 	}
 
 
@@ -91,6 +91,12 @@ public:
 			launch_kernel_models(
 				d_positions,
 				m_meshes.at(i)->d_modelBuffer,
+				m_numparticles
+			);
+
+			launch_kernel_velocities(
+				uv,
+				m_meshes.at(i)->d_velocitiesBuffer,
 				m_numparticles
 			);
 

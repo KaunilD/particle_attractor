@@ -8,12 +8,12 @@
 class Mesh {
 public:
 	size_t i_count = 0, v_count = 0;
-	GLuint m_VAO, m_VBO, m_EBO, m_models, m_positions;
-	struct cudaGraphicsResource* m_models_CUDA;
+	GLuint m_VAO, m_VBO, m_EBO, m_models, m_positions, m_velocities;
+	struct cudaGraphicsResource* m_models_CUDA, *m_velocities_CUDA;
 	
-	float4* d_modelBuffer;
+	float4* d_modelBuffer, *d_velocitiesBuffer;
 
-	size_t num_bytes;
+	size_t num_bytes, num_bytes_velocities;
 
 	Mesh() = default;
 	enum Buffers {

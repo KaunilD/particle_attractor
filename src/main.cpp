@@ -14,7 +14,7 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 360, width = 640;
+	int height = 1080, width = 1920;
 
 	/*
 		Initialize Window
@@ -39,7 +39,6 @@ int main(int argc, char* argv[])
 	/*
 		Initialiize Meshes
 	*/
-
 	shared_ptr<Material> m_currentMaterial(new Material(height, width));
 	
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
@@ -61,10 +60,11 @@ int main(int argc, char* argv[])
 	/*
 		Initialiize Shader
 	*/
+
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"glsl\\object_vs_instanced.glsl",
-		"glsl\\object_fs.glsl"
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_vs_instanced.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
 	);
 
 	/*
@@ -74,8 +74,9 @@ int main(int argc, char* argv[])
 		glm::vec3(0.0f, 0.0f, 1.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		90.0f, height, width, 0.001f, 100.f
+		45, height, width, 0.01f, 100.f
 	));
+
 	camera->setSpeed(0.05);
 	/*
 		Add Mouse and Window event-listeners 
@@ -86,7 +87,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("lemon_low.mp4")) {
+	if (!cap.open("lemon_high.mp4")) {
 		return 0;
 	}
 	int frameCount = 0;
@@ -112,13 +113,15 @@ int main(int argc, char* argv[])
 			cap.set(cv::CAP_PROP_POS_FRAMES, 0);
 			continue;
 		}
-		
-		cv::flip(lastFrame, lastFrame, 0);
-		cv::flip(currentFrame, currentFrame, 0);
+
+		//cv::resize(lastFrame, lastFrame, cv::Size(640, 360));
+		//cv::resize(currentFrame, currentFrame, cv::Size(640, 360));
 		
 		optFlow.copy(lastFrame, currentFrame);
 		m_currentMaterial->updateFrame(currentFrame);
 		
+		launch_fill(optFlow.d_uv, 0.0, height * width);
+
 		launch_partials(
 			optFlow.d_f1ptr,
 			optFlow.d_f1dx, optFlow.d_f1dy,
@@ -136,6 +139,7 @@ int main(int argc, char* argv[])
 			optFlow.d_dt, 
 			height, width
 		);
+
 		for (int i = 0; i < 8; i++) {
 
 			launch_optflow(
@@ -152,7 +156,6 @@ int main(int argc, char* argv[])
 			camera
 		);
 
-		launch_fill(optFlow.d_uv, 0.0, height*width);
 		frameCount++;
 		
 		window.update();

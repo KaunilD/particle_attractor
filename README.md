@@ -1,10 +1,12 @@
 # Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
+![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/screen.png)
+
 #### Theory
 [Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
 
 #### Demo:
-You can find the demo of the project [here on Vimeo](https://vimeo.com/408605423).
+You can find the coolest state of the project [here on Vimeo](https://vimeo.com/408605423).
 
 #### Dependencies:
 
@@ -44,3 +46,4 @@ make -j4
 - [x] Compute Shader for creating Laplacian image pyramid.
 - [x] Compute Shader for ~LK~ HS based velocity vector computation.
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
+- [x] Navier Stokes based CFD Physics.
