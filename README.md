@@ -46,4 +46,4 @@ make -j4
 - [x] Compute Shader for creating Laplacian image pyramid.
 - [x] Compute Shader for ~LK~ HS based velocity vector computation.
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
-- [x] Navier Stokes based CFD Physics.
+- [] Navier Stokes based CFD Physics.
