@@ -121,7 +121,7 @@ __global__ void kernel_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* 
 
 	float k[9] = { 0.084, 0.167, 0.084, 0.167, -1, 0.167, 0.084, 0.167, 0.084 };
 
-	float u_avg = uv[idx].x, v_avg = uv[idx].y, num = 0, denom = 0.0001 + grad_x * grad_x + grad_y * grad_y;
+	float u_avg = uv[idx].x, v_avg = uv[idx].y, num = 0, denom = 0.01 + grad_x * grad_x + grad_y * grad_y;
 	int count = 0;
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j <= 1; j++) {

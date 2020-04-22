@@ -96,6 +96,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
 	
 	${PROJECT_SOURCE_DIR}/include/cuda/update_gameobject.hpp
+	${PROJECT_SOURCE_DIR}/include/cuda/update_velocities.hpp
 	${PROJECT_SOURCE_DIR}/include/cuda/update_models.hpp
 	${PROJECT_SOURCE_DIR}/include/cuda/optflow.hpp
 
@@ -106,6 +107,7 @@ set (KERNELS
 	"cuda/update_gameobject.cu"
 	"cuda/optflow.cu"
 	"cuda/update_models.cu"
+	"cuda/update_velocities.cu"
 )
 
 if(WIN32)

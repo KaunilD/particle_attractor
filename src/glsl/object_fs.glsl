@@ -24,12 +24,12 @@ uniform Light light;
 
 in vec3 vs_normal;
 in vec4 vs_position;
-
+in vec4 vs_color;
 out vec4 gl_FragColor;
 
 void main()
 {
-    gl_FragColor = texture(textureSampler, vs_position.xy+vec2(0.5));
+    gl_FragColor = mix( texture(textureSampler, vs_position.xy+vec2(0.5)), vec4(1.0, 1.0, 1.0, 1.0), vs_color);
 }
 
 

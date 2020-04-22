@@ -1,4 +1,6 @@
-# Lucas Kanade based Optical Flow simulation using a particle engine.
+# Horn Shuncke based Optical Flow simulation using a particle engine.
+
+![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/screen.png)
 
 #### Dependencies:
 
