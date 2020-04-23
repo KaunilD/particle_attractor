@@ -14,7 +14,7 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 360, width = 640;
+	int height = 1080, width = 1920;
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
 	cv::Mat lastFrame, currentFrame;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 		Initialiize Meshes
 	*/
 	shared_ptr<Material> m_currentMaterial(new Material(height, width));
-	
+
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
 			"resources\\objects\\sphere.obj"
@@ -59,15 +59,15 @@ int main(int argc, char* argv[])
 		Initialiize Renderer
 	*/
 	shared_ptr<ParticleRenderer> particleRenderer(new ParticleRenderer());
-	
+
 	/*
 		Initialiize Shader
 	*/
 
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_vs_instanced.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
+		"glsl\\object_vs_instanced.glsl",
+		"glsl\\object_fs.glsl"
 	);
 
 	/*
@@ -79,10 +79,9 @@ int main(int argc, char* argv[])
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		45, height, width, 0.01f, 100.f
 	));
-
 	camera->setSpeed(0.05);
 	/*
-		Add Mouse and Window event-listeners 
+		Add Mouse and Window event-listeners
 		to Camera
 	*/
 	mouseEvent->addListener(camera);
@@ -90,10 +89,10 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("lemon_low.mp4")) {
+	if (!cap.open("resources//tunnel_high.mp4")) {
 		return 0;
 	}
-	
+
 	OpticalFlow optFlow(height, width);
 
 	cap >> currentFrame;

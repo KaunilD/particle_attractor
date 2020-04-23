@@ -7,7 +7,7 @@
 class Event {
 public:
 	unique_ptr<std::vector<shared_ptr<Updatable>>> observers;
-	
+
 	Event() {
 		LOG("Event::default c_tor()");
 		observers = make_unique<std::vector<shared_ptr<Updatable>>>() ;
@@ -20,4 +20,4 @@ public:
 	virtual void dispatchEvents() = 0;
 };
 
-#endif EVENTS_H
+#endif

@@ -15,7 +15,7 @@ public:
 	int m_width = 0, m_height = 0;
 	int frame_count = 0;
 	std::string m_title;
-	
+
 	GLFWwindow* window;
 	shared_ptr<MouseEvent> mouseEvent;
 	shared_ptr<WindowEvent> windowEvent;
@@ -29,7 +29,7 @@ public:
 	void update();
 	void makeCurrent();
 	void destroy();
-	
+
 };
 
-#endif WINDOW_H
+#endif

@@ -26,4 +26,4 @@ public:
 	unique_ptr<WindowProps> props;
 
 };
-#endif WINDOWEVENT_H
+#endif

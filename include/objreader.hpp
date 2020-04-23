@@ -3,6 +3,7 @@
 
 #include "libs.hpp"
 #include "vertex.hpp"
+
 namespace Utils {
 	struct ObjReaderRet {
 		std::vector<Vertex> v;
@@ -11,4 +12,4 @@ namespace Utils {
 
 	ObjReaderRet readObj(const char *filePath);
 };
-#endif OBJREADER_H
+#endif

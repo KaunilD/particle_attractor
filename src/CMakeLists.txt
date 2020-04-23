@@ -65,36 +65,36 @@ set(SRCS
 
 set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/libs.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/vertex.hpp
 	${PROJECT_SOURCE_DIR}/include/objreader.hpp
 
 	${PROJECT_SOURCE_DIR}/include/shaderprogram.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/gameobject/gameobject.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/sunobject.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/particleobject.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/mesh.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/material.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/algorithms/algorithms.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
 
 	${PROJECT_SOURCE_DIR}/include/scene.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/renderer/renderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/sunrenderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/particlerenderer.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/window.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/events/events.hpp
 	${PROJECT_SOURCE_DIR}/include/events/updatable.hpp
 	${PROJECT_SOURCE_DIR}/include/events/mouseevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/windowevents.hpp
 	${PROJECT_SOURCE_DIR}/include/events/keyboardevents.hpp
-	
+
 	${PROJECT_SOURCE_DIR}/include/cuda/update_gameobject.hpp
 	${PROJECT_SOURCE_DIR}/include/cuda/update_velocities.hpp
 	${PROJECT_SOURCE_DIR}/include/cuda/update_models.hpp
@@ -130,33 +130,33 @@ set_target_properties( ${PROJECT_NAME}
                        PROPERTIES CUDA_SEPARABLE_COMPILATION ON
                       )
 target_include_directories(
-	particle_attractor 
-		PUBLIC 
-			${OPENGL_INCLUDE_DIR} 
+	particle_attractor
+		PUBLIC
+			${OPENGL_INCLUDE_DIR}
 			$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 			$<INSTALL_INTERFACE:include>
 
 )
 if(WIN32)
-target_link_libraries( 
-	particle_attractor 
+target_link_libraries(
+	particle_attractor
 		PUBLIC
 		glew32
 		glfw
-		${OPENGL_gl_LIBRARY} 
+		${OPENGL_gl_LIBRARY}
 		${CUDA_LIBRARIES}
-		${CUDA_CUBLAS_LIBRARIES} 
-        ${OpenCV_LIBS}
+		${OpenCV_LIBS}
 )
 else()
-target_link_libraries( 
-	particle_attractor 
+target_link_libraries(
+	particle_attractor
 		PUBLIC
-		glew32
 		glfw
-		${OPENGL_gl_LIBRARY} 
+		opencv_imgcodecs opencv_core
+		opencv_highgui opencv_imgproc
+		opencv_videoio
+		${OPENGL_gl_LIBRARY}
 		${CUDA_LIBRARIES}
-		"${CUDA_CUBLAS_LIBRARIES}" 
 )
 endif()
 

@@ -10,4 +10,4 @@ public:
 	virtual void update(WindowProps) = 0;
 };
 
-#endif UPDATABLE_H
+#endif
