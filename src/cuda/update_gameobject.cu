@@ -8,12 +8,21 @@ __device__ float dot(float4 a, float4 b) {
 }
 
 __global__ void kernel_update(
-	float4* d_positions, float4* d_og_positions,float4* d_velocities,
+	float4* d_positions, float4* d_og_positions, float4* d_velocities,
 	float* d_masses, size_t numel) {
 
 	size_t col = threadIdx.x + blockIdx.x * blockDim.x;
 	if (col >= numel) { return; }
 
+	float4 velocity = d_velocities[col];
+
+
+	//d_positions[col] = make_float4(
+	
+		//d_og_positions[col].x + velocity.x * 0.05,
+		//d_og_positions[col].y + velocity.y * 0.05,
+		//0, 0
+	//);
 	__syncthreads();
 }
 

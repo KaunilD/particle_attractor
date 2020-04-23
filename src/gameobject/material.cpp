@@ -31,7 +31,7 @@ Material::Material(const std::string& texturePath) {
 
 Material::Material(int h, int w) {
     LOG("Material:: empty texture");
-    
+
     glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_2D, m_texture);
 
