@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("resources//tunnel_high.mp4")) {
+	if (!cap.open("resources\\lemon_high.mp4")) {
 		return 0;
 	}
 
@@ -116,8 +116,8 @@ int main(int argc, char* argv[])
 				continue;
 			}
 
-			cv::flip(lastFrame, lastFrame, 0);
-			cv::flip(currentFrame, currentFrame, 0);
+			//cv::flip(lastFrame, lastFrame, 0);
+			//cv::flip(currentFrame, currentFrame, 0);
 
 			optFlow.copy(lastFrame, currentFrame);
 			m_currentMaterial->updateFrame(lastFrame);

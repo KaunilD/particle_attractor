@@ -20,9 +20,10 @@ You can find the coolest state of the project [here on Vimeo](https://vimeo.com/
 #### Installation:
 
 1. Let `$PROJECT_ROOT` be the root directory of the project.
-2. Download an example video from [here](https://drive.google.com/open?id=17ydViQMNjSS5pO2UBRHf9ntapH9-HCjR) and place it in `$PROJECT_ROOT/src`.
+2. Download an example video from [here](https://drive.google.com/open?id=1gg7qESE4TFNfjMmYdOnTzwgEwnnZV7UT) and place it in `$PROJECT_ROOT/src/resources`.
 3. After installing the dependencies please follow the cmake build steps in the code block below.
-4. After the binary has been compiled, place it in `$PROJECT_ROOT/src` directory besides the video file you downloaded in step 2.
+4. After the binary has been compiled, place it in `$PROJECT_ROOT/src` directory.
+5. Run `.\particle_atractor`
 
 ```cmake
 cd $PROJECT_ROOT

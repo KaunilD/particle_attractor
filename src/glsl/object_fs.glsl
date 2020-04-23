@@ -30,7 +30,7 @@ out vec4 gl_FragColor;
 
 void main()
 {
-    gl_FragColor = mix( texture(textureSampler, vs_position.xy+vec2(0.5)), vec4(1.0, 1.0, 1.0, 1.0), vs_velocity);
+    gl_FragColor = vs_velocity;
 }
 
 
