@@ -14,22 +14,23 @@ struct Material {
     vec3 specular;
 };
 
+uniform Material material;
+uniform Light light;
+
 uniform sampler2D textureSampler;
 
 uniform highp mat3 normalMat;
 uniform highp vec3 cameraEye;
 
-uniform Material material;
-uniform Light light;
-
 in vec3 vs_normal;
 in vec4 vs_position;
-in vec4 vs_color;
+in vec4 vs_velocity;
+
 out vec4 gl_FragColor;
 
 void main()
 {
-    gl_FragColor = mix( texture(textureSampler, vs_position.xy+vec2(0.5)), vec4(1.0, 1.0, 1.0, 1.0), vs_color);
+    gl_FragColor = mix( texture(textureSampler, vs_position.xy+vec2(0.5)), vec4(1.0, 1.0, 1.0, 1.0), vs_velocity);
 }
 
 

@@ -14,7 +14,10 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 1080, width = 1920;
+	int height = 360, width = 640;
+	double lastTime = glfwGetTime();
+	int frameCount = 0;
+	cv::Mat lastFrame, currentFrame;
 
 	/*
 		Initialize Window
@@ -87,78 +90,79 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("lemon_high.mp4")) {
+	if (!cap.open("lemon_low.mp4")) {
 		return 0;
 	}
-	int frameCount = 0;
-	cv::Mat lastFrame, currentFrame;
-
+	
 	OpticalFlow optFlow(height, width);
-
 
 	cap >> currentFrame;
 
 	while (!glfwWindowShouldClose(window.window)){
+		double currentTime = glfwGetTime();
+		frameCount++;
 
 		glfwPollEvents();
-		mouseEvent->dispatchEvents();
-		windowEvent->dispatchEvents();
-		
-		window.clearCanvas();
-	
-		lastFrame = std::move(currentFrame);
-		cap >> currentFrame;
-		
-		if (lastFrame.empty() || currentFrame.empty()) {
-			cap.set(cv::CAP_PROP_POS_FRAMES, 0);
-			continue;
-		}
+		if (currentTime - lastTime >= 1/30.0f) {
+			mouseEvent->dispatchEvents();
+			windowEvent->dispatchEvents();
 
-		//cv::resize(lastFrame, lastFrame, cv::Size(640, 360));
-		//cv::resize(currentFrame, currentFrame, cv::Size(640, 360));
-		
-		optFlow.copy(lastFrame, currentFrame);
-		m_currentMaterial->updateFrame(currentFrame);
-		
-		launch_fill(optFlow.d_uv, 0.0, height * width);
+			window.clearCanvas();
 
-		launch_partials(
-			optFlow.d_f1ptr,
-			optFlow.d_f1dx, optFlow.d_f1dy,
-			height, width
-		);
+			lastFrame = std::move(currentFrame);
+			cap >> currentFrame;
 
-		launch_partials(
-			optFlow.d_f2ptr,
-			optFlow.d_f2dx, optFlow.d_f2dy,
-			height, width
-		);
+			if (lastFrame.empty() || currentFrame.empty()) {
+				cap.set(cv::CAP_PROP_POS_FRAMES, 0);
+				continue;
+			}
 
-		launch_sub(
-			optFlow.d_f1ptr, optFlow.d_f2ptr, 
-			optFlow.d_dt, 
-			height, width
-		);
+			cv::flip(lastFrame, lastFrame, 0);
+			cv::flip(currentFrame, currentFrame, 0);
 
-		for (int i = 0; i < 8; i++) {
+			optFlow.copy(lastFrame, currentFrame);
+			m_currentMaterial->updateFrame(lastFrame);
 
-			launch_optflow(
-				optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
-				optFlow.d_uv, 
+			launch_fill(optFlow.d_uv, 0.0, height * width);
+
+			launch_partials(
+				optFlow.d_f1ptr,
+				optFlow.d_f1dx, optFlow.d_f1dy,
 				height, width
 			);
+
+			launch_partials(
+				optFlow.d_f2ptr,
+				optFlow.d_f2dx, optFlow.d_f2dy,
+				height, width
+			);
+
+			launch_sub(
+				optFlow.d_f1ptr, optFlow.d_f2ptr,
+				optFlow.d_dt,
+				height, width
+			);
+
+			for (int i = 0; i < 8; i++) {
+
+				launch_optflow(
+					optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
+					optFlow.d_uv,
+					height, width
+				);
+			}
+
+			particleRenderer->render(
+				particleShader,
+				scene,
+				m_currentMaterial->m_texture, optFlow,
+				camera
+			);
+
+			window.update();
+			frameCount = 0;
+			lastTime += 1/30.0f;
 		}
-
-		particleRenderer->render(
-			particleShader,
-			scene,
-			m_currentMaterial->m_texture, optFlow,
-			camera
-		);
-
-		frameCount++;
-		
-		window.update();
 	}
 
 	window.destroy();
