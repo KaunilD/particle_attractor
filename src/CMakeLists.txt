@@ -152,6 +152,9 @@ target_link_libraries(
 	particle_attractor
 		PUBLIC
 		glfw
+		opencv_imgcodecs opencv_core
+		opencv_highgui opencv_imgproc
+		opencv_videoio
 		${OPENGL_gl_LIBRARY}
 		${CUDA_LIBRARIES}
 )

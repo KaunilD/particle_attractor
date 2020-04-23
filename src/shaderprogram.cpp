@@ -10,6 +10,7 @@ ShaderProgram::~ShaderProgram() {
 
 void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
 	// 1. retrieve the vertex/fragment source code from filePath
+	LOG("ShaderProgram::c_tor()")
 	std::string vertexCode;
 	std::string fragmentCode;
 
@@ -102,4 +103,3 @@ void ShaderProgram::activate() {
 void ShaderProgram::deactivate() {
 	glUseProgram(0);
 }
-
