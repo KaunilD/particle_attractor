@@ -16,7 +16,7 @@ class ShaderProgram{
 		void activate();
 		void deactivate();
 
-		
+
 		void setMat4(std::string name, glm::mat4 matrix) {
 			glUniformMatrix4fv(
 				glGetUniformLocation(program, name.c_str()),
@@ -47,4 +47,4 @@ class ShaderProgram{
 
 };
 
-#endif // SHADERPROGRAM_H
+#endif

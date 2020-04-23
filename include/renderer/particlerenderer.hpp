@@ -26,4 +26,4 @@ public:
 		shared_ptr<Camera> camera) override;
 };
 
-#endif PARTICLERENDERER_H
+#endif

@@ -20,4 +20,4 @@ namespace Algorithms {
 	}
 };
 
-#endif ALGORITHMS_H
+#endif

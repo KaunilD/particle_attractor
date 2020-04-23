@@ -17,7 +17,7 @@ public:
 	glm::vec3 m_posVector, m_upVector, m_frontVector, m_worldUpVector, m_rightVector;
 
 	float4* d_projViewMatrix = { nullptr };
-	
+
 	Camera();
 	Camera(
 		glm::vec3 posVector, glm::vec3 frontVector, glm::vec3 upVector,
@@ -39,4 +39,4 @@ public:
 	virtual void update(MouseProps props);
 	virtual void update(WindowProps props);
 };
-#endif CAMERA_H
+#endif

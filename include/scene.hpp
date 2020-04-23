@@ -131,11 +131,11 @@ public:
 	float4* d_positions, * h_positions, *d_og_positions;
 	float4* d_velocities, * h_velocities;
 	float* d_masses, * h_masses;
-	
+
 	std::vector<glm::mat4> h_models;
 	std::vector<shared_ptr<Mesh>> m_meshes;
 
 
 };
 
-#endif SCENE_H
+#endif

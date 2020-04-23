@@ -18,4 +18,4 @@ public:
 		shared_ptr<Camera> camera) override;
 };
 
-#endif SUNRENDERER_H
+#endif

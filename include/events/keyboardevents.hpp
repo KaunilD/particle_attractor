@@ -6,11 +6,11 @@
 class KeyboardEvent: public Event {
 public:
 	KeyboardEvent() : Event() {};
-	
+
 	virtual void handleEvent() {
 		LOG("KeyboardEvent:: Keyboard event detected");
 	}
-	
+
 	virtual void dispatchEvents(){
 		for (int i = 0; i < observers->size(); i++) {
 			//observers->at(i)->update();
@@ -18,4 +18,4 @@ public:
 	}
 };
 
-#endif KEYBOARDEVENT_H
+#endif

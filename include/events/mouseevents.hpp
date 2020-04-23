@@ -9,11 +9,11 @@ public:
 		props = make_unique<MouseProps>();
 	};
 	~MouseEvent() = default;
-		
+
 	virtual void handleEvent() {
 		LOG("MouseEvent:: Mouse Event Detected.");
 	}
-		
+
 
 	virtual void dispatchEvents() {
 		for (int i = 0; i < observers->size(); i++) {
@@ -23,4 +23,4 @@ public:
 	unique_ptr<MouseProps> props;
 
 };
-#endif MOUSEEVENT_H
+#endif
