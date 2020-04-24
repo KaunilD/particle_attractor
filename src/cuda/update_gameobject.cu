@@ -15,14 +15,12 @@ __global__ void kernel_update(
 	if (col >= numel) { return; }
 
 	float4 velocity = d_velocities[col];
-
-
-	//d_positions[col] = make_float4(
-	
-		//d_og_positions[col].x + velocity.x * 0.05,
-		//d_og_positions[col].y + velocity.y * 0.05,
-		//0, 0
-	//);
+	float mag = sqrtf(velocity.x*velocity.x + velocity.y*velocity.y);
+	d_positions[col] = make_float4(
+		d_og_positions[col].x,
+		d_og_positions[col].y,
+		mag*0.0003, 0
+	);
 	__syncthreads();
 }
 

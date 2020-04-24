@@ -22,6 +22,7 @@ public:
 		time intervals.
 	*/
 	uchar3* d_f1ptr, * d_f2ptr;
+	uchar3* d_f1ptrBlur, * d_f2ptrBlur;
 	/*
 		
 	*/
@@ -37,6 +38,9 @@ public:
 
 		CUDACHECK(cudaMalloc(&d_f1ptr, m_numpixels * sizeof(uchar3)));
 		CUDACHECK(cudaMalloc(&d_f2ptr, m_numpixels * sizeof(uchar3)));
+
+		CUDACHECK(cudaMalloc(&d_f1ptrBlur, m_numpixels * sizeof(uchar3)));
+		CUDACHECK(cudaMalloc(&d_f2ptrBlur, m_numpixels * sizeof(uchar3)));
 
 		CUDACHECK(cudaMalloc(&d_f1dx, m_numpixels * sizeof(float)));
 		CUDACHECK(cudaMalloc(&d_f1dy, m_numpixels * sizeof(float)));
@@ -57,6 +61,9 @@ public:
 	~OpticalFlow() {
 		cudaFree(d_f1ptr);
 		cudaFree(d_f2ptr);
+
+		cudaFree(d_f1ptrBlur);
+		cudaFree(d_f2ptrBlur);
 
 		cudaFree(d_f1dx);
 		cudaFree(d_f1dy);
@@ -89,7 +96,13 @@ public:
 */
 void launch_partials(
 	uchar3* d_I, 
-	float* d_, float* , 
+	float* d_dx, float* d_dy, 
+	int H, int W
+);
+
+void launch_blur(
+	uchar3* d_I,
+	uchar3* d_Ib,
 	int H, int W
 );
 

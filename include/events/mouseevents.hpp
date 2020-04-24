@@ -19,6 +19,8 @@ public:
 		for (int i = 0; i < observers->size(); i++) {
 			observers->at(i)->update(*props.get());
 		}
+		props->setYOff(0);
+		props->setXOff(0);
 	}
 	unique_ptr<MouseProps> props;
 

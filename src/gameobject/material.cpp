@@ -75,3 +75,6 @@ void Material::updateFrame(cv::Mat mat) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Material::bind() {
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+}

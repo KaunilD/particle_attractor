@@ -13,7 +13,7 @@ public:
     Material(const std::string& texturePath);
 	Material(int, int);
 	void updateFrame(cv::Mat);
-
+	void bind();
 	~Material() {
 		LOG("Material::Destroyed")
 	};

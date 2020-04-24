@@ -2,7 +2,6 @@
 #include "camera.hpp"
 #include "shaderprogram.hpp"
 #include "renderer/particlerenderer.hpp"
-#include "renderer/sunrenderer.hpp"
 #include "gameobject/gameobject.hpp"
 #include "gameobject/sunobject.hpp"
 #include "gameobject/particleobject.hpp"
@@ -14,7 +13,7 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 1080, width = 1920;
+	int height = 360, width = 640;
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
 	cv::Mat lastFrame, currentFrame;
@@ -67,17 +66,17 @@ int main(int argc, char* argv[])
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
 		"glsl\\object_vs_instanced.glsl",
-		"glsl\\object_fs.glsl"
+		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
 	);
 
 	/*
 		Initialiize Camera
 	*/
 	shared_ptr<Camera> camera(new Camera(
-		glm::vec3(0.0f, 0.0f, 1.0f),
+		glm::vec3(0.0f, 0.0f, 3.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		45, height, width, 0.01f, 100.f
+		45, height, width, 0.1f, 100.f
 	));
 	camera->setSpeed(0.05);
 	/*
@@ -89,7 +88,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("resources\\lemon_high.mp4")) {
+	if (!cap.open("resources\\lemon_low.mp4")) {
 		return 0;
 	}
 
@@ -102,10 +101,11 @@ int main(int argc, char* argv[])
 		frameCount++;
 
 		glfwPollEvents();
-		if (currentTime - lastTime >= 1/30.0f) {
-			mouseEvent->dispatchEvents();
-			windowEvent->dispatchEvents();
+		mouseEvent->dispatchEvents();
+		windowEvent->dispatchEvents();
 
+		if (currentTime - lastTime >= 1/30.0f) {
+			
 			window.clearCanvas();
 
 			lastFrame = std::move(currentFrame);
@@ -124,20 +124,30 @@ int main(int argc, char* argv[])
 
 			launch_fill(optFlow.d_uv, 0.0, height * width);
 
+			launch_blur(optFlow.d_f1ptr,
+				optFlow.d_f1ptrBlur,
+				height, width
+			);
+
+			launch_blur(optFlow.d_f2ptr,
+				optFlow.d_f2ptrBlur,
+				height, width
+			);
+
 			launch_partials(
-				optFlow.d_f1ptr,
+				optFlow.d_f1ptrBlur,
 				optFlow.d_f1dx, optFlow.d_f1dy,
 				height, width
 			);
 
 			launch_partials(
-				optFlow.d_f2ptr,
+				optFlow.d_f2ptrBlur,
 				optFlow.d_f2dx, optFlow.d_f2dy,
 				height, width
 			);
 
 			launch_sub(
-				optFlow.d_f1ptr, optFlow.d_f2ptr,
+				optFlow.d_f1ptrBlur, optFlow.d_f2ptrBlur,
 				optFlow.d_dt,
 				height, width
 			);
@@ -154,7 +164,7 @@ int main(int argc, char* argv[])
 			particleRenderer->render(
 				particleShader,
 				scene,
-				m_currentMaterial->m_texture, optFlow,
+				m_currentMaterial, optFlow,
 				camera
 			);
 

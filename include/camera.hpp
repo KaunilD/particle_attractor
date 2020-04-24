@@ -13,6 +13,10 @@ public:
 
 	double m_speed;
 
+
+	bool m_firstMouse = true;
+	float xoffset, yoffset, lastX, lastY, m_yaw = 0.0, m_pitch = 89.0f;
+
 	glm::mat4x4 m_projectionMatrix, m_viewMatrix;
 	glm::vec3 m_posVector, m_upVector, m_frontVector, m_worldUpVector, m_rightVector;
 
@@ -33,8 +37,6 @@ public:
 
 	glm::mat4x4 getProjectionMatrix() const;
 	glm::mat4x4 getViewMatrix() const;
-
-	void update(float, float, float);
 
 	virtual void update(MouseProps props);
 	virtual void update(WindowProps props);

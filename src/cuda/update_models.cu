@@ -10,7 +10,7 @@ __global__ void kernel_update_models(float4* d_positions, float4* d_modelBuffer,
 	d_modelBuffer[col*4+3] = make_float4(
 		d_positions[col].x,
 		d_positions[col].y,
-		0,
+		d_positions[col].z,
 		1
 	);
 	__syncthreads();

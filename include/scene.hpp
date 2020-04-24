@@ -53,6 +53,7 @@ public:
 
 				glm::mat4 mat(1.0f);
 				mat = glm::translate(mat, glm::vec3(h_positions[count].x, h_positions[count].y, h_positions[count].z));
+				mat = glm::scale(mat, glm::vec3(0.005f));
 				h_models.push_back(mat);
 
 				count++;

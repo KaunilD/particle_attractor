@@ -16,6 +16,7 @@ public:
 	int frame_count = 0;
 	std::string m_title;
 
+
 	GLFWwindow* window;
 	shared_ptr<MouseEvent> mouseEvent;
 	shared_ptr<WindowEvent> windowEvent;

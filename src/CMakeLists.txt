@@ -52,8 +52,6 @@ set(SRCS
 	"objreader.cpp"
 	"algorithms.cpp"
 
-	"renderer/renderer.cpp"
-	"renderer/sunrenderer.cpp"
 	"renderer/particlerenderer.cpp"
 
 	"gameobject/gameobject.cpp"
@@ -84,7 +82,6 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/scene.hpp
 
 	${PROJECT_SOURCE_DIR}/include/renderer/renderer.hpp
-	${PROJECT_SOURCE_DIR}/include/renderer/sunrenderer.hpp
 	${PROJECT_SOURCE_DIR}/include/renderer/particlerenderer.hpp
 
 	${PROJECT_SOURCE_DIR}/include/window.hpp

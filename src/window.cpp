@@ -40,6 +40,10 @@ void Window::attachEventHandler(shared_ptr<MouseEvent> t_mouseEvent) {
 		this->window, [](GLFWwindow* t_window, double x, double y) {
 			Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(t_window));
 			if (window) {
+
+				/*
+					prevent jumps when clicked
+				*/
 				window->mouseEvent->props->setXPos(x);
 				window->mouseEvent->props->setYPos(y);
 			}

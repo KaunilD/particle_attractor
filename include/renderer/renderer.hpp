@@ -14,25 +14,9 @@ public:
 
 	virtual void render(
 		shared_ptr<ShaderProgram> shaderProgram,
-		shared_ptr<GameObject> gameObject,
-		shared_ptr<Camera> camera
-	) = 0;
-
-	virtual void render(
-		shared_ptr<ShaderProgram> shaderProgram,
-		shared_ptr<std::vector<shared_ptr<GameObject>>> gameObject,
-		shared_ptr<Camera> camera
-	) = 0;
-
-	virtual void render(
-		shared_ptr<ShaderProgram> shaderProgram,
-		shared_ptr<Scene> scene,
-		shared_ptr<Camera> camera
-	) = 0;
-
-	virtual void render(
-		shared_ptr<ShaderProgram> shaderProgram,
-		shared_ptr<Scene> scene, GLuint material, const OpticalFlow& optflow,
+		shared_ptr<Scene> scene, 
+		shared_ptr<Material> material, 
+		const OpticalFlow& optflow,
 		shared_ptr<Camera> camera) = 0;
 
 };
