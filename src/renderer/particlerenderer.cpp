@@ -25,7 +25,7 @@ void ParticleRenderer::render(
 
 
 	material->bind();
-	scene->update(optflow.d_uv);
+	scene->update(optflow.d_uv3);
 
 	shaderProgram->deactivate();
 };

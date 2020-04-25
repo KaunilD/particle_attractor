@@ -35,29 +35,26 @@ public:
 	void init() {
 		float W = 1, aspect = m_height / (float)m_width, H = 1;
 
-		float dx = W / (float)m_width;
-		float dy = H / (float)m_height;
+		float dx = W / ((float)m_width);
+		float dy = H / ((float)m_height);
 
-		int count = 0;
+		int count = 0, row=0, col=0;
+
 		//std::cout << H << " " << W << " " << aspect << " " << dx << " " << dy << "\n";
-		for (float i = 0; i < H - dy; i = i + dy) {
-			for (float j = 0; j < W - dx; j = j + dx) {
-				h_positions[count] = make_float4(j - W / 2.0f, i - H / 2.0f, 0.0, 1.0f);
-				h_velocities[count] = make_float4(
-					Algorithms::randomInt(10) / 100.0f + 0.01,
-					Algorithms::randomInt(10) / 100.0f + 0.01,
-					Algorithms::randomInt(10) / 100.0f + 0.01,
-					1.0f
-				);
-				h_masses[count] = Algorithms::randomInt(10) / 100.0f + 0.01;
-
+		for (float i = 0; i < H-dy; i = i + dy) {
+			row += 1;
+			for (float j = 0; j < W-dx; j = j + dx) {
+				col += 1;
+				h_positions[count] = make_float4(j - 0.50f, i - 0.50f, 0.0, 0.0f);
+				
 				glm::mat4 mat(1.0f);
 				mat = glm::translate(mat, glm::vec3(h_positions[count].x, h_positions[count].y, h_positions[count].z));
-				mat = glm::scale(mat, glm::vec3(0.005f));
+				mat = glm::scale(mat, glm::vec3(dx, dy, 0.5f));
 				h_models.push_back(mat);
-
 				count++;
 			}
+		//	std::cout << row << " " << col << "\n";
+
 		}
 
 		CUDACHECK(cudaMemcpy(d_positions, h_positions, m_numparticles * sizeof(float4), cudaMemcpyHostToDevice));

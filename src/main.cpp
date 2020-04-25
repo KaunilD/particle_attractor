@@ -13,7 +13,7 @@
 int main(int argc, char* argv[])
 {
 
-	int height = 360, width = 640;
+	int height = 1080, width = 1920;
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
 	cv::Mat lastFrame, currentFrame;
@@ -73,10 +73,10 @@ int main(int argc, char* argv[])
 		Initialiize Camera
 	*/
 	shared_ptr<Camera> camera(new Camera(
-		glm::vec3(0.0f, 0.0f, 3.0f),
+		glm::vec3(0.0f, 0.0f, 2.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		45, height, width, 0.1f, 100.f
+		45.0f, height, width, 0.1f, 100.f
 	));
 	camera->setSpeed(0.05);
 	/*
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("resources\\lemon_low.mp4")) {
+	if (!cap.open("resources\\candle_high.mp4")) {
 		return 0;
 	}
 
@@ -96,58 +96,78 @@ int main(int argc, char* argv[])
 
 	cap >> currentFrame;
 
-	while (!glfwWindowShouldClose(window.window)){
-		double currentTime = glfwGetTime();
+	while (!glfwWindowShouldClose(window.window)) {
 		frameCount++;
 
 		glfwPollEvents();
 		mouseEvent->dispatchEvents();
 		windowEvent->dispatchEvents();
 
-		if (currentTime - lastTime >= 1/30.0f) {
-			
-			window.clearCanvas();
 
-			lastFrame = std::move(currentFrame);
-			cap >> currentFrame;
+		window.clearCanvas();
+		lastFrame = std::move(currentFrame);
+		cap >> currentFrame;
 
-			if (lastFrame.empty() || currentFrame.empty()) {
-				cap.set(cv::CAP_PROP_POS_FRAMES, 0);
-				continue;
-			}
+		if (lastFrame.empty() || currentFrame.empty()) {
+			cap.set(cv::CAP_PROP_POS_FRAMES, 0);
+			continue;
+		}
 
-			//cv::flip(lastFrame, lastFrame, 0);
-			//cv::flip(currentFrame, currentFrame, 0);
+		m_currentMaterial->updateFrame(lastFrame);
+
+
+		if (frameCount >= 300) {
 
 			optFlow.copy(lastFrame, currentFrame);
-			m_currentMaterial->updateFrame(lastFrame);
 
-			launch_fill(optFlow.d_uv, 0.0, height * width);
+			//launch_fill(optFlow.d_uv1, 0.0, height * width);
+			launch_convert(
+				optFlow.d_f1ptr,
+				optFlow.d_f1ptrf32,
+				height * width
+			);
 
-			launch_blur(optFlow.d_f1ptr,
+			launch_convert(
+				optFlow.d_f2ptr,
+				optFlow.d_f2ptrf32,
+				height * width
+			); 
+			launch_gray(
+				optFlow.d_f1ptrf32,
+				optFlow.d_f1ptrf32gray,
+				height * width
+			);
+
+			launch_gray(
+				optFlow.d_f2ptrf32,
+				optFlow.d_f2ptrf32gray,
+				height * width
+			);
+			/*
+			launch_blur(optFlow.d_f1ptrf32,
 				optFlow.d_f1ptrBlur,
 				height, width
 			);
 
-			launch_blur(optFlow.d_f2ptr,
+			launch_blur(optFlow.d_f2ptrf32,
 				optFlow.d_f2ptrBlur,
 				height, width
 			);
-
+			*/
 			launch_partials(
-				optFlow.d_f1ptrBlur,
+				optFlow.d_f1ptrf32gray,
 				optFlow.d_f1dx, optFlow.d_f1dy,
 				height, width
 			);
 
 			launch_partials(
-				optFlow.d_f2ptrBlur,
+				optFlow.d_f2ptrf32gray,
 				optFlow.d_f2dx, optFlow.d_f2dy,
 				height, width
 			);
 
 			launch_sub(
-				optFlow.d_f1ptrBlur, optFlow.d_f2ptrBlur,
+				optFlow.d_f1ptrf32gray, optFlow.d_f2ptrf32gray,
 				optFlow.d_dt,
 				height, width
 			);
@@ -156,22 +176,25 @@ int main(int argc, char* argv[])
 
 				launch_optflow(
 					optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
-					optFlow.d_uv,
+					optFlow.d_uv1, optFlow.d_uv2,
 					height, width
 				);
 			}
 
-			particleRenderer->render(
-				particleShader,
-				scene,
-				m_currentMaterial, optFlow,
-				camera
-			);
-
-			window.update();
 			frameCount = 0;
-			lastTime += 1/30.0f;
 		}
+
+		launch_convection(optFlow.d_uv2, optFlow.d_uv3, height, width);
+
+		particleRenderer->render(
+			particleShader,
+			scene,
+			m_currentMaterial, optFlow,
+			camera
+		);
+
+		window.update();
+		frameCount++;
 	}
 
 	window.destroy();

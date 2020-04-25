@@ -38,15 +38,14 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 
 	m_projectionMatrix = glm::perspective(
 		glm::radians(m_fov),
-		m_frameBufferWidth / (float)m_frameBufferHeight,
-		m_near, m_far
+		1.0f,m_near, m_far
 	);
 }
 
 void Camera::resetProjectionMatrix() {
 	m_projectionMatrix = glm::perspective(
 		glm::radians(m_fov),
-		m_frameBufferWidth / (float)m_frameBufferHeight,
+		(float)m_frameBufferWidth / (float)m_frameBufferHeight,
 		m_near, m_far
 	);
 }
@@ -98,7 +97,7 @@ void Camera::update(MouseProps props) {
 
 	m_frontVector = glm::normalize(direction);
 	
-	std::cout << m_frontVector.r << " " << m_frontVector.g << " " << m_frontVector.b << std::endl;
+	//std::cout << m_frontVector.r << " " << m_frontVector.g << " " << m_frontVector.b << std::endl;
 	//updateViewMatrix();
 };
 

@@ -22,7 +22,9 @@ public:
 		time intervals.
 	*/
 	uchar3* d_f1ptr, * d_f2ptr;
-	uchar3* d_f1ptrBlur, * d_f2ptrBlur;
+	float4* d_f1ptrf32, * d_f2ptrf32;
+	float* d_f1ptrf32gray, * d_f2ptrf32gray;
+	float4* d_f1ptrBlur, * d_f2ptrBlur;
 	/*
 		
 	*/
@@ -30,7 +32,7 @@ public:
 	float* d_f2dx, * d_f2dy;
 	float* d_dt;
 
-	float4* d_uv;
+	float4* d_uv1, *d_uv2, *d_uv3;
 
 	OpticalFlow() = default;
 	OpticalFlow(int H, int W) : m_H(H), m_W(W), m_numpixels(H* W) {
@@ -39,8 +41,14 @@ public:
 		CUDACHECK(cudaMalloc(&d_f1ptr, m_numpixels * sizeof(uchar3)));
 		CUDACHECK(cudaMalloc(&d_f2ptr, m_numpixels * sizeof(uchar3)));
 
-		CUDACHECK(cudaMalloc(&d_f1ptrBlur, m_numpixels * sizeof(uchar3)));
-		CUDACHECK(cudaMalloc(&d_f2ptrBlur, m_numpixels * sizeof(uchar3)));
+		CUDACHECK(cudaMalloc(&d_f1ptrf32, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_f2ptrf32, m_numpixels * sizeof(float4)));
+
+		CUDACHECK(cudaMalloc(&d_f1ptrf32gray, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f2ptrf32gray, m_numpixels * sizeof(float)));
+
+		CUDACHECK(cudaMalloc(&d_f1ptrBlur, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_f2ptrBlur, m_numpixels * sizeof(float4)));
 
 		CUDACHECK(cudaMalloc(&d_f1dx, m_numpixels * sizeof(float)));
 		CUDACHECK(cudaMalloc(&d_f1dy, m_numpixels * sizeof(float)));
@@ -48,7 +56,9 @@ public:
 		CUDACHECK(cudaMalloc(&d_f2dx, m_numpixels * sizeof(float)));
 		CUDACHECK(cudaMalloc(&d_f2dy, m_numpixels * sizeof(float)));
 
-		CUDACHECK(cudaMalloc(&d_uv, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_uv1, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_uv2, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_uv3, m_numpixels * sizeof(float4)));
 
 		CUDACHECK(cudaMalloc(&d_dt, m_numpixels * sizeof(float)));
 	}
@@ -62,6 +72,12 @@ public:
 		cudaFree(d_f1ptr);
 		cudaFree(d_f2ptr);
 
+		cudaFree(d_f1ptrf32);
+		cudaFree(d_f2ptrf32);
+
+		cudaFree(d_f1ptrf32gray);
+		cudaFree(d_f2ptrf32gray);
+
 		cudaFree(d_f1ptrBlur);
 		cudaFree(d_f2ptrBlur);
 
@@ -71,7 +87,9 @@ public:
 		cudaFree(d_f2dx);
 		cudaFree(d_f2dy);
 
-		cudaFree(d_uv);
+		cudaFree(d_uv1);
+		cudaFree(d_uv2);
+		cudaFree(d_uv3);
 
 		cudaFree(d_dt);
 	
@@ -95,19 +113,31 @@ public:
  @output	= float*
 */
 void launch_partials(
-	uchar3* d_I, 
+	float* d_I, 
 	float* d_dx, float* d_dy, 
 	int H, int W
 );
 
+void launch_convert(
+	uchar3* d_Iin,
+	float4* d_Iout,
+	int numel
+);
+
+void launch_gray(
+	float4* d_Iin,
+	float* d_Iout,
+	int numel
+);
+
 void launch_blur(
-	uchar3* d_I,
-	uchar3* d_Ib,
+	float4* d_I,
+	float4* d_Ib,
 	int H, int W
 );
 
 void launch_sub(
-	uchar3* d_f1ptr, uchar3* d_f2ptr, 
+	float* d_f1ptr, float* d_f2ptr, 
 	float* d_dt, 
 	int H, int W
 );
@@ -116,20 +146,13 @@ void launch_fill(
 	float val, 
 	int numel
 );
-void launch_add(
-	float1* a, float1* b, 
-	float1* c, 
-	int H, int W
-);
-void launch_prod(
-	float1* a, float1* b, 
-	float1* c, 
-	int H, int W
-);
+
 void launch_optflow(
 	float* d_dx1, float* d_dy1, float* d_dx2, float* d_dy2, float* d_dt, 
-	float4* uv, 
+	float4* uv1, float4* d_uv2, 
 	int H, int W
 
 );
+
+void launch_convection(float4* d_uv1, float4* d_uv2, int H, int W);
 #endif OPTFLOW_H
