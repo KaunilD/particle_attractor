@@ -48,3 +48,6 @@ make -j4
 - [x] Compute Shader for ~LK~ HS based velocity vector computation.
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
 - [ ] Navier Stokes based CFD Physics.
+  - [x] 2D convection
+  - [ ] 2D Diffusion
+  - [ ] Burgers' equation
