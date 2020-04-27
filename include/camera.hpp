@@ -15,7 +15,7 @@ public:
 
 
 	bool m_firstMouse = true;
-	float xoffset, yoffset, lastX, lastY, m_yaw = -89.0, m_pitch = 0.0;
+	float xoffset, yoffset, lastX, lastY, m_yaw = -90.0, m_pitch = 0.0;
 
 	glm::mat4x4 m_projectionMatrix, m_viewMatrix;
 	glm::vec3 m_posVector, m_upVector, m_frontVector, m_worldUpVector, m_rightVector;

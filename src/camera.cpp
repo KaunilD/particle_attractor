@@ -67,7 +67,7 @@ void Camera::update(MouseProps props) {
 		m_fov = 45.0f;
 	
 	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
-
+	
 	if (m_firstMouse)
 	{
 		lastX = props.xpos;
@@ -98,7 +98,7 @@ void Camera::update(MouseProps props) {
 	m_frontVector = glm::normalize(direction);
 	
 	//std::cout << m_frontVector.r << " " << m_frontVector.g << " " << m_frontVector.b << std::endl;
-	//updateViewMatrix();
+	updateViewMatrix();
 };
 
 void Camera::update(WindowProps props) {

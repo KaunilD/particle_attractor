@@ -16,12 +16,12 @@ __global__ void kernel_update(
 
 	float4 velocity = d_velocities[col];
 
-	//printf(" %d %d %d\n", velocity.x, velocity.y, velocity.z);
 	float mag = sqrtf(velocity.x*velocity.x + velocity.y*velocity.y);
+	float pos = min(mag, 0.50f);
 	d_positions[col] = make_float4(
 		d_og_positions[col].x,
 		d_og_positions[col].y,
-		max(min(mag, 0.1f), -1.0f), 0
+		pos, 0
 	);
 	__syncthreads();
 }

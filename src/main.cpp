@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 		m_currentMaterial->updateFrame(lastFrame);
 
 
-		if (frameCount >= 300) {
+		if (frameCount < 3) {
 
 			optFlow.copy(lastFrame, currentFrame);
 
@@ -143,17 +143,7 @@ int main(int argc, char* argv[])
 				optFlow.d_f2ptrf32gray,
 				height * width
 			);
-			/*
-			launch_blur(optFlow.d_f1ptrf32,
-				optFlow.d_f1ptrBlur,
-				height, width
-			);
 
-			launch_blur(optFlow.d_f2ptrf32,
-				optFlow.d_f2ptrBlur,
-				height, width
-			);
-			*/
 			launch_partials(
 				optFlow.d_f1ptrf32gray,
 				optFlow.d_f1dx, optFlow.d_f1dy,
