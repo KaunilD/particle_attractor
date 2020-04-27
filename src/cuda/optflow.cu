@@ -5,7 +5,7 @@
 
 #define KERN_RADIUS 5
 
-__constant__ float gaussian_kernel[KERN_RADIUS*KERN_RADIUS];
+__constant__ float gaussian_kernel[KERN_RADIUS * KERN_RADIUS];
 __constant__ float hs_kernel[9];
 
 __device__ size_t GIDX(size_t row, size_t col, int H, int W) {
@@ -117,12 +117,12 @@ __global__ void kernel_sub(float* d_f1ptr, float* d_f2ptr, float* d_dt, int H, i
 	size_t col = threadIdx.x + blockDim.x * blockIdx.x;
 	size_t idx = GIDX(row, col, H, W);
 
-	if (row >= H || col >= W ) {
+	if (row >= H || col >= W) {
 		return;
 	}
 
 	d_dt[idx] = d_f2ptr[idx] - d_f1ptr[idx];
-	
+
 }
 
 
@@ -222,7 +222,7 @@ __global__ void kernel_blur(float4* d_I, float4* d_Ib, int H, int W) {
 		return;
 	}
 
-	
+
 	d_Ib[idx] = make_float4(0.0f, 0.0f, 0.0f, 0.0f);
 	int count = 0;
 	for (int i = -KERN_RADIUS; i <= KERN_RADIUS; i++) {
@@ -255,9 +255,9 @@ void launch_blur(float4* d_I, float4* d_Ib, int H, int W) {
 	float f = 36 / 256.0;
 
 	const float k[25] = {
-		a, b, c, b, a, 
+		a, b, c, b, a,
 		b, d, e, d, b,
-		c, e, f, e, c, 
+		c, e, f, e, c,
 		b, d, e, d, b,
 		a, b, c, b, a
 	};
@@ -282,15 +282,18 @@ __global__ void kernel_convection(float4* d_uv1, float4* d_uv2, int H, int W) {
 		return;
 	}
 
-	d_uv2[idx].x = d_uv1[idx].x - (
-		(d_uv1[idx].x * (1/30.0f) * (1) * (d_uv1[idx].x - d_uv1[GIDX(row, col - 1, H, W)].x)) -
-		(d_uv1[idx].y * (1/30.0f) * (1) * (d_uv1[idx].x - d_uv1[GIDX(row - 1, col, H, W)].x))
-	);
+	d_uv2[idx].x = d_uv1[idx].x -
+		(1 / 30.0f * (d_uv1[idx].x * (d_uv1[idx].x - d_uv1[GIDX(row - 1, col, H, W)].x))) -
+		(1 / 30.0f * (d_uv1[idx].y * (d_uv1[idx].x - d_uv1[GIDX(row, col - 1, H, W)].x))) +
+		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row + 1, col, H, W)].x - 2 * d_uv1[idx].x + d_uv1[GIDX(row - 1, col, H, W)].x)) +
+		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row, col + 1, H, W)].x - 2 * d_uv1[idx].x + d_uv1[GIDX(row, col - 1, H, W)].x));
 
-	d_uv2[idx].y = d_uv1[idx].y - (
-		(d_uv1[idx].x * (1/30.0f) * (1) * (d_uv1[idx].y - d_uv1[GIDX(row, col - 1, H, W)].y)) -
-		(d_uv1[idx].y * (1/30.0f) * (1) * (d_uv1[idx].y - d_uv1[GIDX(row - 1, col, H, W)].y))
-	);
+	d_uv2[idx].y = d_uv1[idx].y -
+		(1 / 30.0f * (d_uv1[idx].x * (d_uv1[idx].y - d_uv1[GIDX(row - 1, col, H, W)].y))) -
+		(1 / 30.0f * (d_uv1[idx].y * (d_uv1[idx].y - d_uv1[GIDX(row, col - 1, H, W)].y))) +
+		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row + 1, col, H, W)].y - 2 * d_uv1[idx].y + d_uv1[GIDX(row - 1, col, H, W)].y)) +
+		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row, col + 1, H, W)].y - 2 * d_uv1[idx].y + d_uv1[GIDX(row, col - 1, H, W)].y));
+
 
 
 	d_uv1[idx].x = d_uv2[idx].x;
