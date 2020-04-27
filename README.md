@@ -1,6 +1,6 @@
 # Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
-![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/screen.png)
+![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/optflow_cfd.png)
 
 #### Theory
 [Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
