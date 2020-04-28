@@ -15,7 +15,7 @@ void ParticleRenderer::render(
 	shaderProgram->setVec3("light.position", glm::vec3(1, 1, 1));
 	shaderProgram->setVec3("light.ambient", glm::vec3(0.2f));
 	shaderProgram->setVec3("light.diffuse", glm::vec3(0.5f));
-	shaderProgram->setVec3("light.specular", glm::vec3(1.00f));
+	shaderProgram->setVec3("light.specular", glm::vec3(0.50f));
 
 	/* material */
 	shaderProgram->setFloat("material.shininess", 0.088);

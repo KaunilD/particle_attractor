@@ -12,7 +12,6 @@ __device__ size_t GIDX(size_t row, size_t col, int H, int W) {
 	return row * W + col;
 }
 
-
 void setGaussian(float const* elements, const int count) {
 	if (count != 25) {
 		std::cerr << "Only 5x5 gaussian kernel supported!" << std::endl;
@@ -143,24 +142,50 @@ void launch_sub(float* d_f1ptr, float* d_f2ptr, float* d_dt, int H, int W) {
 
 __global__ void kernel_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* d_dy2, float* d_dt, float4* uv, float4* uv1, int H, int W) {
 
-	size_t row = threadIdx.y + blockDim.y * blockIdx.y;
-	size_t col = threadIdx.x + blockDim.x * blockIdx.x;
-	size_t idx = GIDX(row, col, H, W);
+	const size_t row = threadIdx.y + blockDim.y * blockIdx.y;
+	const size_t col = threadIdx.x + blockDim.x * blockIdx.x;
+	const size_t idx = GIDX(row, col, H, W);
+
+	const size_t s_tidx = threadIdx.y + 1; // 1 padding for HS Kernel
+	const size_t s_tidy = threadIdx.y + 1; // 1 padding for HS Kernel
+
+	extern __shared__ float4 s_img[];
+
 
 	if (row >= H || row <= 1 || col >= W || col <= 1) {
 		return;
 	}
 
+	s_img[GIDX(s_tidy, s_tidx, 34, 34)] = uv[idx];
+
+	if (threadIdx.x == 0) {
+		s_img[GIDX(s_tidy, s_tidx - 1, 34, 34)] = uv[GIDX(row, col - 1, H, W)];
+	}
+
+	if (threadIdx.x == blockDim.x - 1) {
+		s_img[GIDX(s_tidy, s_tidx + 1, 34, 34)] = uv[GIDX(row, col + 1, H, W)];
+	}
+
+	if (threadIdx.y == 0) {
+		s_img[GIDX(s_tidy - 1, s_tidx, 34, 34)] = uv[GIDX(row - 1, col - 1, H, W)];
+	}
+
+	if (threadIdx.x == blockDim.y - 1) {
+		s_img[GIDX(s_tidy+1, s_tidx, 34, 34)] = uv[GIDX(row + 1, col + 1, H, W)];
+	}
+
+	__syncthreads();
+
 	float grad_x = (d_dx1[idx] + d_dx2[idx]) / 2.0f;
 	float grad_y = (d_dy1[idx] + d_dy2[idx]) / 2.0f;
 
 
-	float u_avg = uv[idx].x, v_avg = uv[idx].y, num = 0, denom = 0.01 + grad_x * grad_x + grad_y * grad_y;
+	float u_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].x, v_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].y, num = 0, denom = 0.01 + grad_x * grad_x + grad_y * grad_y;
 	int count = 0;
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j <= 1; j++) {
-			u_avg += uv[GIDX(row + i, col + j, H, W)].x * hs_kernel[count];
-			v_avg += uv[GIDX(row + i, col + j, H, W)].y * hs_kernel[count];
+			u_avg += s_img[GIDX(s_tidy + i, s_tidx + j, 34, 34)].x * hs_kernel[count];
+			v_avg += s_img[GIDX(s_tidy + i, s_tidx + j, 34, 34)].y * hs_kernel[count];
 			count++;
 		}
 	}
@@ -180,12 +205,13 @@ void launch_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* d_dy2, floa
 		static_cast<unsigned int>(ceil(W / blockSize.x)),
 		static_cast<unsigned int>(ceil(H / blockSize.y))
 	};
+	size_t sharedMem = sizeof(float4) * (blockSize.y + 2) * (blockSize.x + 2);
 
 	const float k[9] = { 0.084, 0.167, 0.084, 0.167, -1, 0.167, 0.084, 0.167, 0.084 };
 
 	setHS(k, 9);
 
-	kernel_optflow << <gridSize, blockSize >> > (
+	kernel_optflow << <gridSize, blockSize, sharedMem >> > (
 		d_dx1, d_dy1, d_dx2, d_dy2, d_dt, uv, uv1, H, W
 		);
 
@@ -196,7 +222,10 @@ __global__ void kernel_fill(float4* d_dx1, float val, int numel) {
 	size_t col = threadIdx.x + blockIdx.x * blockDim.x;
 	if (col >= numel) { return; }
 
-	d_dx1[col] = make_float4(val, val, val, val);
+	d_dx1[col].x /= val;
+	d_dx1[col].y /= val;
+	d_dx1[col].z /= val;
+	d_dx1[col].w /= val;
 }
 
 void launch_fill(float4* d_dx1, float val, int numel) {
@@ -212,7 +241,7 @@ void launch_fill(float4* d_dx1, float val, int numel) {
 };
 
 
-__global__ void kernel_blur(float4* d_I, float4* d_Ib, int H, int W) {
+__global__ void kernel_blur(float* d_I, float* d_Ib, int H, int W) {
 
 	size_t row = threadIdx.y + blockDim.y * blockIdx.y;
 	size_t col = threadIdx.x + blockDim.x * blockIdx.x;
@@ -223,13 +252,10 @@ __global__ void kernel_blur(float4* d_I, float4* d_Ib, int H, int W) {
 	}
 
 
-	d_Ib[idx] = make_float4(0.0f, 0.0f, 0.0f, 0.0f);
 	int count = 0;
 	for (int i = -KERN_RADIUS; i <= KERN_RADIUS; i++) {
 		for (int j = -KERN_RADIUS; j <= KERN_RADIUS; j++) {
-			d_Ib[idx].x += d_I[GIDX(row + i, col + j, H, W)].x * gaussian_kernel[count];
-			d_Ib[idx].y += d_I[GIDX(row + i, col + j, H, W)].y * gaussian_kernel[count];
-			d_Ib[idx].z += d_I[GIDX(row + i, col + j, H, W)].z * gaussian_kernel[count];
+			d_Ib[idx] += d_I[GIDX(row + i, col + j, H, W)] * gaussian_kernel[count];
 			count++;
 		}
 	}
@@ -239,7 +265,7 @@ __global__ void kernel_blur(float4* d_I, float4* d_Ib, int H, int W) {
 
 
 
-void launch_blur(float4* d_I, float4* d_Ib, int H, int W) {
+void launch_blur(float* d_I, float* d_Ib, int H, int W) {
 
 	dim3 blockSize = { 32, 32 };
 	dim3 gridSize = {
@@ -283,10 +309,10 @@ __global__ void kernel_convection(float4* d_uv1, float4* d_uv2, float* d_p, int 
 		return;
 	}
 
-	float dt = 1 / 30.0f;
+	float dt = 0.0001;
 	float nu = 0.1;
 	float dx = 1, dy = 1, dx2 = dx*dx, dy2 = dy*dy;
-	float rho = 1;
+	float rho = 1.2;
 	
 	float4 d_uv1r1 = d_uv1[GIDX(row - 1, col, H, W)], d_uv1r2 = d_uv1[GIDX(row + 1, col, H, W)];
 	float4 d_uv1c1 = d_uv1[GIDX(row, col - 1, H, W)], d_uv1c2 = d_uv1[GIDX(row, col + 1, H, W)];
@@ -295,7 +321,17 @@ __global__ void kernel_convection(float4* d_uv1, float4* d_uv2, float* d_p, int 
 	float d_pr1 = d_p[GIDX(row - 1, col, H, W)], d_pr2 = d_p[GIDX(row + 1, col, H, W)];
 	float d_pc1 = d_p[GIDX(row, col - 1, H, W)], d_pc2 = d_p[GIDX(row, col + 1, H, W)];
 	float d_p_idx = d_p[idx];
-	
+	float a = (d_pr2 + d_pr1) * dy2;
+	float b = (d_pc2 + d_pc1) * dx2;
+	float c = 2 * (dx2 + dy2);
+	float d = rho * dx2 * dy2;
+
+	d_p[idx] = ((a + b) / c) - (d / c) *
+		(1 / dt * ((d_uv1r2.x - d_uv1r1.x) / (2 * dx) + (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
+			((d_uv1r2.x - d_uv1r1.x) / (2 * dx)) * ((d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
+			(2 * (d_uv1c2.x - d_uv1c1.x) / (2 * dy)) * (2 * (d_uv1r2.y - d_uv1r1.y) / (2 * dx)) -
+			(2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) * (2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dx)));
+
 
 	d_uv2[idx].x = d_uv1_idx.x -
 		d_uv1_idx.x * dt * (d_uv1_idx.x - d_uv1r1.x) -
@@ -311,17 +347,7 @@ __global__ void kernel_convection(float4* d_uv1, float4* d_uv2, float* d_p, int 
 			dt * (d_uv1c2.y - 2 * d_uv1_idx.y + d_uv1c1.y));
 
 
-	float a = (d_pr2+ d_pr1) * dy2;
-	float b = (d_pc2 + d_pc1) * dx2;
-	float c = 2 * (dx2 + dy2);
-	float d = rho * dx2 * dy2;
-
-	d_p[idx] = ((a + b) / c) - (d / c) *
-		(1 / dt * ((d_uv1r2.x - d_uv1r1.x) / (2 * dx) + (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
-			((d_uv1r2.x - d_uv1r1.x) / (2 * dx)) * ((d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
-			(2 * (d_uv1c2.x - d_uv1c1.x) / (2 * dy)) * (2 * (d_uv1r2.y - d_uv1r1.y) / (2 * dx)) -
-			(2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) * (2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dx)));
-
+	
 	d_uv1[idx].x = d_uv2[idx].x;
 	d_uv1[idx].y = d_uv2[idx].y;
 

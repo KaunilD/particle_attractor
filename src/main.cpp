@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 
 	shared_ptr<Mesh> m_shpereMesh(new Mesh(
 		Utils::readObj(
-			"resources\\objects\\sphere.obj"
+			"./resources/objects/sphere.obj"
 		)
 	));
 
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
-		"glsl\\object_vs_instanced.glsl",
+		"./glsl/object_vs_instanced.glsl",
 		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
 	);
 
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 
 
 	cv::VideoCapture cap;
-	if (!cap.open("resources\\candle_high.mp4")) {
+	if (!cap.open("./resources/candle_high.mp4")) {
 		return 0;
 	}
 
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 
 		optFlow.copy(lastFrame, currentFrame);
 
-		//launch_fill(optFlow.d_uv1, 0.0, height * width);
+		launch_fill(optFlow.d_uv1, 1.50, height * width);
 		launch_convert(
 			optFlow.d_f1ptr,
 			optFlow.d_f1ptrf32,
@@ -141,7 +141,6 @@ int main(int argc, char* argv[])
 			optFlow.d_f2ptrf32gray,
 			height * width
 		);
-
 
 		launch_partials(
 			optFlow.d_f1ptrf32gray,

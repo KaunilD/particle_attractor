@@ -24,7 +24,7 @@ public:
 	uchar3* d_f1ptr, * d_f2ptr;
 	float4* d_f1ptrf32, * d_f2ptrf32;
 	float* d_f1ptrf32gray, * d_f2ptrf32gray;
-	float4* d_f1ptrBlur, * d_f2ptrBlur;
+	float* d_f1ptrBlur, * d_f2ptrBlur;
 	/*
 		
 	*/
@@ -48,8 +48,8 @@ public:
 		CUDACHECK(cudaMalloc(&d_f1ptrf32gray, m_numpixels * sizeof(float)));
 		CUDACHECK(cudaMalloc(&d_f2ptrf32gray, m_numpixels * sizeof(float)));
 
-		CUDACHECK(cudaMalloc(&d_f1ptrBlur, m_numpixels * sizeof(float4)));
-		CUDACHECK(cudaMalloc(&d_f2ptrBlur, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&d_f1ptrBlur, m_numpixels * sizeof(float)));
+		CUDACHECK(cudaMalloc(&d_f2ptrBlur, m_numpixels * sizeof(float)));
 
 		CUDACHECK(cudaMalloc(&d_f1dx, m_numpixels * sizeof(float)));
 		CUDACHECK(cudaMalloc(&d_f1dy, m_numpixels * sizeof(float)));
@@ -134,8 +134,8 @@ void launch_gray(
 );
 
 void launch_blur(
-	float4* d_I,
-	float4* d_Ib,
+	float* d_I,
+	float* d_Ib,
 	int H, int W
 );
 

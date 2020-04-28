@@ -68,37 +68,6 @@ void Camera::update(MouseProps props) {
 	
 	updateProjectionMatrix(m_frameBufferWidth, m_frameBufferHeight, m_fov);
 	
-	if (m_firstMouse)
-	{
-		lastX = props.xpos;
-		lastY = props.ypos;
-		m_firstMouse = false;
-	}
-	xoffset = props.xpos - lastX;
-	yoffset = lastY - props.ypos;
-	lastX = props.xpos;
-	lastY = props.ypos;
-
-	xoffset *= m_speed;
-	yoffset *= m_speed;
-
-	m_yaw += xoffset;
-	m_pitch += yoffset;
-
-	if (m_pitch > 89.0f)
-		m_pitch = 89.0f;
-	if (m_pitch < -89.0f)
-		m_pitch = -89.0f;
-
-	glm::vec3 direction;
-	direction.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-	direction.y = sin(glm::radians(m_pitch));
-	direction.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-
-	m_frontVector = glm::normalize(direction);
-	
-	//std::cout << m_frontVector.r << " " << m_frontVector.g << " " << m_frontVector.b << std::endl;
-	updateViewMatrix();
 };
 
 void Camera::update(WindowProps props) {
