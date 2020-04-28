@@ -12,7 +12,7 @@ You can find the coolest state of the project [here on Vimeo](https://vimeo.com/
 
 1. [CMake v3.8+](https://cmake.org/download/) [for CUDA support within CMake]
 2. [CUDA v9.0+](https://developer.nvidia.com/cuda-92-download-archive) 
-3. [OpenCV 4.3.0](https://github.com/opencv/opencv/archive/4.3.0.tar.gz)
+3. [OpenCV 4.3.0](https://github.com/opencv/opencv/archive/4.3.0.tar.gz) [for reading images and webcam]
 4. [GLFW](https://github.com/glfw/glfw)
 5. [GLEW](https://github.com/nigels-com/glew/archive/glew-2.1.0.tar.gz) (Only Windows)
 6. [GLM](https://github.com/g-truc/glm/archive/0.9.9.8.tar.gz)
