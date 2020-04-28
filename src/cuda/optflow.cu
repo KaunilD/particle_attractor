@@ -146,11 +146,10 @@ __global__ void kernel_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* 
 	const size_t col = threadIdx.x + blockDim.x * blockIdx.x;
 	const size_t idx = GIDX(row, col, H, W);
 
-	const size_t s_tidx = threadIdx.y + 1; // 1 padding for HS Kernel
+	const size_t s_tidx = threadIdx.x + 1; // 1 padding for HS Kernel
 	const size_t s_tidy = threadIdx.y + 1; // 1 padding for HS Kernel
 
 	extern __shared__ float4 s_img[];
-
 
 	if (row >= H || row <= 1 || col >= W || col <= 1) {
 		return;
@@ -167,11 +166,11 @@ __global__ void kernel_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* 
 	}
 
 	if (threadIdx.y == 0) {
-		s_img[GIDX(s_tidy - 1, s_tidx, 34, 34)] = uv[GIDX(row - 1, col - 1, H, W)];
+		s_img[GIDX(s_tidy - 1, s_tidx, 34, 34)] = uv[GIDX(row - 1, col, H, W)];
 	}
 
-	if (threadIdx.x == blockDim.y - 1) {
-		s_img[GIDX(s_tidy+1, s_tidx, 34, 34)] = uv[GIDX(row + 1, col + 1, H, W)];
+	if (threadIdx.y == blockDim.y - 1) {
+		s_img[GIDX(s_tidy + 1, s_tidx, 34, 34)] = uv[GIDX(row + 1, col, H, W)];
 	}
 
 	__syncthreads();
@@ -180,8 +179,12 @@ __global__ void kernel_optflow(float* d_dx1, float* d_dy1, float* d_dx2, float* 
 	float grad_y = (d_dy1[idx] + d_dy2[idx]) / 2.0f;
 
 
-	float u_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].x, v_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].y, num = 0, denom = 0.01 + grad_x * grad_x + grad_y * grad_y;
+	float u_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].x;
+	float v_avg = s_img[GIDX(s_tidy, s_tidx, 34, 34)].y;
+	float num = 0, denom = 0.01 + grad_x * grad_x + grad_y * grad_y;
+
 	int count = 0;
+	
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j <= 1; j++) {
 			u_avg += s_img[GIDX(s_tidy + i, s_tidx + j, 34, 34)].x * hs_kernel[count];
@@ -222,10 +225,10 @@ __global__ void kernel_fill(float4* d_dx1, float val, int numel) {
 	size_t col = threadIdx.x + blockIdx.x * blockDim.x;
 	if (col >= numel) { return; }
 
-	d_dx1[col].x /= val;
-	d_dx1[col].y /= val;
-	d_dx1[col].z /= val;
-	d_dx1[col].w /= val;
+	d_dx1[col].x = val;
+	d_dx1[col].y = val;
+	d_dx1[col].z = val;
+	d_dx1[col].w = val;
 }
 
 void launch_fill(float4* d_dx1, float val, int numel) {
@@ -251,7 +254,6 @@ __global__ void kernel_blur(float* d_I, float* d_Ib, int H, int W) {
 		return;
 	}
 
-
 	int count = 0;
 	for (int i = -KERN_RADIUS; i <= KERN_RADIUS; i++) {
 		for (int j = -KERN_RADIUS; j <= KERN_RADIUS; j++) {
@@ -261,9 +263,6 @@ __global__ void kernel_blur(float* d_I, float* d_Ib, int H, int W) {
 	}
 
 }
-
-
-
 
 void launch_blur(float* d_I, float* d_Ib, int H, int W) {
 

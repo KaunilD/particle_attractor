@@ -10,6 +10,7 @@
 #include "scene.hpp"
 #include "window.hpp"
 #include "cuda/optflow.hpp"
+
 int main(int argc, char* argv[])
 {
 
@@ -118,7 +119,7 @@ int main(int argc, char* argv[])
 
 		optFlow.copy(lastFrame, currentFrame);
 
-		launch_fill(optFlow.d_uv1, 1.50, height * width);
+		launch_fill(optFlow.d_uv1, 0, height * width);
 		launch_convert(
 			optFlow.d_f1ptr,
 			optFlow.d_f1ptrf32,
