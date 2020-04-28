@@ -37,14 +37,14 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 	m_fov = _fov;
 
 	m_projectionMatrix = glm::perspective(
-		glm::radians(m_fov),
+		glm::radians(-m_fov),
 		1.0f,m_near, m_far
 	);
 }
 
 void Camera::resetProjectionMatrix() {
 	m_projectionMatrix = glm::perspective(
-		glm::radians(m_fov),
+		glm::radians(-m_fov),
 		(float)m_frameBufferWidth / (float)m_frameBufferHeight,
 		m_near, m_far
 	);
