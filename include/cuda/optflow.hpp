@@ -32,7 +32,8 @@ public:
 	float* d_f2dx, * d_f2dy;
 	float* d_dt;
 
-	float4* d_uv1, *d_uv2, *d_uv3;
+	float4* d_uv1, * d_uv2, * d_uv3;
+	float *p;
 
 	OpticalFlow() = default;
 	OpticalFlow(int H, int W) : m_H(H), m_W(W), m_numpixels(H* W) {
@@ -59,6 +60,7 @@ public:
 		CUDACHECK(cudaMalloc(&d_uv1, m_numpixels * sizeof(float4)));
 		CUDACHECK(cudaMalloc(&d_uv2, m_numpixels * sizeof(float4)));
 		CUDACHECK(cudaMalloc(&d_uv3, m_numpixels * sizeof(float4)));
+		CUDACHECK(cudaMalloc(&p, m_numpixels * sizeof(float)));
 
 		CUDACHECK(cudaMalloc(&d_dt, m_numpixels * sizeof(float)));
 	}
@@ -90,6 +92,7 @@ public:
 		cudaFree(d_uv1);
 		cudaFree(d_uv2);
 		cudaFree(d_uv3);
+		cudaFree(p);
 
 		cudaFree(d_dt);
 	
@@ -154,5 +157,5 @@ void launch_optflow(
 
 );
 
-void launch_convection(float4* d_uv1, float4* d_uv2, int H, int W);
+void launch_convection(float4* d_uv1, float4* d_uv2, float* p, int H, int W);
 #endif OPTFLOW_H

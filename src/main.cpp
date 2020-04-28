@@ -116,65 +116,63 @@ int main(int argc, char* argv[])
 		m_currentMaterial->updateFrame(lastFrame);
 
 
-		if (frameCount < 3) {
+		optFlow.copy(lastFrame, currentFrame);
 
-			optFlow.copy(lastFrame, currentFrame);
+		//launch_fill(optFlow.d_uv1, 0.0, height * width);
+		launch_convert(
+			optFlow.d_f1ptr,
+			optFlow.d_f1ptrf32,
+			height * width
+		);
 
-			//launch_fill(optFlow.d_uv1, 0.0, height * width);
-			launch_convert(
-				optFlow.d_f1ptr,
-				optFlow.d_f1ptrf32,
-				height * width
-			);
+		launch_convert(
+			optFlow.d_f2ptr,
+			optFlow.d_f2ptrf32,
+			height * width
+		); 
+		launch_gray(
+			optFlow.d_f1ptrf32,
+			optFlow.d_f1ptrf32gray,
+			height * width
+		);
 
-			launch_convert(
-				optFlow.d_f2ptr,
-				optFlow.d_f2ptrf32,
-				height * width
-			); 
-			launch_gray(
-				optFlow.d_f1ptrf32,
-				optFlow.d_f1ptrf32gray,
-				height * width
-			);
+		launch_gray(
+			optFlow.d_f2ptrf32,
+			optFlow.d_f2ptrf32gray,
+			height * width
+		);
 
-			launch_gray(
-				optFlow.d_f2ptrf32,
-				optFlow.d_f2ptrf32gray,
-				height * width
-			);
 
-			launch_partials(
-				optFlow.d_f1ptrf32gray,
-				optFlow.d_f1dx, optFlow.d_f1dy,
+		launch_partials(
+			optFlow.d_f1ptrf32gray,
+			optFlow.d_f1dx, optFlow.d_f1dy,
+			height, width
+		);
+
+		launch_partials(
+			optFlow.d_f2ptrf32gray,
+			optFlow.d_f2dx, optFlow.d_f2dy,
+			height, width
+		);
+
+		launch_sub(
+			optFlow.d_f1ptrf32gray, optFlow.d_f2ptrf32gray,
+			optFlow.d_dt,
+			height, width
+		);
+
+		for (int i = 0; i < 8; i++) {
+
+			launch_optflow(
+				optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
+				optFlow.d_uv1, optFlow.d_uv2,
 				height, width
 			);
-
-			launch_partials(
-				optFlow.d_f2ptrf32gray,
-				optFlow.d_f2dx, optFlow.d_f2dy,
-				height, width
-			);
-
-			launch_sub(
-				optFlow.d_f1ptrf32gray, optFlow.d_f2ptrf32gray,
-				optFlow.d_dt,
-				height, width
-			);
-
-			for (int i = 0; i < 8; i++) {
-
-				launch_optflow(
-					optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
-					optFlow.d_uv1, optFlow.d_uv2,
-					height, width
-				);
-			}
-
-			frameCount = 0;
 		}
 
-		launch_convection(optFlow.d_uv2, optFlow.d_uv3, height, width);
+		frameCount = 0;
+
+		launch_convection(optFlow.d_uv2, optFlow.d_uv3, optFlow.p, height, width);
 
 		particleRenderer->render(
 			particleShader,

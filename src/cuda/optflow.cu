@@ -272,29 +272,55 @@ void launch_blur(float4* d_I, float4* d_Ib, int H, int W) {
 };
 
 
-__global__ void kernel_convection(float4* d_uv1, float4* d_uv2, int H, int W) {
+__global__ void kernel_convection(float4* d_uv1, float4* d_uv2, float* d_p, int H, int W) {
 
 	size_t row = threadIdx.y + blockDim.y * blockIdx.y;
 	size_t col = threadIdx.x + blockDim.x * blockIdx.x;
 	size_t idx = GIDX(row, col, H, W);
 
-	if (row >= H - KERN_RADIUS || row <= KERN_RADIUS || col >= W - KERN_RADIUS || col <= KERN_RADIUS) {
+
+	if (row >= H - 1 || row <= 1 || col >= W - 1 || col <= 1) {
 		return;
 	}
 
-	d_uv2[idx].x = d_uv1[idx].x -
-		(1 / 30.0f * (d_uv1[idx].x * (d_uv1[idx].x - d_uv1[GIDX(row - 1, col, H, W)].x))) -
-		(1 / 30.0f * (d_uv1[idx].y * (d_uv1[idx].x - d_uv1[GIDX(row, col - 1, H, W)].x))) +
-		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row + 1, col, H, W)].x - 2 * d_uv1[idx].x + d_uv1[GIDX(row - 1, col, H, W)].x)) +
-		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row, col + 1, H, W)].x - 2 * d_uv1[idx].x + d_uv1[GIDX(row, col - 1, H, W)].x));
+	float dt = 1 / 30.0f;
+	float nu = 0.1;
+	float dx = 1, dy = 1, dx2 = dx*dx, dy2 = dy*dy;
+	float rho = 1;
+	
+	float4 d_uv1r1 = d_uv1[GIDX(row - 1, col, H, W)], d_uv1r2 = d_uv1[GIDX(row + 1, col, H, W)];
+	float4 d_uv1c1 = d_uv1[GIDX(row, col - 1, H, W)], d_uv1c2 = d_uv1[GIDX(row, col + 1, H, W)];
+	float4 d_uv1_idx = d_uv1[idx];
 
-	d_uv2[idx].y = d_uv1[idx].y -
-		(1 / 30.0f * (d_uv1[idx].x * (d_uv1[idx].y - d_uv1[GIDX(row - 1, col, H, W)].y))) -
-		(1 / 30.0f * (d_uv1[idx].y * (d_uv1[idx].y - d_uv1[GIDX(row, col - 1, H, W)].y))) +
-		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row + 1, col, H, W)].y - 2 * d_uv1[idx].y + d_uv1[GIDX(row - 1, col, H, W)].y)) +
-		(0.05 * (1 / 30.0f) * (d_uv1[GIDX(row, col + 1, H, W)].y - 2 * d_uv1[idx].y + d_uv1[GIDX(row, col - 1, H, W)].y));
+	float d_pr1 = d_p[GIDX(row - 1, col, H, W)], d_pr2 = d_p[GIDX(row + 1, col, H, W)];
+	float d_pc1 = d_p[GIDX(row, col - 1, H, W)], d_pc2 = d_p[GIDX(row, col + 1, H, W)];
+	float d_p_idx = d_p[idx];
+	
+
+	d_uv2[idx].x = d_uv1_idx.x -
+		d_uv1_idx.x * dt * (d_uv1_idx.x - d_uv1r1.x) -
+		d_uv1_idx.y * dt * (d_uv1_idx.x - d_uv1c1.x) -
+		(dt / rho) * (d_pr2 - d_pr1) + 
+		nu * (dt * (d_uv1r2.x - 2 * d_uv1[idx].x + d_uv1r1.x) + dt * (d_uv1c2.x - 2 * d_uv1_idx.x + d_uv1c1.x));
+
+	d_uv2[idx].y = d_uv1_idx.y -
+		d_uv1_idx.x * dt * (d_uv1_idx.y - d_uv1r1.y) -
+		d_uv1_idx.y * dt * (d_uv1_idx.y - d_uv1c1.y) -
+		(dt / rho) * (d_pr2 - d_pr1) +
+		nu * (dt * (d_uv1r2.y - 2 * d_uv1_idx.y + d_uv1r1.y) +
+			dt * (d_uv1c2.y - 2 * d_uv1_idx.y + d_uv1c1.y));
 
 
+	float a = (d_pr2+ d_pr1) * dy2;
+	float b = (d_pc2 + d_pc1) * dx2;
+	float c = 2 * (dx2 + dy2);
+	float d = rho * dx2 * dy2;
+
+	d_p[idx] = ((a + b) / c) - (d / c) *
+		(1 / dt * ((d_uv1r2.x - d_uv1r1.x) / (2 * dx) + (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
+			((d_uv1r2.x - d_uv1r1.x) / (2 * dx)) * ((d_uv1c2.y - d_uv1c1.y) / (2 * dy)) -
+			(2 * (d_uv1c2.x - d_uv1c1.x) / (2 * dy)) * (2 * (d_uv1r2.y - d_uv1r1.y) / (2 * dx)) -
+			(2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dy)) * (2 * (d_uv1c2.y - d_uv1c1.y) / (2 * dx)));
 
 	d_uv1[idx].x = d_uv2[idx].x;
 	d_uv1[idx].y = d_uv2[idx].y;
@@ -305,16 +331,21 @@ __global__ void kernel_convection(float4* d_uv1, float4* d_uv2, int H, int W) {
 
 
 
-void launch_convection(float4* d_uv1, float4* d_uv2, int H, int W) {
+void launch_convection(float4* d_uv1, float4* d_uv2, float*p, int H, int W) {
 
 	dim3 blockSize = { 32, 32 };
 	dim3 gridSize = {
 		static_cast<unsigned int>(ceil(W / blockSize.x)),
 		static_cast<unsigned int>(ceil(H / blockSize.y))
 	};
+	int padding = 1;
 
-	kernel_convection << <gridSize, blockSize >> > (
-		d_uv1, d_uv2, H, W
+	size_t s_numel = (blockSize.x + 2 * padding) * (blockSize.y + 2 * padding);
+	size_t s_uv1 = s_numel * sizeof(float4);
+	size_t s_p = s_numel * sizeof(float);
+
+	kernel_convection << <gridSize, blockSize, s_uv1 + s_p >> > (
+		d_uv1, d_uv2, p, H, W
 		);
 
 	CUDACHECK(cudaDeviceSynchronize());
