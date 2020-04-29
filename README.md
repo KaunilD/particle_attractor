@@ -48,10 +48,10 @@ make -j4
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
 - [x] CUDA Kernel for ~LK~ HS based velocity vector computation.
-  - [x] Central difference approximation
-  - [x] HK convolution
+  - [x] [Central difference approximation](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L67)
+  - [x] [HK convolution](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
-- [x] Navier Stokes based CFD Physics.
+- [x] [Navier Stokes based CFD Physics.](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
   - [x] 2D advection
   - [x] 2D Diffusion
   - [x] Cavity Flow
