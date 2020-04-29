@@ -6,7 +6,7 @@
 [Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
 
 #### Performance Stats
-1. Final render: 3840x2160x12 @ 37 fps.
+1. Final render: __3840x2160x12 @ 37 fps__ on an Nvidia 1060 GTX GPU assembled on a Surface Book Pro 2 
 
 #### Demo:
 You can find the coolest state of the project [here on Vimeo](https://vimeo.com/408605423).
