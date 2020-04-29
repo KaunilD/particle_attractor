@@ -47,8 +47,9 @@ make -j4
   - [x] Materials and Lighting (Specular, Ambient and Diffuse)
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
-- [x] Compute Shader for creating Laplacian image pyramid.
-- [x] Compute Shader for ~LK~ HS based velocity vector computation.
+- [x] CUDA Kernel for ~LK~ HS based velocity vector computation.
+  - [x] Central difference approximation
+  - [x] HK convolution
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
 - [x] Navier Stokes based CFD Physics.
   - [x] 2D advection
