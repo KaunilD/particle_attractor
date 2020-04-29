@@ -5,6 +5,9 @@
 #### Theory
 [Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
 
+#### Performance Stats
+1. Final render: 3840x2160x12 @ 37 fps.
+
 #### Demo:
 You can find the coolest state of the project [here on Vimeo](https://vimeo.com/408605423).
 
