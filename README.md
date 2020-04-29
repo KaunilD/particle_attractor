@@ -49,7 +49,7 @@ make -j4
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
 - [x] CUDA Kernel for ~LK~ HS based velocity vector computation.
   - [x] [Central difference approximation](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L67)
-  - [x] [HK convolution](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
+  - [x] [HS convolution](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
 - [x] [Navier Stokes based CFD Physics.](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L300)
   - [x] 2D advection
