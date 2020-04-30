@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 	shared_ptr<ShaderProgram> particleShader(new ShaderProgram());
 	particleShader->loadShaders(
 		"./glsl/object_vs_instanced.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\particle_attractor\\src\\glsl\\object_fs.glsl"
+		"./glsl/object_fs.glsl"
 	);
 
 	/*
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 			optFlow.d_f2ptr,
 			optFlow.d_f2ptrf32,
 			height * width
-		); 
+		);
 		launch_gray(
 			optFlow.d_f1ptrf32,
 			optFlow.d_f1ptrf32gray,
