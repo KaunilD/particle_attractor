@@ -16,7 +16,7 @@ __global__ void kernel_update(
 
 	float4 velocity = d_velocities[col];
 
-	float mag = sqrtf(velocity.x*velocity.x + velocity.y*velocity.y);
+	float mag = sqrtf(velocity.x*velocity.x + velocity.y*velocity.y)*0.03;
 	float pos = min(mag, 0.50f);
 	d_positions[col] = make_float4(
 		d_og_positions[col].x,

@@ -161,18 +161,15 @@ int main(int argc, char* argv[])
 			height, width
 		);
 
-		for (int i = 0; i < 8; i++) {
+		launch_optflow(
+			optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
+			optFlow.d_uv1, optFlow.d_uv2,
+			height, width
+		);
+		for (int i = 0; i < 2; i++) {
+			launch_convection(optFlow.d_uv2, optFlow.d_uv3, optFlow.p, height, width);
 
-			launch_optflow(
-				optFlow.d_f1dx, optFlow.d_f1dy, optFlow.d_f2dx, optFlow.d_f2dy, optFlow.d_dt,
-				optFlow.d_uv1, optFlow.d_uv2,
-				height, width
-			);
 		}
-
-		frameCount = 0;
-
-		launch_convection(optFlow.d_uv2, optFlow.d_uv3, optFlow.p, height, width);
 
 		particleRenderer->render(
 			particleShader,
