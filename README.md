@@ -1,4 +1,4 @@
-# Lucas Kanade Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
+# LK and HS Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
 ![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/optflow_cfd.png)
 
