@@ -1,10 +1,10 @@
-# Horn Schunke Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
+# Lucas Kanade Optical Flow simulated with a Particle Engine using CUDA/OpenGL InterOp.
 
 ![Particle engine rendering 1024^3*30 triangles on the left and OPtFlow on the right.](./res/optflow_cfd.png)
 
-#### Theory
-[Determining Optical Flow](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
-
+#### Theory - Determining Optical Flow
+[Horn Schunck Method](http://image.diku.dk/imagecanon/material/HornSchunckOptical_Flow.pdf)
+[Lucas Kanade Method](http://robots.stanford.edu/cs223b04/algo_tracking.pdf)
 #### Performance Stats
 1. Final render: __3840x2160x12 @ 37 fps__ on an Nvidia 1060 GTX GPU assembled on a Surface Book Pro 2 
 
@@ -47,9 +47,10 @@ make -j4
   - [x] Materials and Lighting (Specular, Ambient and Diffuse)
 - [x] Simulate gravity using CUDA OpenGL Interop.
 - [x] Integrating OpenCV with the particle engine to render frames captured from the video file.
-- [x] CUDA Kernel for ~LK~ HS based velocity vector computation.
+- [x] CUDA Kernel for LK and HS based velocity vector computation.
   - [x] [Central difference approximation](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L67)
-  - [x] [HS convolution](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
+  - [x] [HS Kernel](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
+  - [x] [LK Kernel](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L143)
 - [x] Update particle engine physics to simulate ~Hooke's Law~ Gradient descent.
 - [x] [Navier Stokes based CFD Physics.](https://github.com/KaunilD/particle_attractor/blob/master/src/cuda/optflow.cu#L300)
   - [x] 2D advection
