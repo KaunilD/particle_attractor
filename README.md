@@ -56,3 +56,8 @@ make -j4
   - [x] 2D advection
   - [x] 2D Diffusion
   - [x] Cavity Flow
+  
+  #### Lessons learnt
+  1. Heap allocations are expensive.
+  2. Locality of reference is critical.
+  3. Random access is costlier than sliding things in a cache.
