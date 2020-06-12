@@ -7,6 +7,7 @@
 [Lucas Kanade Method](http://robots.stanford.edu/cs223b04/algo_tracking.pdf)
 #### Performance Stats
 1. Final render: __3840x2160x12 @ 37 fps__ on an Nvidia 1060 GTX GPU assembled on a Surface Book Pro 2 
+2. Final render: __3840x2160x12 @ 93 fps__ on an Nvidia 1060 GTX GPU assembled on a Surface Book Pro 2 
 
 #### Demo:
 You can find the coolest state of the project [here on Vimeo](https://vimeo.com/408605423).
